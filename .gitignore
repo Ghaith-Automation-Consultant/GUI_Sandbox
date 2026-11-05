@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Tooling caches and logs
+.pytest_cache/
+.ruff_cache/
+*.log
+
+# Local assistant state
+.claude/
+
+# Third-party binaries, used locally only and never redistributed
+tools/SAP-Scripting-tracker-main/
+
+# Local-only files. Screenshots of live systems must never be committed.
+_local_archive/
+screens/screenshots/
+screenshots/

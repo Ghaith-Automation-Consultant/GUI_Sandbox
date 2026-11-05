@@ -1,0 +1,420 @@
+{
+  "_label": "07_SE38_initial",
+  "system": "SBX",
+  "client": "000",
+  "user": "USER_STANDARD",
+  "transaction": "SE38",
+  "program": "ZSBX_SE38",
+  "screen": 100,
+  "status": "",
+  "tree": {
+    "id": "/app/con[0]/ses[0]",
+    "type": "GuiSession",
+    "name": "ses[0]",
+    "children": [
+      {
+        "id": "/app/con[0]/ses[0]/wnd[0]",
+        "type": "GuiMainWindow",
+        "name": "wnd[0]",
+        "text": "ABAP Editor: Initial Screen",
+        "changeable": true,
+        "left": 0,
+        "top": 0,
+        "width": 1280,
+        "height": 800,
+        "children": [
+          {
+            "id": "/app/con[0]/ses[0]/wnd[0]/mbar",
+            "type": "GuiMenubar",
+            "name": "mbar",
+            "children": [
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[0]",
+                "type": "GuiMenu",
+                "name": "Program",
+                "text": "Program",
+                "changeable": true,
+                "children": [
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[0]/menu[0]",
+                    "type": "GuiMenu",
+                    "name": "Check",
+                    "text": "Check",
+                    "changeable": true
+                  },
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[0]/menu[1]",
+                    "type": "GuiMenu",
+                    "name": "Activate",
+                    "text": "Activate",
+                    "changeable": true
+                  },
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[0]/menu[2]",
+                    "type": "GuiMenu",
+                    "name": "Execute",
+                    "text": "Execute",
+                    "changeable": true
+                  }
+                ]
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[1]",
+                "type": "GuiMenu",
+                "name": "Edit",
+                "text": "Edit",
+                "changeable": true,
+                "children": [
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[1]/menu[0]",
+                    "type": "GuiMenu",
+                    "name": "Find",
+                    "text": "Find",
+                    "changeable": true
+                  }
+                ]
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[2]",
+                "type": "GuiMenu",
+                "name": "Goto",
+                "text": "Goto",
+                "changeable": true,
+                "children": [
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[2]/menu[0]",
+                    "type": "GuiMenu",
+                    "name": "Attributes",
+                    "text": "Attributes",
+                    "changeable": true
+                  },
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[2]/menu[1]",
+                    "type": "GuiMenu",
+                    "name": "Variants",
+                    "text": "Variants",
+                    "changeable": true
+                  }
+                ]
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[3]",
+                "type": "GuiMenu",
+                "name": "Utilities",
+                "text": "Utilities",
+                "changeable": true,
+                "children": [
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[3]/menu[0]",
+                    "type": "GuiMenu",
+                    "name": "Settings",
+                    "text": "Settings",
+                    "changeable": true
+                  }
+                ]
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[4]",
+                "type": "GuiMenu",
+                "name": "System",
+                "text": "System",
+                "changeable": true,
+                "children": [
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[4]/menu[0]",
+                    "type": "GuiMenu",
+                    "name": "User Profile",
+                    "text": "User Profile",
+                    "changeable": true
+                  },
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[4]/menu[1]",
+                    "type": "GuiMenu",
+                    "name": "Services",
+                    "text": "Services",
+                    "changeable": true
+                  },
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[4]/menu[2]",
+                    "type": "GuiMenu",
+                    "name": "Status...",
+                    "text": "Status...",
+                    "changeable": true
+                  }
+                ]
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[5]",
+                "type": "GuiMenu",
+                "name": "Help",
+                "text": "Help",
+                "changeable": true,
+                "children": [
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[5]/menu[0]",
+                    "type": "GuiMenu",
+                    "name": "Application Help",
+                    "text": "Application Help",
+                    "changeable": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]",
+            "type": "GuiToolbar",
+            "name": "tbar[0]",
+            "changeable": true,
+            "children": [
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/okcd",
+                "type": "GuiOkCodeField",
+                "name": "okcd",
+                "changeable": true,
+                "max_len": 132
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[0]",
+                "type": "GuiButton",
+                "name": "btn[0]",
+                "tooltip": "Enter   (Enter)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[11]",
+                "type": "GuiButton",
+                "name": "btn[11]",
+                "tooltip": "Save   (Ctrl+S)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[3]",
+                "type": "GuiButton",
+                "name": "btn[3]",
+                "tooltip": "Back   (F3)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[15]",
+                "type": "GuiButton",
+                "name": "btn[15]",
+                "tooltip": "Exit   (Shift+F3)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[12]",
+                "type": "GuiButton",
+                "name": "btn[12]",
+                "tooltip": "Cancel   (F12)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[86]",
+                "type": "GuiButton",
+                "name": "btn[86]",
+                "tooltip": "Print   (Ctrl+P)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[71]",
+                "type": "GuiButton",
+                "name": "btn[71]",
+                "tooltip": "Find   (Ctrl+F)",
+                "changeable": true
+              }
+            ]
+          },
+          {
+            "id": "/app/con[0]/ses[0]/wnd[0]/titl",
+            "type": "GuiTitlebar",
+            "name": "titl",
+            "text": "ABAP Editor: Initial Screen"
+          },
+          {
+            "id": "/app/con[0]/ses[0]/wnd[0]/tbar[1]",
+            "type": "GuiToolbar",
+            "name": "tbar[1]",
+            "changeable": true,
+            "children": [
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[1]/btn[8]",
+                "type": "GuiButton",
+                "name": "btn[8]",
+                "tooltip": "Direct Processing   (F8)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[1]/btn[17]",
+                "type": "GuiButton",
+                "name": "btn[17]",
+                "tooltip": "Debugging   (Shift+F5)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[1]/btn[18]",
+                "type": "GuiButton",
+                "name": "btn[18]",
+                "tooltip": "With Variant   (Shift+F6)",
+                "changeable": true
+              }
+            ]
+          },
+          {
+            "id": "/app/con[0]/ses[0]/wnd[0]/usr",
+            "type": "GuiUserArea",
+            "name": "usr",
+            "changeable": true,
+            "children": [
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/lblRS38M-PROGRAMM",
+                "type": "GuiLabel",
+                "name": "RS38M-PROGRAMM",
+                "text": "Program",
+                "left": 16,
+                "top": 20,
+                "width": 200,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/ctxtRS38M-PROGRAMM",
+                "type": "GuiCTextField",
+                "name": "RS38M-PROGRAMM",
+                "changeable": true,
+                "max_len": 40,
+                "left": 220,
+                "top": 20,
+                "width": 240,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/boxSUBOBJECTS",
+                "type": "GuiBox",
+                "name": "SUBOBJECTS",
+                "text": "Subobjects",
+                "left": 16,
+                "top": 56,
+                "width": 520,
+                "height": 190
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/radRS38M-FUNC_EDIT",
+                "type": "GuiRadioButton",
+                "name": "RS38M-FUNC_EDIT",
+                "text": "Source Code",
+                "selected": true,
+                "changeable": true,
+                "left": 28,
+                "top": 80,
+                "width": 240,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/radRS38M-FUNC_VARI",
+                "type": "GuiRadioButton",
+                "name": "RS38M-FUNC_VARI",
+                "text": "Variants",
+                "selected": false,
+                "changeable": true,
+                "left": 28,
+                "top": 110,
+                "width": 240,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/radRS38M-FUNC_HEAD",
+                "type": "GuiRadioButton",
+                "name": "RS38M-FUNC_HEAD",
+                "text": "Attributes",
+                "selected": false,
+                "changeable": true,
+                "left": 28,
+                "top": 140,
+                "width": 240,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/radRS38M-FUNC_DOCU",
+                "type": "GuiRadioButton",
+                "name": "RS38M-FUNC_DOCU",
+                "text": "Documentation",
+                "selected": false,
+                "changeable": true,
+                "left": 28,
+                "top": 170,
+                "width": 240,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/radRS38M-FUNC_TEXT",
+                "type": "GuiRadioButton",
+                "name": "RS38M-FUNC_TEXT",
+                "text": "Text Elements",
+                "selected": false,
+                "changeable": true,
+                "left": 28,
+                "top": 200,
+                "width": 240,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/btnSHOP",
+                "type": "GuiButton",
+                "name": "SHOP",
+                "text": "Display",
+                "tooltip": "Display   (F7)",
+                "changeable": true,
+                "left": 16,
+                "top": 260,
+                "width": 120,
+                "height": 28
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/btnCHAP",
+                "type": "GuiButton",
+                "name": "CHAP",
+                "text": "Change",
+                "tooltip": "Change   (F6)",
+                "changeable": true,
+                "left": 146,
+                "top": 260,
+                "width": 120,
+                "height": 28
+              }
+            ]
+          },
+          {
+            "id": "/app/con[0]/ses[0]/wnd[0]/sbar",
+            "type": "GuiStatusbar",
+            "name": "sbar",
+            "children": [
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/sbar/pane[0]",
+                "type": "GuiStatusPane",
+                "name": "pane[0]"
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/sbar/pane[1]",
+                "type": "GuiStatusPane",
+                "name": "pane[1]",
+                "text": "SBX (1) 000"
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/sbar/pane[2]",
+                "type": "GuiStatusPane",
+                "name": "pane[2]",
+                "text": "sandbox"
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/sbar/pane[3]",
+                "type": "GuiStatusPane",
+                "name": "pane[3]",
+                "text": "INS"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

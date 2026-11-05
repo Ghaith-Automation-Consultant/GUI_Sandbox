@@ -1,0 +1,876 @@
+<title>GUI Sandbox</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+:root {
+  --bg: #F7F8FA;
+  --surface: #FFFFFF;
+  --surface-alt: #EDF1F7;
+  --text: #1A1D23;
+  --text-secondary: #5A6170;
+  --accent: #2B5A9E;
+  --accent-light: #E8EFF9;
+  --accent-dark: #1D3F72;
+  --border: #D2D8E3;
+  --border-light: #E8ECF2;
+  --code-bg: #F0F3F8;
+  --layer-a: #2B7A5F;
+  --layer-a-bg: #E8F5EF;
+  --layer-b: #9E6B2B;
+  --layer-b-bg: #FDF3E6;
+  --layer-c: #7B2B9E;
+  --layer-c-bg: #F4E8FA;
+  --tools-color: #5A6170;
+  --tools-bg: #EDEEF1;
+  --font-display: 'Source Serif 4', Georgia, serif;
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Consolas', monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #13151A;
+    --surface: #1C1F26;
+    --surface-alt: #252830;
+    --text: #E2E4E9;
+    --text-secondary: #8E95A3;
+    --accent: #5B8FD4;
+    --accent-light: #1E2A3E;
+    --accent-dark: #8AB4EC;
+    --border: #33373F;
+    --border-light: #292D35;
+    --code-bg: #1E2128;
+    --layer-a: #4FC9A0;
+    --layer-a-bg: #1A2E26;
+    --layer-b: #D4A24F;
+    --layer-b-bg: #2E2518;
+    --layer-c: #B86FD9;
+    --layer-c-bg: #291A33;
+    --tools-color: #8E95A3;
+    --tools-bg: #22252C;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #13151A;
+  --surface: #1C1F26;
+  --surface-alt: #252830;
+  --text: #E2E4E9;
+  --text-secondary: #8E95A3;
+  --accent: #5B8FD4;
+  --accent-light: #1E2A3E;
+  --accent-dark: #8AB4EC;
+  --border: #33373F;
+  --border-light: #292D35;
+  --code-bg: #1E2128;
+  --layer-a: #4FC9A0;
+  --layer-a-bg: #1A2E26;
+  --layer-b: #D4A24F;
+  --layer-b-bg: #2E2518;
+  --layer-c: #B86FD9;
+  --layer-c-bg: #291A33;
+  --tools-color: #8E95A3;
+  --tools-bg: #22252C;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.7;
+  padding-inline: 24px;
+  padding-block: 0;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* ── HEADER ─────────────────────────────────── */
+
+.hero {
+  padding-block: 48px 40px;
+  border-bottom: 1px solid var(--border);
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 600;
+  line-height: 1.15;
+  margin: 0 0 12px;
+  color: var(--text);
+  text-wrap: balance;
+}
+.hero .subtitle {
+  font-size: 17px;
+  color: var(--text-secondary);
+  margin: 0 0 24px;
+  max-width: 640px;
+}
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+.hero-meta span { white-space: nowrap; }
+
+/* ── TABLE OF CONTENTS ──────────────────────── */
+
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: 24px 28px;
+  margin-block: 32px;
+}
+.toc h2 {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  margin: 0 0 16px;
+}
+.toc ol {
+  margin: 0;
+  padding-left: 20px;
+  columns: 2;
+  column-gap: 32px;
+}
+.toc li {
+  margin-bottom: 6px;
+  break-inside: avoid;
+}
+.toc a {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+.toc a:hover { text-decoration: underline; }
+
+@media (max-width: 560px) {
+  .toc ol { columns: 1; }
+}
+
+/* ── SECTIONS ───────────────────────────────── */
+
+section { padding-block: 36px; border-bottom: 1px solid var(--border-light); }
+section:last-of-type { border-bottom: none; }
+
+h2 {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  color: var(--text);
+  text-wrap: balance;
+}
+h3 {
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 28px 0 10px;
+  color: var(--text);
+}
+h4 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 20px 0 8px;
+  color: var(--text);
+}
+p { margin: 0 0 14px; }
+
+/* ── LAYER TAGS ─────────────────────────────── */
+
+.layer-tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 3px 10px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+.layer-tag.a { background: var(--layer-a-bg); color: var(--layer-a); }
+.layer-tag.b { background: var(--layer-b-bg); color: var(--layer-b); }
+.layer-tag.c { background: var(--layer-c-bg); color: var(--layer-c); }
+.layer-tag.tools { background: var(--tools-bg); color: var(--tools-color); }
+
+/* ── CODE ───────────────────────────────────── */
+
+code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  word-break: break-word;
+}
+pre {
+  background: var(--code-bg);
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 16px 20px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.65;
+  margin: 14px 0 18px;
+}
+pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+/* ── DIAGRAM ────────────────────────────────── */
+
+.diagram-box {
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: 24px;
+  margin: 18px 0 22px;
+  overflow-x: auto;
+}
+.diagram-box pre {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: var(--text);
+  white-space: pre;
+  line-height: 1.5;
+}
+
+/* ── TABLES ─────────────────────────────────── */
+
+.table-wrap {
+  overflow-x: auto;
+  margin: 14px 0 18px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  padding: 10px 14px;
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+}
+td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-light);
+  vertical-align: top;
+}
+td code { font-size: 12px; }
+
+/* ── FILE TREE ──────────────────────────────── */
+
+.file-tree {
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: 20px 24px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.8;
+  margin: 14px 0 18px;
+  overflow-x: auto;
+  white-space: pre;
+}
+.file-tree .dir { color: var(--accent); font-weight: 500; }
+.file-tree .comment { color: var(--text-secondary); }
+
+/* ── CALLOUT ────────────────────────────────── */
+
+.callout {
+  background: var(--accent-light);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 6px 6px 0;
+  padding: 16px 20px;
+  margin: 18px 0;
+  font-size: 14px;
+}
+.callout p { margin: 0; }
+.callout strong { color: var(--accent-dark); }
+
+/* ── RESPONSIVE ─────────────────────────────── */
+
+@media (max-width: 560px) {
+  body { padding-inline: 16px; }
+  .hero { padding-block: 32px 28px; }
+  h2 { font-size: 22px; }
+  pre { padding: 12px 14px; font-size: 12px; }
+}
+</style>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+
+<header class="hero">
+  <h1>GUI Sandbox</h1>
+  <p class="subtitle">A three-layer desktop application that emulates the SAP GUI for RPA development, test automation, and training &mdash; no live SAP connection required.</p>
+  <div class="hero-meta">
+    <span>Python 3.13</span>
+    <span>PySide6 / Qt</span>
+    <span>pywin32 COM</span>
+    <span>Windows 10+</span>
+  </div>
+</header>
+
+<!-- TABLE OF CONTENTS -->
+
+<nav class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#why">Why This Exists</a></li>
+    <li><a href="#architecture">Architecture Overview</a></li>
+    <li><a href="#layer-a">Layer A &mdash; Visual Shell</a></li>
+    <li><a href="#layer-b">Layer B &mdash; Control Tree Engine</a></li>
+    <li><a href="#layer-c">Layer C &mdash; Scripting Bridge</a></li>
+    <li><a href="#tools">Tools &amp; Screen Capture Pipeline</a></li>
+    <li><a href="#files">Project File Map</a></li>
+    <li><a href="#usage">Usage Guide</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+  </ol>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 1. WHY -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+
+<section id="why">
+  <h2>1. Why This Exists</h2>
+  <p>SAP GUI Scripting (the COM-based automation API built into SAP&rsquo;s Windows client) is the backbone of most SAP RPA projects. But developing and testing those scripts has a hard dependency: a live SAP system, a valid login, and a connection to the right client. That means scripts can&rsquo;t be developed offline, tested in CI, or safely debugged without touching real data.</p>
+  <p>This sandbox removes that dependency. It rebuilds a SAP-style control tree from JSON screen files &mdash; every field ID, every button, every table cell &mdash; and exposes it through the same COM interface that real SAP uses. The result:</p>
+  <ul>
+    <li><strong>Develop RPA scripts</strong> against realistic SAP screens without a live connection.</li>
+    <li><strong>Replay sample screens</strong> &mdash; the sandbox loads fictional JSON screen files.</li>
+    <li><strong>Drop-in compatibility</strong> &mdash; change one line (<code>GetObject("SAPGUI")</code> instead of <code>GetObject("SAPGUI")</code>) and existing scripts run against the sandbox.</li>
+    <li><strong>Action recording</strong> &mdash; every <code>findById</code>, <code>setText</code>, <code>press</code>, <code>sendVKey</code> is logged with timestamps for test validation.</li>
+  </ul>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 2. ARCHITECTURE -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+
+<section id="architecture">
+  <h2>2. Architecture Overview</h2>
+  <p>The project mirrors SAP GUI&rsquo;s own internal architecture with three distinct layers. Each layer is independently useful and has no upward dependencies:</p>
+
+  <div class="diagram-box"><pre>
+┌─────────────────────────────────────────────────────────────────┐
+│  <strong>External Scripts</strong>  (Python, VBScript, UiPath, etc.)             │
+│                                                                 │
+│  sap = GetObject("SAPGUI")                               │
+│  session = sap.GetScriptingEngine.Children(0).Children(0)       │
+│  session.findById("wnd[0]/usr/ctxtFOO").Text = "SFLIGHT"           │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+          ┌────────────────▼────────────────┐
+          │     <strong>Layer C: Scripting Bridge</strong>    │
+          │                                 │
+          │  COM/ROT ─ HTTP API ─ In-Proc   │
+          │  bridge/                        │
+          └────────────────┬────────────────┘
+                           │  delegates to
+          ┌────────────────▼────────────────┐
+          │   <strong>Layer B: Control Tree Engine</strong>   │
+          │                                 │
+          │  Session ─ Window ─ Controls    │
+          │  findById() ─ O(1) registry     │
+          │  engine/                        │
+          └────────────────┬────────────────┘
+                           │  renders
+          ┌────────────────▼────────────────┐
+          │     <strong>Layer A: Visual Shell</strong>        │
+          │                                 │
+          │  PySide6/Qt ─ classic-style UI     │
+          │  main.py                        │
+          └─────────────────────────────────┘</pre></div>
+
+  <div class="callout">
+    <p><strong>Key design principle:</strong> Layer B is the source of truth. Layer A renders it visually. Layer C exposes it to external scripts. All three operate on the same in-memory control tree.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 3. LAYER A -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+
+<section id="layer-a">
+  <span class="layer-tag a">LAYER A</span>
+  <h2>3. Visual Shell</h2>
+  <p>The Qt/PySide6 front-end renders the classic-style window chrome. It is implemented entirely in <code>main.py</code>.</p>
+
+  <h3>What it builds</h3>
+  <p><code>MainWindow(QMainWindow)</code> assembles six stacked horizontal zones, matching the real SAP GUI layout top to bottom:</p>
+
+  <div class="diagram-box"><pre>
+┌─────────────────────────────────────────────┐
+│  <strong>Menu Bar</strong>     Menu │ Traiter │ Favoris │ ...  │
+├─────────────────────────────────────────────┤
+│  <strong>Main Toolbar</strong>  ✓  [command field ▼]  Save Back │
+├─────────────────────────────────────────────┤
+│  <strong>Title Banner</strong>  GUI Sandbox - User Menu       │  gradient
+├─────────────────────────────────────────────┤
+│  <strong>Context Toolbar</strong>  Open │ Create │ Delete │..│
+├─────────────┬───────────────────────────────┤
+│  <strong>Nav Tree</strong>    │  <strong>Workspace Panel</strong>               │
+│  📁 Favoris │                               │
+│  📁 Menu    │        (content area)         │
+│             │                               │
+├─────────────┴───────────────────────────────┤
+│  <strong>Status Bar</strong>   Ready                          │
+└─────────────────────────────────────────────┘</pre></div>
+
+  <h3>Implementation details</h3>
+  <ul>
+    <li><code>app.setStyle("Fusion")</code> is called before showing the window &mdash; this is required for the SAP color palette to render correctly.</li>
+    <li>Toolbars are <strong>removed from Qt&rsquo;s native toolbar system</strong> and re-parented into a <code>QVBoxLayout</code> to force the correct stacking order. Without this, Qt may reorder toolbars or allow the user to drag them.</li>
+    <li>Every widget gets a stable <code>objectName</code> matching SAP-like IDs (e.g. <code>cmd_field</code>, <code>btn_save</code>, <code>nav_tree</code>).</li>
+  </ul>
+
+  <h3>Color palette</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Element</th><th>Hex</th><th>Usage</th></tr></thead>
+      <tbody>
+        <tr><td>Window / Menu bg</td><td><code>#E6EEF7</code></td><td>Main background, menu bar</td></tr>
+        <tr><td>Toolbar bg</td><td><code>#D5DEE8</code></td><td>Main &amp; context toolbars, status bar</td></tr>
+        <tr><td>Banner gradient</td><td><code>#DCE6F2 → #B7C9DC</code></td><td>Title banner (top to bottom)</td></tr>
+        <tr><td>Panel bg</td><td><code>#F4F6F9</code></td><td>Nav tree, content panels</td></tr>
+        <tr><td>Selected item</td><td><code>#C7D6EA</code></td><td>Tree item selection, menu hover</td></tr>
+        <tr><td>Borders</td><td><code>#9FB2C6</code></td><td>Banner bottom, toolbar separators</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>Font:</strong> Segoe UI, 12px for UI chrome, 14px bold for the title banner.</p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 4. LAYER B -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+
+<section id="layer-b">
+  <span class="layer-tag b">LAYER B</span>
+  <h2>4. Control Tree Engine</h2>
+  <p>The core data model. Every UI element in a SAP screen is represented as a Python object in a tree, independent of any UI framework. This is what makes automation possible.</p>
+
+  <h3>Control class hierarchy</h3>
+  <p>All classes live in <code>engine/control.py</code>. The base <code>Control</code> class holds the properties every SAP element has. Each subclass sets a <code>sap_type</code> class attribute that matches the real SAP GUI Scripting COM type name:</p>
+
+  <div class="diagram-box"><pre>
+<strong>Control</strong> (base)  sap_type="GuiControl"
+│
+├── <strong>Container</strong>  "GuiContainerShell"
+│   ├── UserArea          "GuiUserArea"
+│   ├── Menubar / Menu    "GuiMenubar" / "GuiMenu"
+│   ├── Toolbar           "GuiToolbar"
+│   ├── TabStrip / Tab    "GuiTabStrip" / "GuiTab"
+│   ├── Shell             "GuiShell"
+│   ├── Splitter          "GuiSplitterContainer"
+│   ├── ScrollContainer   "GuiScrollContainer"
+│   ├── SimpleContainer   "GuiSimpleContainer"
+│   ├── Box               "GuiBox"
+│   ├── TableControl      "GuiTableControl"    ← classic ABAP tables
+│   └── GridView          "GuiGridView"         ← ALV grids
+│
+├── <strong>Leaf controls</strong>
+│   ├── TextField          "GuiTextField"
+│   ├── ComboTextField     "GuiCTextField"       ← with F4 help
+│   ├── PasswordField      "GuiPasswordField"
+│   ├── Label              "GuiLabel"
+│   ├── Button             "GuiButton"
+│   ├── RadioButton        "GuiRadioButton"      + selected
+│   ├── CheckBox           "GuiCheckBox"          + selected
+│   ├── ComboBox           "GuiComboBox"          + options
+│   ├── CommandField       "GuiOkCodeField"       ← transaction field
+│   ├── StatusBar          "GuiStatusbar"         + message_type, show()
+│   └── Tree               "GuiTree"
+│
+└── <strong>Table internals</strong>
+    ├── TableRow           "TableRow"             + index, cells
+    └── TableCell          "TableCell"            + row, col, col_name</pre></div>
+
+  <h3>Base Control properties and methods</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Property</th><th>Type</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>str</td><td>Full SAP path, e.g. <code>/app/con[0]/ses[0]/wnd[0]/usr/ctxtFOO</code></td></tr>
+        <tr><td><code>name</code></td><td>str</td><td>Short name segment, e.g. <code>ctxtFOO</code></td></tr>
+        <tr><td><code>text</code></td><td>str</td><td>Current display text / value</td></tr>
+        <tr><td><code>enabled</code>, <code>changeable</code>, <code>visible</code>, <code>required</code></td><td>bool</td><td>State flags</td></tr>
+        <tr><td><code>parent</code> / <code>children</code></td><td>Control</td><td>Tree links</td></tr>
+        <tr><td><code>events</code></td><td>dict</td><td>Event handlers: <code>{"change": fn, "press": fn}</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Method</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>find_control(id)</code></td><td>Depth-first search by full ID path</td></tr>
+        <tr><td><code>all_controls()</code></td><td>Flat list of self + all descendants</td></tr>
+        <tr><td><code>value</code> (property)</td><td>Read/write alias for <code>text</code>; setter fires <code>change</code> event</td></tr>
+        <tr><td><code>press()</code></td><td>Trigger the <code>press</code> event (buttons)</td></tr>
+        <tr><td><code>select()</code></td><td>Trigger the <code>select</code> event (tabs, radios)</td></tr>
+        <tr><td><code>on(event, handler)</code></td><td>Register an event callback</td></tr>
+        <tr><td><code>trigger(event, *args)</code></td><td>Fire an event</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Session &amp; Window</h3>
+  <p>Defined in <code>engine/session.py</code>. <code>Session</code> is the top-level object (mirrors <code>GuiSession</code> in SAP COM).</p>
+  <pre><code>session = load_screen("screens/02_SE16_initial.json")
+
+# O(1) lookup via internal registry (dict[str, Control])
+field = session.findById("wnd[0]/usr/ctxtDATABROWSE-TABLENAME")
+field.value = "SFLIGHT"
+
+# Accepts both full and short paths
+session.findById("/app/con[0]/ses[0]/wnd[0]/usr/ctxtFOO")   # full
+session.findById("wnd[0]/usr/ctxtFOO")                       # short
+
+# VKeys, transactions, status bar
+session.send_vkey(0)                   # Enter
+session.start_transaction("SE16")
+session.set_status("Saved.", "S")</code></pre>
+  <p><code>SessionInfo</code> holds read-only metadata: <code>system_name</code>, <code>client</code>, <code>user</code>, <code>transaction</code>, <code>program</code>, <code>screen_number</code>.</p>
+
+  <h3>JSON loader</h3>
+  <p><code>engine/loader.py</code> reconstructs a full <code>Session</code> from a screen JSON file. It uses <code>_TYPE_MAP</code> (30+ entries mapping SAP COM type strings to Python classes) to instantiate the correct control type for each node. Special handling for <code>TableControl</code> (pre-parsed rows), <code>GridView</code> (rows as dicts), and selection state on <code>RadioButton</code>/<code>CheckBox</code>/<code>Tab</code>.</p>
+  <pre><code>from engine import load_screen, build_tree
+
+# From a file
+session = load_screen("screens/02_SE16_initial.json")
+
+# From a pre-parsed dict (e.g. from an HTTP API)
+session = build_tree(json_data)</code></pre>
+
+  <h3>Transaction screens</h3>
+  <p><code>engine/transactions/</code> contains hand-authored screen classes that build control trees programmatically (without a JSON file):</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Class</th><th>Transaction</th><th>What it builds</th></tr></thead>
+      <tbody>
+        <tr><td><code>SE16InitialScreen</code></td><td>SE16</td><td>Table name input field</td></tr>
+        <tr><td><code>SE16SelectionScreen</code></td><td>SE16</td><td>Filter fields per column (low/high pairs)</td></tr>
+        <tr><td><code>SE16ResultsScreen</code></td><td>SE16</td><td>ALV GridView with data rows</td></tr>
+        <tr><td><code>SessionManagerScreen</code></td><td>SESSION_MANAGER</td><td>Easy Access with nav tree</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>All extend <code>BaseTransaction</code>, which provides the standard window chrome (toolbar with command field, status bar) and convenience methods (<code>find()</code>, <code>set_field()</code>, <code>press()</code>, <code>send_vkey()</code>).</p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 5. LAYER C -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+
+<section id="layer-c">
+  <span class="layer-tag c">LAYER C</span>
+  <h2>5. Scripting Bridge</h2>
+  <p>Three complementary mechanisms expose the control tree to external automation scripts. All three share the same <code>ActionRecorder</code> for logging.</p>
+
+  <h3>Mechanism 1: In-process Python proxy</h3>
+  <p>Wrap any <code>Session</code> in a <code>SandboxSession</code> for a SAP COM-compatible Python API. Both PascalCase (<code>.Text</code>) and snake_case (<code>.text</code>) are supported.</p>
+  <pre><code>from bridge import SandboxSession
+from engine import load_screen
+
+session = SandboxSession(load_screen("screens/02_SE16_initial.json"))
+
+# Exact SAP GUI Scripting syntax
+session.findById("wnd[0]/usr/ctxtDATABROWSE-TABLENAME").Text = "SFLIGHT"
+session.findById("wnd[0]").sendVKey(0)
+print(session.Info.Transaction)       # "SE16"
+print(session.recorder.entries())     # action log</code></pre>
+
+  <h3>Mechanism 2: HTTP JSON API</h3>
+  <p>For cross-process / cross-language access (UiPath, test harnesses, browser tools).</p>
+  <pre><code># === Server side ===
+from bridge import start_server
+from engine import load_screen
+server = start_server(load_screen("screens/02_SE16_initial.json"), port=7654)
+
+# === Client side (any language) ===
+from bridge import RemoteSession
+session = RemoteSession("http://localhost:7654")
+session.findById("wnd[0]/usr/ctxtDATABROWSE-TABLENAME").Text = "SFLIGHT"</code></pre>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Endpoint</th><th>Method</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>/info</code></td><td>GET</td><td>Session metadata (transaction, user, screen)</td></tr>
+        <tr><td><code>/tree</code></td><td>GET</td><td>Full control tree as nested JSON</td></tr>
+        <tr><td><code>/controls</code></td><td>GET</td><td>Flat list of all controls</td></tr>
+        <tr><td><code>/log</code></td><td>GET</td><td>Action recorder entries</td></tr>
+        <tr><td><code>/findById</code></td><td>POST</td><td><code>{"path": "wnd[0]/usr/ctxtFOO"}</code></td></tr>
+        <tr><td><code>/action</code></td><td>POST</td><td><code>{"path": "...", "action": "setText", "value": "X"}</code></td></tr>
+        <tr><td><code>/loadScreen</code></td><td>POST</td><td><code>{"file": "screens/02_SE16_initial.json"}</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Mechanism 3: Windows COM / ROT</h3>
+  <p>The flagship mechanism. A background STA thread registers COM objects in the Windows Running Object Table (ROT), so external scripts connect via <code>GetObject("SAPGUI")</code> &mdash; exactly how real SAP works, just with a different moniker name.</p>
+
+  <div class="diagram-box"><pre>
+<strong>GetObject("SAPGUI")</strong>
+  │
+  ├── .GetScriptingEngine  →  <strong>ComApplication</strong>
+  │     └── .Children(0)   →  <strong>ComConnection</strong>
+  │           └── .Children(0)  →  <strong>ComSession</strong>
+  │                 ├── .findById(path)  →  <strong>ComControl</strong>
+  │                 │     ├── .Text  (read/write)
+  │                 │     ├── .Press()
+  │                 │     ├── .sendVKey(key)
+  │                 │     ├── .Children  →  ComCollection
+  │                 │     └── .Id, .Type, .Name, .Enabled, ...
+  │                 ├── .Info  →  <strong>ComSessionInfo</strong>
+  │                 │     └── .Transaction, .User, .SystemName, ...
+  │                 ├── .ActiveWindow  →  ComControl
+  │                 └── .sendVKey(key)</pre></div>
+
+  <h4>How it works internally</h4>
+  <ol>
+    <li><code>ComBridge.start()</code> spawns a daemon thread that calls <code>pythoncom.CoInitialize()</code> (STA apartment).</li>
+    <li>It creates a <code>ComSapGui</code> instance wrapping the engine <code>Session</code>, wraps it with <code>win32com.server.util.wrap()</code>, and registers it in the ROT via <code>pythoncom.CreateFileMoniker("SAPGUI")</code>.</li>
+    <li>The thread enters a message pump loop (<code>PumpWaitingMessages()</code> every 50ms) so incoming COM calls from external processes are dispatched.</li>
+    <li>On shutdown, the thread revokes from the ROT and calls <code>CoUninitialize()</code>.</li>
+  </ol>
+
+  <h4>Drop-in compatibility</h4>
+  <p>Existing SAP automation scripts need exactly one change:</p>
+  <pre><code># Before (real SAP):
+sap = win32com.client.GetObject("SAPGUI")
+
+# After (sandbox):
+sap = win32com.client.GetObject("SAPGUI")
+
+# Everything below is unchanged
+app = sap.GetScriptingEngine
+session = app.Children(0).Children(0)
+session.findById("wnd[0]/usr/ctxtFOO").Text = "1000"
+session.findById("wnd[0]").sendVKey(0)</code></pre>
+
+  <h3>Action Recorder</h3>
+  <p><code>bridge/recorder.py</code> provides an append-only log shared by all three mechanisms. Every scripting operation is recorded with a UTC ISO-8601 timestamp, the action name, the target control path, and any value written or returned.</p>
+  <pre><code>recorder.log("setText", path="wnd[0]/usr/ctxtFOO", value="SFLIGHT")
+recorder.save("session_log.json")    # persist to file
+recorder.entries()                   # list of dicts
+recorder.filter("sendVKey")          # filter by action</code></pre>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 6. TOOLS -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+
+<section id="tools">
+  <span class="layer-tag tools">TOOLS</span>
+  <h2>6. Tools &amp; Screen Capture Pipeline</h2>
+  <p>The <code>tools/</code> directory contains scripts that connect to a <strong>real</strong> SAP GUI session, walk the live control tree, and export it as JSON. These JSON files are what the sandbox loads and replays.</p>
+
+  <div class="diagram-box"><pre>
+Real SAP GUI  ──→  tools/sap_inspect.py  ──→  screens/*.json  ──→  engine/loader.py  ──→  Session
+(live COM)          (walks control tree)        (JSON snapshots)     (reconstructs tree)    (in-memory)</pre></div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Script</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>sap_connect.py</code></td><td>Core connection module. <code>get_session()</code> attaches to a running SAP GUI via <code>GetObject("SAPGUI")</code>. <code>launch_and_login()</code> opens SAP Logon and fills the login screen programmatically.</td></tr>
+        <tr><td><code>sap_inspect.py</code></td><td>Walks the full control tree of the active SAP screen and exports it as JSON. Extracts all properties, table data, grid columns/rows.</td></tr>
+        <tr><td><code>sap_scenarios.py</code></td><td>Automated multi-screen capture. Navigates through transactions (SE16, SU01, SM37, etc.), captures each screen to <code>screens/</code>, generates <code>_manifest.json</code>.</td></tr>
+        <tr><td><code>sap_launch.py</code></td><td>Launches SAP Logon, waits for login, then optionally runs the inspector or scenarios.</td></tr>
+        <tr><td><code>generate_screens.py</code></td><td>Generates the sample screens in <code>screens/</code>.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>CLI entry point</h3>
+  <p><code>run_sandbox.bat</code> dispatches to the tools using the system Python (which has pywin32 for COM):</p>
+  <pre><code>run_sandbox.bat launch              # start SAP, wait for login
+run_sandbox.bat inspect             # capture current screen to JSON
+run_sandbox.bat inspect --out screens/myscreen.json
+run_sandbox.bat scenarios all       # run all capture scenarios
+run_sandbox.bat scenarios SE16 --table MARA</code></pre>
+
+  <h3>Captured screens</h3>
+  <p>The <code>screens/</code> directory contains 18+ JSON snapshots from real SAP sessions, covering:</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Transaction</th><th>Screens</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>SESSION_MANAGER</td><td>1</td><td>Easy Access (main menu)</td></tr>
+        <tr><td>SE16</td><td>3</td><td>Data Browser &mdash; initial, selection, results for table SFLIGHT</td></tr>
+        <tr><td>SE16N</td><td>2</td><td>General Table Display</td></tr>
+        <tr><td>SE38</td><td>3</td><td>ABAP Editor &mdash; initial, source, attributes</td></tr>
+        <tr><td>SM37</td><td>1</td><td>Job Overview</td></tr>
+        <tr><td>SU01</td><td>1</td><td>User Maintenance</td></tr>
+        <tr><td>VA03</td><td>2</td><td>Display Sales Order</td></tr>
+        <tr><td>MM03</td><td>1</td><td>Display Material</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 7. FILE MAP -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+
+<section id="files">
+  <h2>7. Project File Map</h2>
+
+  <div class="file-tree"><span class="dir">gui_sandbox/</span>
+├── main.py                          <span class="comment"># Layer A: Qt visual shell + app entry point</span>
+├── requirements.txt                 <span class="comment"># PySide6, pywin32, pandas</span>
+├── run_sandbox.bat                      <span class="comment"># CLI dispatcher for tools</span>
+│
+├── <span class="dir">engine/</span>                          <span class="comment"># Layer B: Control Tree Engine</span>
+│   ├── __init__.py                  <span class="comment"># public exports</span>
+│   ├── control.py                   <span class="comment"># Control base + 30 subclasses</span>
+│   ├── session.py                   <span class="comment"># Session, Window, SessionInfo</span>
+│   ├── loader.py                    <span class="comment"># JSON → Session reconstruction</span>
+│   └── <span class="dir">transactions/</span>
+│       ├── base.py                  <span class="comment"># BaseTransaction</span>
+│       ├── se16.py                  <span class="comment"># SE16 Initial / Selection / Results</span>
+│       └── session_manager.py       <span class="comment"># SESSION_MANAGER main menu</span>
+│
+├── <span class="dir">bridge/</span>                          <span class="comment"># Layer C: Scripting Bridge</span>
+│   ├── __init__.py                  <span class="comment"># public exports</span>
+│   ├── proxy.py                     <span class="comment"># In-process: SessionProxy, ControlProxy</span>
+│   ├── server.py                    <span class="comment"># HTTP: SandboxServer, REST endpoints</span>
+│   ├── client.py                    <span class="comment"># HTTP: RemoteSession client</span>
+│   ├── recorder.py                  <span class="comment"># ActionRecorder (shared logging)</span>
+│   ├── com_server.py                <span class="comment"># COM: wrapper classes (7 COM objects)</span>
+│   └── com_thread.py                <span class="comment"># COM: STA thread, ROT lifecycle</span>
+│
+├── <span class="dir">screens/</span>                         <span class="comment"># Captured SAP screen JSONs (18+ files)</span>
+│   ├── _manifest.json
+│   ├── 01_SESSION_MANAGER.json
+│   ├── 02_SE16_initial.json
+│   └── ...
+│
+├── <span class="dir">tools/</span>                           <span class="comment"># SAP connection &amp; capture scripts</span>
+│   ├── sap_connect.py               <span class="comment"># COM connection to real SAP</span>
+│   ├── sap_inspect.py               <span class="comment"># Screen tree walker → JSON</span>
+│   ├── sap_scenarios.py             <span class="comment"># Multi-screen automated capture</span>
+│   ├── sap_launch.py                <span class="comment"># SAP Logon launcher</span>
+│   └── generate_screens.py          <span class="comment"># Generates sample screens</span>
+│
+├── <span class="dir">tests/</span>
+│   ├── test_com_bridge.py           <span class="comment"># Python COM smoke test</span>
+│   └── test_com_bridge.vbs          <span class="comment"># VBScript COM smoke test</span>
+│
+└── <span class="dir">specs/</span>
+    ├── spec_tech.md                 <span class="comment"># High-level architecture</span>
+    ├── 1_spec_visual_shell.md       <span class="comment"># UI shell spec</span>
+    ├── 2_spec_logical_model.md      <span class="comment"># Control Tree class design</span>
+    └── UI_detailed.md               <span class="comment"># Pixel-level layout &amp; colors</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 8. USAGE -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+
+<section id="usage">
+  <h2>8. Usage Guide</h2>
+
+  <h3>Quick start</h3>
+  <pre><code># Install dependencies
+pip install -r requirements.txt
+
+# Launch the sandbox (starts Qt UI + COM bridge)
+python main.py</code></pre>
+  <p>The app loads <code>screens/02_SE16_initial.json</code> by default and registers <code>GetObject("SAPGUI")</code> in the ROT. You&rsquo;ll see <code>COM bridge started</code> in the terminal.</p>
+
+  <h3>Connect from a Python script</h3>
+  <pre><code>import win32com.client
+
+sap = win32com.client.GetObject("SAPGUI")
+app = sap.GetScriptingEngine
+session = app.Children.Item(0).Children.Item(0)
+
+# Read a field
+field = session.findById("wnd[0]/usr/ctxtDATABROWSE-TABLENAME")
+print(field.Text)              # ""
+
+# Write a field
+field.Text = "SFLIGHT"
+print(field.Text)              # "SFLIGHT"
+
+# Press Enter
+session.findById("wnd[0]").sendVKey(0)
+
+# Read session info
+print(session.Info.Transaction)  # "SE16"
+print(session.Info.User)         # "USER_STANDARD"</code></pre>
+
+  <h3>Connect from VBScript</h3>
+  <pre><code>Set sap = GetObject("SAPGUI")
+Set app = sap.GetScriptingEngine
+Set session = app.Children(0).Children(0)
+session.findById("wnd[0]/usr/ctxtDATABROWSE-TABLENAME").Text = "SFLIGHT"
+session.findById("wnd[0]").sendVKey 0
+MsgBox session.Info.Transaction</code></pre>
+
+  <h3>Use the HTTP API instead</h3>
+  <pre><code>from bridge import start_server
+from engine import load_screen
+
+server = start_server(load_screen("screens/02_SE16_initial.json"), port=7654)
+# Then from any HTTP client:
+# POST http://localhost:7654/findById  {"path": "wnd[0]/usr/ctxtDATABROWSE-TABLENAME"}
+# POST http://localhost:7654/action    {"path": "...", "action": "setText", "value": "SFLIGHT"}</code></pre>
+
+  <h3>Use in-process (same Python script)</h3>
+  <pre><code>from bridge import SandboxSession
+from engine import load_screen
+
+session = SandboxSession(load_screen("screens/04_SE16_SFLIGHT_results.json"))
+grid = session.findById("wnd[0]/usr/cntlGRID1/shellcont/shell")
+print(grid.RowCount)
+print(grid.GetCellValue(0, "CARRID"))</code></pre>
+
+  <h3>Capture new screens from a live SAP</h3>
+  <pre><code>run_sandbox.bat launch              # opens SAP Logon, waits for login
+run_sandbox.bat inspect --out screens/my_screen.json
+run_sandbox.bat scenarios all       # automated multi-screen capture</code></pre>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 9. ROADMAP -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+
+<section id="roadmap">
+  <h2>9. Roadmap</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Phase</th><th>Status</th><th>Scope</th></tr></thead>
+      <tbody>
+        <tr><td>Phase 1</td><td>Done</td><td>Visual Shell + Control Tree Engine skeleton</td></tr>
+        <tr><td>Phase 2</td><td>Done</td><td><code>findById</code> scripting bridge &mdash; COM, HTTP, in-process</td></tr>
+        <tr><td>Phase 3</td><td>Next</td><td>Transaction screens &mdash; VA01 (Sales Order), ME21N (Purchase Order), SE16 (Table Viewer)</td></tr>
+        <tr><td>Phase 4</td><td>Planned</td><td>Keyboard focus engine, modal popups (<code>wnd[1]</code>, <code>wnd[2]</code>), functional status bar</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer style="padding: 32px 0 48px; text-align: center; font-size: 13px; color: var(--text-secondary); border-top: 1px solid var(--border-light);">
+  GUI Sandbox &mdash; documentation generated October 2026
+</footer>

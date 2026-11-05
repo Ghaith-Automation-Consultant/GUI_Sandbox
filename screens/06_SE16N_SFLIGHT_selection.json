@@ -1,0 +1,398 @@
+{
+  "_label": "06_SE16N_SFLIGHT_selection",
+  "system": "SBX",
+  "client": "000",
+  "user": "USER_STANDARD",
+  "transaction": "SE16N",
+  "program": "ZSBX_SE16N",
+  "screen": 100,
+  "status": "",
+  "tree": {
+    "id": "/app/con[0]/ses[0]",
+    "type": "GuiSession",
+    "name": "ses[0]",
+    "children": [
+      {
+        "id": "/app/con[0]/ses[0]/wnd[0]",
+        "type": "GuiMainWindow",
+        "name": "wnd[0]",
+        "text": "General Table Display",
+        "changeable": true,
+        "left": 0,
+        "top": 0,
+        "width": 1280,
+        "height": 800,
+        "children": [
+          {
+            "id": "/app/con[0]/ses[0]/wnd[0]/mbar",
+            "type": "GuiMenubar",
+            "name": "mbar",
+            "children": [
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[0]",
+                "type": "GuiMenu",
+                "name": "Table",
+                "text": "Table",
+                "changeable": true,
+                "children": [
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[0]/menu[0]",
+                    "type": "GuiMenu",
+                    "name": "Display",
+                    "text": "Display",
+                    "changeable": true
+                  },
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[0]/menu[1]",
+                    "type": "GuiMenu",
+                    "name": "Exit",
+                    "text": "Exit",
+                    "changeable": true
+                  }
+                ]
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[1]",
+                "type": "GuiMenu",
+                "name": "Edit",
+                "text": "Edit",
+                "changeable": true,
+                "children": [
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[1]/menu[0]",
+                    "type": "GuiMenu",
+                    "name": "Delete Row",
+                    "text": "Delete Row",
+                    "changeable": true
+                  }
+                ]
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[2]",
+                "type": "GuiMenu",
+                "name": "Goto",
+                "text": "Goto",
+                "changeable": true,
+                "children": [
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[2]/menu[0]",
+                    "type": "GuiMenu",
+                    "name": "Back",
+                    "text": "Back",
+                    "changeable": true
+                  }
+                ]
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[3]",
+                "type": "GuiMenu",
+                "name": "System",
+                "text": "System",
+                "changeable": true,
+                "children": [
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[3]/menu[0]",
+                    "type": "GuiMenu",
+                    "name": "User Profile",
+                    "text": "User Profile",
+                    "changeable": true
+                  },
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[3]/menu[1]",
+                    "type": "GuiMenu",
+                    "name": "Services",
+                    "text": "Services",
+                    "changeable": true
+                  },
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[3]/menu[2]",
+                    "type": "GuiMenu",
+                    "name": "Status...",
+                    "text": "Status...",
+                    "changeable": true
+                  }
+                ]
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[4]",
+                "type": "GuiMenu",
+                "name": "Help",
+                "text": "Help",
+                "changeable": true,
+                "children": [
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[4]/menu[0]",
+                    "type": "GuiMenu",
+                    "name": "Application Help",
+                    "text": "Application Help",
+                    "changeable": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]",
+            "type": "GuiToolbar",
+            "name": "tbar[0]",
+            "changeable": true,
+            "children": [
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/okcd",
+                "type": "GuiOkCodeField",
+                "name": "okcd",
+                "changeable": true,
+                "max_len": 132
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[0]",
+                "type": "GuiButton",
+                "name": "btn[0]",
+                "tooltip": "Enter   (Enter)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[11]",
+                "type": "GuiButton",
+                "name": "btn[11]",
+                "tooltip": "Save   (Ctrl+S)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[3]",
+                "type": "GuiButton",
+                "name": "btn[3]",
+                "tooltip": "Back   (F3)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[15]",
+                "type": "GuiButton",
+                "name": "btn[15]",
+                "tooltip": "Exit   (Shift+F3)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[12]",
+                "type": "GuiButton",
+                "name": "btn[12]",
+                "tooltip": "Cancel   (F12)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[86]",
+                "type": "GuiButton",
+                "name": "btn[86]",
+                "tooltip": "Print   (Ctrl+P)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[71]",
+                "type": "GuiButton",
+                "name": "btn[71]",
+                "tooltip": "Find   (Ctrl+F)",
+                "changeable": true
+              }
+            ]
+          },
+          {
+            "id": "/app/con[0]/ses[0]/wnd[0]/titl",
+            "type": "GuiTitlebar",
+            "name": "titl",
+            "text": "General Table Display"
+          },
+          {
+            "id": "/app/con[0]/ses[0]/wnd[0]/tbar[1]",
+            "type": "GuiToolbar",
+            "name": "tbar[1]",
+            "changeable": true,
+            "children": [
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[1]/btn[8]",
+                "type": "GuiButton",
+                "name": "btn[8]",
+                "tooltip": "Online   (F8)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[1]/btn[7]",
+                "type": "GuiButton",
+                "name": "btn[7]",
+                "tooltip": "Number of Entries   (F7)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[1]/btn[32]",
+                "type": "GuiButton",
+                "name": "btn[32]",
+                "tooltip": "Background   (Ctrl+F8)",
+                "changeable": true
+              }
+            ]
+          },
+          {
+            "id": "/app/con[0]/ses[0]/wnd[0]/usr",
+            "type": "GuiUserArea",
+            "name": "usr",
+            "changeable": true,
+            "children": [
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/lblGD-TAB",
+                "type": "GuiLabel",
+                "name": "GD-TAB",
+                "text": "Table",
+                "left": 16,
+                "top": 20,
+                "width": 200,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/ctxtGD-TAB",
+                "type": "GuiCTextField",
+                "name": "GD-TAB",
+                "changeable": true,
+                "max_len": 40,
+                "text": "SFLIGHT",
+                "left": 220,
+                "top": 20,
+                "width": 240,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/lblGD-MAX_LINES",
+                "type": "GuiLabel",
+                "name": "GD-MAX_LINES",
+                "text": "Maximum Hits",
+                "left": 16,
+                "top": 50,
+                "width": 200,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/txtGD-MAX_LINES",
+                "type": "GuiTextField",
+                "name": "GD-MAX_LINES",
+                "changeable": true,
+                "max_len": 40,
+                "text": "500",
+                "left": 220,
+                "top": 50,
+                "width": 240,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/tblSE16NSELFIELDS_TC",
+                "type": "GuiTableControl",
+                "name": "SELFIELDS_TC",
+                "text": "Selection Criteria",
+                "changeable": true,
+                "columns": [
+                  {
+                    "name": "FIELDNAME",
+                    "title": "Field Name"
+                  },
+                  {
+                    "name": "SCRTEXT",
+                    "title": "Description"
+                  },
+                  {
+                    "name": "LOW",
+                    "title": "From"
+                  },
+                  {
+                    "name": "HIGH",
+                    "title": "To"
+                  }
+                ],
+                "rows": [
+                  [
+                    "CARRID",
+                    "Airline",
+                    "",
+                    ""
+                  ],
+                  [
+                    "CONNID",
+                    "Flight Number",
+                    "",
+                    ""
+                  ],
+                  [
+                    "FLDATE",
+                    "Flight Date",
+                    "",
+                    ""
+                  ],
+                  [
+                    "PRICE",
+                    "Fare",
+                    "",
+                    ""
+                  ],
+                  [
+                    "CURRENCY",
+                    "Currency",
+                    "",
+                    ""
+                  ],
+                  [
+                    "PLANETYPE",
+                    "Aircraft Type",
+                    "",
+                    ""
+                  ],
+                  [
+                    "SEATSMAX",
+                    "Maximum Seats",
+                    "",
+                    ""
+                  ],
+                  [
+                    "SEATSOCC",
+                    "Occupied Seats",
+                    "",
+                    ""
+                  ]
+                ],
+                "left": 16,
+                "top": 110,
+                "width": 800,
+                "height": 320
+              }
+            ]
+          },
+          {
+            "id": "/app/con[0]/ses[0]/wnd[0]/sbar",
+            "type": "GuiStatusbar",
+            "name": "sbar",
+            "children": [
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/sbar/pane[0]",
+                "type": "GuiStatusPane",
+                "name": "pane[0]"
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/sbar/pane[1]",
+                "type": "GuiStatusPane",
+                "name": "pane[1]",
+                "text": "SBX (1) 000"
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/sbar/pane[2]",
+                "type": "GuiStatusPane",
+                "name": "pane[2]",
+                "text": "sandbox"
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/sbar/pane[3]",
+                "type": "GuiStatusPane",
+                "name": "pane[3]",
+                "text": "INS"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

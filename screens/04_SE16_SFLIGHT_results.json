@@ -1,0 +1,416 @@
+{
+  "_label": "04_SE16_SFLIGHT_results",
+  "system": "SBX",
+  "client": "000",
+  "user": "USER_STANDARD",
+  "transaction": "SE16",
+  "program": "ZSBX_SE16",
+  "screen": 500,
+  "status": "8 entries displayed",
+  "tree": {
+    "id": "/app/con[0]/ses[0]",
+    "type": "GuiSession",
+    "name": "ses[0]",
+    "children": [
+      {
+        "id": "/app/con[0]/ses[0]/wnd[0]",
+        "type": "GuiMainWindow",
+        "name": "wnd[0]",
+        "text": "Data Browser: Table SFLIGHT Select Entries   8",
+        "changeable": true,
+        "left": 0,
+        "top": 0,
+        "width": 1280,
+        "height": 800,
+        "children": [
+          {
+            "id": "/app/con[0]/ses[0]/wnd[0]/mbar",
+            "type": "GuiMenubar",
+            "name": "mbar",
+            "children": [
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[0]",
+                "type": "GuiMenu",
+                "name": "Table Entry",
+                "text": "Table Entry",
+                "changeable": true,
+                "children": [
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[0]/menu[0]",
+                    "type": "GuiMenu",
+                    "name": "Display",
+                    "text": "Display",
+                    "changeable": true
+                  },
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[0]/menu[1]",
+                    "type": "GuiMenu",
+                    "name": "Print",
+                    "text": "Print",
+                    "changeable": true
+                  },
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[0]/menu[2]",
+                    "type": "GuiMenu",
+                    "name": "Exit",
+                    "text": "Exit",
+                    "changeable": true
+                  }
+                ]
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[1]",
+                "type": "GuiMenu",
+                "name": "Edit",
+                "text": "Edit",
+                "changeable": true,
+                "children": [
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[1]/menu[0]",
+                    "type": "GuiMenu",
+                    "name": "Select All",
+                    "text": "Select All",
+                    "changeable": true
+                  },
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[1]/menu[1]",
+                    "type": "GuiMenu",
+                    "name": "Find",
+                    "text": "Find",
+                    "changeable": true
+                  }
+                ]
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[2]",
+                "type": "GuiMenu",
+                "name": "Goto",
+                "text": "Goto",
+                "changeable": true,
+                "children": [
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[2]/menu[0]",
+                    "type": "GuiMenu",
+                    "name": "Back",
+                    "text": "Back",
+                    "changeable": true
+                  }
+                ]
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[3]",
+                "type": "GuiMenu",
+                "name": "System",
+                "text": "System",
+                "changeable": true,
+                "children": [
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[3]/menu[0]",
+                    "type": "GuiMenu",
+                    "name": "User Profile",
+                    "text": "User Profile",
+                    "changeable": true
+                  },
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[3]/menu[1]",
+                    "type": "GuiMenu",
+                    "name": "Services",
+                    "text": "Services",
+                    "changeable": true
+                  },
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[3]/menu[2]",
+                    "type": "GuiMenu",
+                    "name": "Status...",
+                    "text": "Status...",
+                    "changeable": true
+                  }
+                ]
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[4]",
+                "type": "GuiMenu",
+                "name": "Help",
+                "text": "Help",
+                "changeable": true,
+                "children": [
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[4]/menu[0]",
+                    "type": "GuiMenu",
+                    "name": "Application Help",
+                    "text": "Application Help",
+                    "changeable": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]",
+            "type": "GuiToolbar",
+            "name": "tbar[0]",
+            "changeable": true,
+            "children": [
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/okcd",
+                "type": "GuiOkCodeField",
+                "name": "okcd",
+                "changeable": true,
+                "max_len": 132
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[0]",
+                "type": "GuiButton",
+                "name": "btn[0]",
+                "tooltip": "Enter   (Enter)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[11]",
+                "type": "GuiButton",
+                "name": "btn[11]",
+                "tooltip": "Save   (Ctrl+S)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[3]",
+                "type": "GuiButton",
+                "name": "btn[3]",
+                "tooltip": "Back   (F3)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[15]",
+                "type": "GuiButton",
+                "name": "btn[15]",
+                "tooltip": "Exit   (Shift+F3)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[12]",
+                "type": "GuiButton",
+                "name": "btn[12]",
+                "tooltip": "Cancel   (F12)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[86]",
+                "type": "GuiButton",
+                "name": "btn[86]",
+                "tooltip": "Print   (Ctrl+P)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[71]",
+                "type": "GuiButton",
+                "name": "btn[71]",
+                "tooltip": "Find   (Ctrl+F)",
+                "changeable": true
+              }
+            ]
+          },
+          {
+            "id": "/app/con[0]/ses[0]/wnd[0]/titl",
+            "type": "GuiTitlebar",
+            "name": "titl",
+            "text": "Data Browser: Table SFLIGHT Select Entries   8"
+          },
+          {
+            "id": "/app/con[0]/ses[0]/wnd[0]/tbar[1]",
+            "type": "GuiToolbar",
+            "name": "tbar[1]",
+            "changeable": true,
+            "children": [
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[1]/btn[7]",
+                "type": "GuiButton",
+                "name": "btn[7]",
+                "tooltip": "Display   (F7)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[1]/btn[28]",
+                "type": "GuiButton",
+                "name": "btn[28]",
+                "tooltip": "Sort Ascending   (Ctrl+F4)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[1]/btn[40]",
+                "type": "GuiButton",
+                "name": "btn[40]",
+                "tooltip": "Sort Descending   (Ctrl+Shift+F4)",
+                "changeable": true
+              }
+            ]
+          },
+          {
+            "id": "/app/con[0]/ses[0]/wnd[0]/usr",
+            "type": "GuiUserArea",
+            "name": "usr",
+            "changeable": true,
+            "children": [
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/cntlGRID1/shellcont/shell",
+                "type": "GuiGridView",
+                "name": "shell",
+                "changeable": true,
+                "columns": [
+                  {
+                    "name": "CARRID",
+                    "title": "Airline"
+                  },
+                  {
+                    "name": "CONNID",
+                    "title": "Flight Number"
+                  },
+                  {
+                    "name": "FLDATE",
+                    "title": "Flight Date"
+                  },
+                  {
+                    "name": "PRICE",
+                    "title": "Fare"
+                  },
+                  {
+                    "name": "CURRENCY",
+                    "title": "Currency"
+                  },
+                  {
+                    "name": "PLANETYPE",
+                    "title": "Aircraft Type"
+                  },
+                  {
+                    "name": "SEATSMAX",
+                    "title": "Maximum Seats"
+                  },
+                  {
+                    "name": "SEATSOCC",
+                    "title": "Occupied Seats"
+                  }
+                ],
+                "rows": [
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0101",
+                    "FLDATE": "20260112",
+                    "PRICE": "420.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "152"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0101",
+                    "FLDATE": "20260119",
+                    "PRICE": "435.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "167"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0205",
+                    "FLDATE": "20260114",
+                    "PRICE": "610.50",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A350",
+                    "SEATSMAX": "300",
+                    "SEATSOCC": "241"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0310",
+                    "FLDATE": "20260115",
+                    "PRICE": "289.90",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "98"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0310",
+                    "FLDATE": "20260122",
+                    "PRICE": "305.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "143"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0412",
+                    "FLDATE": "20260118",
+                    "PRICE": "780.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "266"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0550",
+                    "FLDATE": "20260120",
+                    "PRICE": "198.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "77"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0550",
+                    "FLDATE": "20260127",
+                    "PRICE": "212.50",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "121"
+                  }
+                ],
+                "left": 8,
+                "top": 8,
+                "width": 1200,
+                "height": 560
+              }
+            ]
+          },
+          {
+            "id": "/app/con[0]/ses[0]/wnd[0]/sbar",
+            "type": "GuiStatusbar",
+            "name": "sbar",
+            "text": "8 entries displayed",
+            "children": [
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/sbar/pane[0]",
+                "type": "GuiStatusPane",
+                "name": "pane[0]"
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/sbar/pane[1]",
+                "type": "GuiStatusPane",
+                "name": "pane[1]",
+                "text": "SBX (1) 000"
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/sbar/pane[2]",
+                "type": "GuiStatusPane",
+                "name": "pane[2]",
+                "text": "sandbox"
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/sbar/pane[3]",
+                "type": "GuiStatusPane",
+                "name": "pane[3]",
+                "text": "INS"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

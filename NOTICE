@@ -1,0 +1,16 @@
+GUI Sandbox
+Copyright 2026 Ghaith Abdessalem
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+This is an independent project. It is not affiliated with, endorsed by, or
+sponsored by SAP SE or its affiliates. SAP, SAP GUI, ABAP, and other SAP product
+names are trademarks or registered trademarks of SAP SE in Germany and other
+countries. They are used here only to describe interoperability. The Apache
+License does not grant any rights to those trademarks.
+
+This repository contains no SAP software. Running it requires these third-party
+packages, which are installed separately and not redistributed here:
+
+  PySide6 (Qt for Python)  LGPL-3.0-only / GPL-3.0-only / commercial
+  pywin32                  PSF-2.0

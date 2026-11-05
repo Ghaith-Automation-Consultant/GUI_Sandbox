@@ -1,0 +1,114 @@
+[
+  {
+    "label": "01_SESSION_MANAGER",
+    "transaction": "SESSION_MANAGER",
+    "program": "ZSBX_HOME",
+    "screen": 100,
+    "status": "",
+    "file": "01_SESSION_MANAGER.json"
+  },
+  {
+    "label": "02_SE16_initial",
+    "transaction": "SE16",
+    "program": "ZSBX_SE16",
+    "screen": 230,
+    "status": "",
+    "file": "02_SE16_initial.json"
+  },
+  {
+    "label": "03_SE16_SFLIGHT_selection_screen",
+    "transaction": "SE16",
+    "program": "ZSBX_SE16",
+    "screen": 1000,
+    "status": "",
+    "file": "03_SE16_SFLIGHT_selection_screen.json"
+  },
+  {
+    "label": "04_SE16_SFLIGHT_results",
+    "transaction": "SE16",
+    "program": "ZSBX_SE16",
+    "screen": 500,
+    "status": "8 entries displayed",
+    "file": "04_SE16_SFLIGHT_results.json"
+  },
+  {
+    "label": "05_SE16N_initial",
+    "transaction": "SE16N",
+    "program": "ZSBX_SE16N",
+    "screen": 100,
+    "status": "",
+    "file": "05_SE16N_initial.json"
+  },
+  {
+    "label": "06_SE16N_SFLIGHT_selection",
+    "transaction": "SE16N",
+    "program": "ZSBX_SE16N",
+    "screen": 100,
+    "status": "",
+    "file": "06_SE16N_SFLIGHT_selection.json"
+  },
+  {
+    "label": "07_SE38_initial",
+    "transaction": "SE38",
+    "program": "ZSBX_SE38",
+    "screen": 100,
+    "status": "",
+    "file": "07_SE38_initial.json"
+  },
+  {
+    "label": "08_SE38_source_ZSBX_DEMO",
+    "transaction": "SE38",
+    "program": "ZSBX_SE38",
+    "screen": 500,
+    "status": "",
+    "file": "08_SE38_source_ZSBX_DEMO.json"
+  },
+  {
+    "label": "09_SE38_attributes_ZSBX_DEMO",
+    "transaction": "SE38",
+    "program": "ZSBX_SE38",
+    "screen": 120,
+    "status": "",
+    "file": "09_SE38_attributes_ZSBX_DEMO.json"
+  },
+  {
+    "label": "10_SM37_initial",
+    "transaction": "SM37",
+    "program": "ZSBX_SM37",
+    "screen": 2170,
+    "status": "",
+    "file": "10_SM37_initial.json"
+  },
+  {
+    "label": "11_SU01_initial",
+    "transaction": "SU01",
+    "program": "ZSBX_SU01",
+    "screen": 1050,
+    "status": "",
+    "file": "11_SU01_initial.json"
+  },
+  {
+    "label": "12_VA03_initial",
+    "transaction": "VA03",
+    "program": "ZSBX_VA03",
+    "screen": 102,
+    "status": "",
+    "file": "12_VA03_initial.json"
+  },
+  {
+    "label": "13_VA03_overview",
+    "transaction": "VA03",
+    "program": "ZSBX_VA03",
+    "screen": 4001,
+    "status": "",
+    "file": "13_VA03_overview.json"
+  },
+  {
+    "label": "14_MM03_initial",
+    "transaction": "MM03",
+    "program": "ZSBX_MM03",
+    "screen": 60,
+    "status": "",
+    "file": "14_MM03_initial.json"
+  }
+]

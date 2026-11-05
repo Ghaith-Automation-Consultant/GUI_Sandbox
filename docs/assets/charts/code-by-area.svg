@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 258" width="760" height="258" role="img" aria-label="Python code by project area. Scripting bridge: 2,099, Qt interface: 1,659, Tools: 1,519, Tests: 1,369, Control engine: 1,189.">
+<style>
+  .surface { fill: #fcfcfb; stroke: rgba(11,11,11,0.10); }
+  .bar { fill: #2a78d6; }
+  .base { stroke: #c3c2b7; }
+  .title { fill: #0b0b0b; font-size: 17px; font-weight: 600; }
+  .note { fill: #52514e; font-size: 13px; }
+  .label { fill: #0b0b0b; font-size: 14px; }
+  .value { fill: #0b0b0b; font-size: 14px; font-weight: 600; }
+  text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  @media (prefers-color-scheme: dark) {
+    .surface { fill: #1a1a19; stroke: rgba(255,255,255,0.10); }
+    .bar { fill: #3987e5; }
+    .base { stroke: #383835; }
+    .title, .label, .value { fill: #f0efec; }
+    .note { fill: #c3c2b7; }
+  }
+</style>
+
+<rect class="surface" x="0.5" y="0.5" width="759" height="257" rx="8"/>
+<text class="title" x="20" y="31">Python code by project area</text>
+<text class="note" x="20" y="52">Lines including comments and blanks. 7,835 in total.</text>
+<line class="base" x1="190" x2="190" y1="68" y2="232"/>
+<text class="label" x="178" y="86" text-anchor="end">Scripting bridge</text>
+<path class="bar" d="M190,74 H666.0 a4,4 0 0 1 4,4 V84 a4,4 0 0 1 -4,4 H190 Z"><title>Scripting bridge: 2,099</title></path>
+<text class="value" x="678.0" y="86">2,099</text>
+<text class="label" x="178" y="120" text-anchor="end">Qt interface</text>
+<path class="bar" d="M190,108 H565.3806574559314 a4,4 0 0 1 4,4 V118 a4,4 0 0 1 -4,4 H190 Z"><title>Qt interface: 1,659</title></path>
+<text class="value" x="577.3806574559314" y="120">1,659</text>
+<text class="label" x="178" y="154" text-anchor="end">Tools</text>
+<path class="bar" d="M190,142 H533.3654121010004 a4,4 0 0 1 4,4 V152 a4,4 0 0 1 -4,4 H190 Z"><title>Tools: 1,519</title></path>
+<text class="value" x="545.3654121010004" y="154">1,519</text>
+<text class="label" x="178" y="188" text-anchor="end">Tests</text>
+<path class="bar" d="M190,176 H499.06336350643164 a4,4 0 0 1 4,4 V186 a4,4 0 0 1 -4,4 H190 Z"><title>Tests: 1,369</title></path>
+<text class="value" x="511.06336350643164" y="188">1,369</text>
+<text class="label" x="178" y="222" text-anchor="end">Control engine</text>
+<path class="bar" d="M190,210 H457.90090519294904 a4,4 0 0 1 4,4 V220 a4,4 0 0 1 -4,4 H190 Z"><title>Control engine: 1,189</title></path>
+<text class="value" x="469.90090519294904" y="222">1,189</text>
+</svg>

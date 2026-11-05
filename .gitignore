@@ -23,3 +23,6 @@ tools/SAP-Scripting-tracker-main/
 _local_archive/
 screens/screenshots/
 screenshots/
+
+# Video project source and renders
+_video/

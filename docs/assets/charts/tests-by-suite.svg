@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 224" width="760" height="224" role="img" aria-label="Automated tests by suite. Control engine: 65, End to end: 58, Sample data guards: 44, Qt widgets: 37.">
+<style>
+  .surface { fill: #fcfcfb; stroke: rgba(11,11,11,0.10); }
+  .bar { fill: #2a78d6; }
+  .base { stroke: #c3c2b7; }
+  .title { fill: #0b0b0b; font-size: 17px; font-weight: 600; }
+  .note { fill: #52514e; font-size: 13px; }
+  .label { fill: #0b0b0b; font-size: 14px; }
+  .value { fill: #0b0b0b; font-size: 14px; font-weight: 600; }
+  text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  @media (prefers-color-scheme: dark) {
+    .surface { fill: #1a1a19; stroke: rgba(255,255,255,0.10); }
+    .bar { fill: #3987e5; }
+    .base { stroke: #383835; }
+    .title, .label, .value { fill: #f0efec; }
+    .note { fill: #c3c2b7; }
+  }
+</style>
+
+<rect class="surface" x="0.5" y="0.5" width="759" height="223" rx="8"/>
+<text class="title" x="20" y="31">Automated tests by suite</text>
+<text class="note" x="20" y="52">Test cases collected by pytest. 204 in total.</text>
+<line class="base" x1="190" x2="190" y1="68" y2="198"/>
+<text class="label" x="178" y="86" text-anchor="end">Control engine</text>
+<path class="bar" d="M190,74 H666.0 a4,4 0 0 1 4,4 V84 a4,4 0 0 1 -4,4 H190 Z"><title>Control engine: 65</title></path>
+<text class="value" x="678.0" y="86">65</text>
+<text class="label" x="178" y="120" text-anchor="end">End to end</text>
+<path class="bar" d="M190,108 H614.3076923076924 a4,4 0 0 1 4,4 V118 a4,4 0 0 1 -4,4 H190 Z"><title>End to end: 58</title></path>
+<text class="value" x="626.3076923076924" y="120">58</text>
+<text class="label" x="178" y="154" text-anchor="end">Sample data guards</text>
+<path class="bar" d="M190,142 H510.9230769230769 a4,4 0 0 1 4,4 V152 a4,4 0 0 1 -4,4 H190 Z"><title>Sample data guards: 44</title></path>
+<text class="value" x="522.9230769230769" y="154">44</text>
+<text class="label" x="178" y="188" text-anchor="end">Qt widgets</text>
+<path class="bar" d="M190,176 H459.2307692307692 a4,4 0 0 1 4,4 V186 a4,4 0 0 1 -4,4 H190 Z"><title>Qt widgets: 37</title></path>
+<text class="value" x="471.2307692307692" y="188">37</text>
+</svg>

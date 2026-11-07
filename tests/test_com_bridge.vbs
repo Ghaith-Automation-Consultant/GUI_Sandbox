@@ -25,6 +25,14 @@ Set session = con.Children.Item(0)
 WScript.Echo "  Transaction: " & session.Info.Transaction
 WScript.Echo "  User: " & session.Info.User
 
+If session.Info.Transaction = "S000" Then
+    session.findById("wnd[0]/usr/txtRSYST-MANDT").Text = "000"
+    session.findById("wnd[0]/usr/txtRSYST-BNAME").Text = "USER_STANDARD"
+    session.findById("wnd[0]/usr/pwdRSYST-BCODE").Text = "sandbox"
+    session.findById("wnd[0]").sendVKey 0
+    WScript.Echo "  Logged on as: " & session.Info.User
+End If
+
 session.StartTransaction "SE16"
 session.findById("wnd[0]/usr/ctxtDATABROWSE-TABLENAME").Text = "SFLIGHT"
 WScript.Echo "  Set field to SFLIGHT"

@@ -40,6 +40,14 @@ def main():
     print(f"  User: {info.User}")
     print(f"  Screen: {info.ScreenNumber}")
 
+    if info.Transaction == "S000":
+        print("\nLogging on with the sandbox test user...")
+        session.findById("wnd[0]/usr/txtRSYST-MANDT").Text = "000"
+        session.findById("wnd[0]/usr/txtRSYST-BNAME").Text = "USER_STANDARD"
+        session.findById("wnd[0]/usr/pwdRSYST-BCODE").Text = "sandbox"
+        session.findById("wnd[0]").sendVKey(0)
+        print(f"  User: {session.Info.User}")
+
     print("\nTesting StartTransaction...")
     session.StartTransaction("SE16")
     print(f"  Transaction: {session.Info.Transaction}")

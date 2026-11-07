@@ -10,7 +10,7 @@ Connect with `GetObject("SAPGUI")`, explore real-looking screens, and develop yo
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-2a78d6)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-2a78d6)](#quick-start)
 [![Platform: Windows](https://img.shields.io/badge/platform-Windows-2a78d6)](#quick-start)
-[![Tests: 204 passing](https://img.shields.io/badge/tests-204%20passing-1baf7a)](#by-the-numbers)
+[![Tests: 232 passing](https://img.shields.io/badge/tests-232%20passing-1baf7a)](#by-the-numbers)
 
 <img src="docs/assets/film/gui-sandbox-demo.gif" alt="Animated demo: opening a table in GUI Sandbox, then a Python script reading values from its results grid" width="820">
 
@@ -41,7 +41,7 @@ GUI Sandbox is for development, training, and testing. It simulates the scriptin
 - 🧩 **A familiar object model:** `findById`, `Children`, `Info`, `sendVKey`, and 30 control types with the `Gui*` type names scripts expect.
 - 🖥️ **A real desktop UI:** menus, toolbars, tabs, grids, and tables, all rendered from the same control tree your script reads.
 - 📼 **An action recorder:** timestamped logs of `findById`, `setText`, `press`, and `sendVKey` for checking what a script did.
-- 🧪 **14 ready-made screens:** Data Browser, ABAP Editor, job overview, users, sales orders, and materials.
+- 🧪 **15 ready-made screens:** a logon screen, Data Browser, ABAP Editor, job overview, users, sales orders, and materials.
 - ✏️ **Easy to extend:** screens are plain JSON, generated from one readable Python script.
 
 ## Take a look
@@ -104,9 +104,11 @@ python main.py
 
 Close SAP Logon first, because both register under the same `SAPGUI` name. When you see `COM bridge started` in the terminal, the sandbox is ready.
 
+The app opens on a logon screen. Log on with client `000`, user `USER_STANDARD` and password `sandbox`. These test credentials are defined in [`engine/logon.py`](engine/logon.py); never put credentials for a real system there. To skip the logon screen, run `python main.py --no-logon`. Type `/nend` in the command field to log off.
+
 ### Connect over COM
 
-Type `SE16` in the app's command field and press Enter, then run this from another terminal:
+Log on from your script with the same field IDs as the SAP GUI logon screen:
 
 ```python
 import win32com.client
@@ -114,6 +116,18 @@ import win32com.client
 sap = win32com.client.GetObject("SAPGUI")
 session = sap.GetScriptingEngine.Children(0).Children(0)
 
+session.findById("wnd[0]/usr/txtRSYST-MANDT").Text = "000"
+session.findById("wnd[0]/usr/txtRSYST-BNAME").Text = "USER_STANDARD"
+session.findById("wnd[0]/usr/pwdRSYST-BCODE").Text = "sandbox"
+session.findById("wnd[0]/usr/txtRSYST-LANGU").Text = "EN"
+session.findById("wnd[0]").sendVKey(0)
+
+print(session.Info.User)  # USER_STANDARD
+```
+
+Then type `SE16` in the app's command field and press Enter, and run:
+
+```python
 print(session.Info.Transaction)  # SE16
 
 field = session.findById("wnd[0]/usr/ctxtDATABROWSE-TABLENAME")
@@ -161,6 +175,7 @@ for entry in session.recorder.entries():
 
 | Transaction | What it shows | Steps in the flow |
 |---|---|---|
+| `S000` | Logon screen: client, user, password, language | 1 |
 | `SE16` | Data Browser: table name, selection, results grid | 3 |
 | `SE16N` | General table display with a selection table | 2 |
 | `SE38` | ABAP Editor: start screen, source, attributes | 3 |
@@ -177,8 +192,8 @@ All screens use fictional data. To add your own, extend [`tools/generate_screens
   <tr>
     <td align="center"><h3>3</h3>scripting bridges</td>
     <td align="center"><h3>30</h3>control types</td>
-    <td align="center"><h3>14</h3>sample screens</td>
-    <td align="center"><h3>204</h3>automated tests</td>
+    <td align="center"><h3>15</h3>sample screens</td>
+    <td align="center"><h3>232</h3>automated tests</td>
   </tr>
 </table>
 

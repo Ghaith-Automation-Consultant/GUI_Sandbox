@@ -66,7 +66,7 @@ run_sandbox.bat
 
 Au démarrage, l'application :
 
-1. Charge l'écran par défaut (`screens/01_SESSION_MANAGER.json`).
+1. Affiche l'écran de connexion (`screens/00_LOGON.json`, transaction `S000`). Connectez-vous avec le mandant `000`, l'utilisateur `USER_STANDARD` et le mot de passe `sandbox` (définis dans `engine/logon.py`), puis appuyez sur Entrée. `python main.py --no-logon` ouvre directement l'écran Easy Access, et `/nend` dans la zone de commande vous déconnecte.
 2. Affiche la fenêtre SAP GUI avec menus, barres d'outils, arbre de navigation et zone de contenu.
 3. Enregistre le pont COM dans la Running Object Table (ROT) Windows — le message `COM bridge started` apparaît dans le terminal.
 4. Les scripts externes peuvent alors se connecter via `GetObject("SAPGUI")`.
@@ -112,11 +112,17 @@ En bas de la fenêtre, la barre de statut affiche les messages système (succès
 
 ## 6. Transactions disponibles
 
-Le sandbox inclut plus de 20 écrans capturés depuis des sessions SAP réelles :
+Le sandbox inclut 15 écrans d'exemple générés par `tools/generate_screens.py`, avec des données fictives :
+
+### S000 — Écran de connexion
+
+Mandant, utilisateur, mot de passe et langue de connexion, avec les mêmes ID de champs que l'écran de connexion SAP GUI (`txtRSYST-MANDT`, `txtRSYST-BNAME`, `pwdRSYST-BCODE`, `txtRSYST-LANGU`). Un script peut donc s'y connecter comme sur un vrai système.
+
+- `00_LOGON.json` — écran de connexion
 
 ### SESSION_MANAGER — Easy Access
 
-L'écran principal SAP avec l'arbre de navigation (Favoris + Menu SAP). C'est l'écran affiché au démarrage.
+L'écran principal SAP avec l'arbre de navigation (Favoris + Menu SAP). C'est l'écran affiché après la connexion.
 
 - `01_SESSION_MANAGER.json` — écran initial
 

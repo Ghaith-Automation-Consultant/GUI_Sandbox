@@ -21,6 +21,7 @@ from PySide6.QtWidgets import (
     QTableView, QHeaderView, QScrollArea, QFrame, QToolButton,
     QHBoxLayout, QPlainTextEdit,
 )
+from PySide6.QtCore import QThread, QTimer
 from PySide6.QtGui import QStandardItemModel, QStandardItem, QFont
 
 from engine.control import (
@@ -32,6 +33,7 @@ from engine.control import (
     ScrollContainer, SimpleContainer, Box, Tree,
     TableControl, GridView,
 )
+from engine.session import Window
 from .styles import SAP
 
 
@@ -96,13 +98,38 @@ def build_textfield(ctrl: TextField, parent: QWidget) -> QLineEdit:
         ctrl.value = text
 
     w.textChanged.connect(on_text_changed)
+    w.returnPressed.connect(lambda: _send_enter(ctrl))
 
-    def on_engine_change(c, new_val):
-        if w.text() != new_val:
-            w.setText(new_val)
-
-    ctrl.on("change", on_engine_change)
+    ctrl.on("change", lambda c, new_val: _sync_from_engine(w, ctrl))
     return w
+
+
+def _sync_from_engine(w: QLineEdit, ctrl: Control) -> None:
+    """Show the engine value in the widget, on the GUI thread.
+
+    Scripts set values from the COM or HTTP thread, where touching Qt widgets
+    is unsafe, so the update is posted to the widget's thread instead. It reads
+    the engine value when it runs, so a later change (such as the logon screen
+    clearing the password) is never overwritten by an older one.
+    """
+    def apply():
+        if w.text() != ctrl.text:
+            w.setText(ctrl.text)
+
+    if QThread.currentThread() == w.thread():
+        apply()
+    else:
+        QTimer.singleShot(0, w, apply)
+
+
+def _send_enter(ctrl: Control) -> None:
+    """Enter in a field sends VKey 0 to its window, as in SAP GUI."""
+    node = ctrl.parent
+    while node is not None:
+        if isinstance(node, Window):
+            node.send_vkey(0)
+            return
+        node = node.parent
 
 
 def build_combo_textfield(ctrl: ComboTextField, parent: QWidget) -> QWidget:
@@ -155,12 +182,9 @@ def build_combo_textfield(ctrl: ComboTextField, parent: QWidget) -> QWidget:
         ctrl.value = text
 
     field.textChanged.connect(on_text_changed)
+    field.returnPressed.connect(lambda: _send_enter(ctrl))
 
-    def on_engine_change(c, new_val):
-        if field.text() != new_val:
-            field.setText(new_val)
-
-    ctrl.on("change", on_engine_change)
+    ctrl.on("change", lambda c, new_val: _sync_from_engine(field, ctrl))
     return container
 
 

@@ -295,6 +295,13 @@ class ScreenRenderer:
 
     # ── Status Bar ──────────────────────────────────────────────────────────
 
+    def refresh_status_bar(self) -> None:
+        """Redraw the status bar after the engine changed its message."""
+        if self._current_session:
+            wnd = self._current_session.get_window(0)
+            if wnd:
+                self._render_status_bar(wnd)
+
     def _render_status_bar(self, wnd: Window) -> None:
         status_bar = self.main_window.statusBar()
         if not status_bar:

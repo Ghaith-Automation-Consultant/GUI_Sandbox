@@ -8,6 +8,11 @@ It loads the next screen and wires its buttons, virtual keys, and command field.
 Listeners are told about each new session: the Qt router renders it and the
 bridges start exposing it to scripts.
 
+With ``require_logon=True`` the navigator starts logged off: home is the logon
+screen (transaction S000), every other transaction is blocked, and Enter on the
+logon screen checks the fields against ``engine.logon``. ``/nend`` and ``/nex``
+log off again.
+
 Usage::
 
     nav = Navigator()
@@ -21,6 +26,7 @@ from pathlib import Path
 from typing import Any, Callable, Optional
 
 from .loader import load_screen
+from .logon import check_logon
 from .session import Session
 
 SCREEN_DIR = Path(__file__).resolve().parent.parent / "screens"
@@ -53,6 +59,18 @@ TRANSACTIONS: dict[str, list[str]] = {
 
 HOME_TCODE = "SESSION_MANAGER"
 
+# Logon screen: not reachable from the command field, only shown while logged off.
+LOGON_TCODE = "S000"
+LOGON_SCREEN = "00_LOGON.json"
+LOGOFF_COMMANDS = {"/NEND", "/NEX"}
+
+_LOGON_FIELDS = {
+    "client":   "wnd[0]/usr/txtRSYST-MANDT",
+    "user":     "wnd[0]/usr/txtRSYST-BNAME",
+    "password": "wnd[0]/usr/pwdRSYST-BCODE",
+    "language": "wnd[0]/usr/txtRSYST-LANGU",
+}
+
 # (transaction, step) → virtual keys that advance the flow.
 _ADVANCE_KEYS: dict[tuple[str, int], set[int]] = {
     ("SE16", 0): {0, 7},
@@ -72,6 +90,8 @@ def _run_directly(fn: Callable[[], Any]) -> Any:
 
 def _locate(session: Session) -> tuple[str, int]:
     """Find a loaded session's transaction and flow step from its source file."""
+    if session.source == LOGON_SCREEN:
+        return LOGON_TCODE, 0
     for tcode, screens in TRANSACTIONS.items():
         if session.source in screens:
             return tcode, screens.index(session.source)
@@ -92,6 +112,7 @@ class Navigator:
         session: Optional[Session] = None,
         *,
         dispatcher: Callable[[Callable[[], Any]], Any] = _run_directly,
+        require_logon: bool = False,
     ) -> None:
         self._dispatch = dispatcher
         self._listeners: list[Callable[[Session, str], None]] = []
@@ -99,6 +120,9 @@ class Navigator:
         self._session: Optional[Session] = None
         self._tcode = ""
         self._step = 0
+        self.require_logon = require_logon
+        self._logon: dict[str, str] = {}
+        self._logged_on = not require_logon
         if session is not None:
             tcode, step = _locate(session)
             self._adopt(session, tcode, step)
@@ -121,6 +145,10 @@ class Navigator:
     @property
     def step(self) -> int:
         return self._step
+
+    @property
+    def logged_on(self) -> bool:
+        return self._logged_on
 
     def subscribe(self, listener: Callable[[Session, str], None]) -> None:
         """Call listener(session, tcode) whenever a new screen becomes active."""
@@ -145,13 +173,24 @@ class Navigator:
         return self._dispatch(self._back)
 
     def go_home(self) -> Optional[Session]:
-        return self.start_transaction(HOME_TCODE)
+        """Go to Easy Access, or to the logon screen while logged off."""
+        return self._dispatch(self._home)
+
+    def attempt_logon(self) -> Optional[Session]:
+        """Check the logon screen's fields; go home on success, else report the error."""
+        return self._dispatch(self._attempt_logon)
+
+    def log_off(self) -> Optional[Session]:
+        """Forget the logged-on user and return to the logon screen."""
+        return self._dispatch(self._log_off)
 
     def handle_command(self, command: str) -> Optional[Session]:
-        """Run a command field entry: TCODE, /nTCODE, /oTCODE, or /n for home."""
+        """Run a command field entry: TCODE, /nTCODE, /oTCODE, /n for home, /nend to log off."""
         command = command.strip()
         if not command:
             return None
+        if command.upper() in LOGOFF_COMMANDS:
+            return self.log_off()
         if command[:2].lower() in ("/n", "/o"):
             tcode = command[2:].strip()
             return self.start_transaction(tcode) if tcode else self.go_home()
@@ -161,6 +200,9 @@ class Navigator:
 
     def _start(self, tcode: str) -> Optional[Session]:
         tcode = tcode.upper().strip()
+        if not self._logged_on:
+            self._report("Log on to the system first")
+            return None
         screens = TRANSACTIONS.get(tcode)
         if not screens:
             self._report(f"Transaction {tcode} not found in sandbox")
@@ -175,17 +217,78 @@ class Navigator:
         return self._show(self._tcode, self._step + 1)
 
     def _back(self) -> Optional[Session]:
+        if not self._logged_on:
+            return None
         if self._step > 0:
             return self._show(self._tcode, self._step - 1)
         return self._start(HOME_TCODE)
 
+    def _home(self) -> Optional[Session]:
+        if self._logged_on:
+            return self._start(HOME_TCODE)
+        if self._tcode == LOGON_TCODE and self._session is not None:
+            return None  # Already there; keep what the user typed.
+        return self._show_logon()
+
+    def _show_logon(self) -> Optional[Session]:
+        session = self._load(LOGON_SCREEN)
+        if session is None:
+            return None
+        session.info.user = ""  # Nobody is logged on yet, as in SAP GUI.
+        return self._activate(session, LOGON_TCODE, 0)
+
+    def _attempt_logon(self) -> Optional[Session]:
+        session = self._session
+        if session is None or self._tcode != LOGON_TCODE:
+            return None
+        values = {}
+        for key, path in _LOGON_FIELDS.items():
+            try:
+                values[key] = session.findById(path).text or ""
+            except RuntimeError:
+                values[key] = ""
+
+        error = check_logon(values["client"], values["user"], values["password"], values["language"])
+        if error:
+            # SAP GUI clears the password after a failed logon.
+            try:
+                session.findById(_LOGON_FIELDS["password"]).value = ""
+            except RuntimeError:
+                pass
+            self._report(error)
+            return None
+
+        self._logged_on = True
+        self._logon = {
+            "user": values["user"].strip().upper(),
+            "client": values["client"].strip(),
+            "language": (values["language"].strip() or "EN").upper(),
+        }
+        return self._start(HOME_TCODE)
+
+    def _log_off(self) -> Optional[Session]:
+        self._logged_on = False
+        self._logon = {}
+        return self._show_logon()
+
     def _show(self, tcode: str, step: int) -> Optional[Session]:
-        name = TRANSACTIONS[tcode][step]
+        session = self._load(TRANSACTIONS[tcode][step])
+        if session is None:
+            return None
+        if self._logon:
+            session.info.user = self._logon["user"]
+            session.info.client = self._logon["client"]
+            session.info.language = self._logon["language"]
+        return self._activate(session, tcode, step)
+
+    def _load(self, name: str) -> Optional[Session]:
         path = SCREEN_DIR / name
         if not path.exists():
             self._report(f"Screen file not found: {name}")
             return None
-        session = load_screen(path)
+        return load_screen(path)
+
+    def _activate(self, session: Session, tcode: str, step: int) -> Session:
         self._adopt(session, tcode, step)
         for listener in self._listeners:
             listener(session, tcode)
@@ -257,6 +360,11 @@ class Navigator:
                 okcd.text = ""
                 self.handle_command(command)
                 return
+            if self._tcode == LOGON_TCODE:
+                self.attempt_logon()
+                return
+        if self._tcode == LOGON_TCODE:
+            return
         if key in (_VKEY_BACK, _VKEY_CANCEL):
             self.go_back()
         elif key == _VKEY_EXIT:

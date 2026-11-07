@@ -1,5 +1,13 @@
 [
   {
+    "label": "00_LOGON",
+    "transaction": "S000",
+    "program": "ZSBX_LOGON",
+    "screen": 20,
+    "status": "",
+    "file": "00_LOGON.json"
+  },
+  {
     "label": "01_SESSION_MANAGER",
     "transaction": "SESSION_MANAGER",
     "program": "ZSBX_HOME",

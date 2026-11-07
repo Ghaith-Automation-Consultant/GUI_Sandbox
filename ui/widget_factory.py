@@ -33,6 +33,7 @@ from engine.control import (
     ScrollContainer, SimpleContainer, Box, Tree,
     TableControl, GridView,
 )
+from engine.session import Window
 from .styles import SAP
 
 
@@ -46,12 +47,18 @@ def _set_common(widget: QWidget, ctrl: Control) -> None:
     widget.setProperty("sap_control", ctrl)
 
 
-def _set_text_on_gui_thread(field: QLineEdit, text: str) -> None:
-    """Show an engine value change, which a script may make from another thread."""
+def _sync_from_engine(field: QLineEdit, ctrl: Control) -> None:
+    """Show the engine value in the widget, on the GUI thread.
+
+    Scripts set values from the COM or HTTP thread, where touching Qt widgets
+    is unsafe. The update reads the engine value when it runs, so a later
+    change (such as the logon screen clearing the password) is never
+    overwritten by an older one.
+    """
     def apply() -> None:
         try:
-            if field.text() != text:
-                field.setText(text)
+            if field.text() != ctrl.text:
+                field.setText(ctrl.text)
         except RuntimeError:
             pass  # The screen was replaced before this change arrived.
 
@@ -109,12 +116,20 @@ def build_textfield(ctrl: TextField, parent: QWidget) -> QLineEdit:
         ctrl.value = text
 
     w.textChanged.connect(on_text_changed)
+    w.returnPressed.connect(lambda: _send_enter(ctrl))
 
-    def on_engine_change(c, new_val):
-        _set_text_on_gui_thread(w, new_val)
-
-    ctrl.on("change", on_engine_change)
+    ctrl.on("change", lambda c, new_val: _sync_from_engine(w, ctrl))
     return w
+
+
+def _send_enter(ctrl: Control) -> None:
+    """Enter in a field sends VKey 0 to its window, as in SAP GUI."""
+    node = ctrl.parent
+    while node is not None:
+        if isinstance(node, Window):
+            node.send_vkey(0)
+            return
+        node = node.parent
 
 
 def build_combo_textfield(ctrl: ComboTextField, parent: QWidget) -> QWidget:
@@ -167,11 +182,9 @@ def build_combo_textfield(ctrl: ComboTextField, parent: QWidget) -> QWidget:
         ctrl.value = text
 
     field.textChanged.connect(on_text_changed)
+    field.returnPressed.connect(lambda: _send_enter(ctrl))
 
-    def on_engine_change(c, new_val):
-        _set_text_on_gui_thread(field, new_val)
-
-    ctrl.on("change", on_engine_change)
+    ctrl.on("change", lambda c, new_val: _sync_from_engine(field, ctrl))
     return container
 
 

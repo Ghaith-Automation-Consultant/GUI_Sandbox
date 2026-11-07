@@ -14,12 +14,12 @@ from PySide6.QtCore import Qt, QSize
 from engine import load_screen
 from bridge import ComBridge
 from ui.screen_renderer import ScreenRenderer
-from ui.transaction_router import TransactionRouter
+from ui.transaction_router import TransactionRouter, LOGON_SCREEN
 from ui.styles import SAP, sap_global_stylesheet
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, com_bridge=None):
+    def __init__(self, com_bridge=None, require_logon=False):
         super().__init__()
         self.com_bridge = com_bridge
 
@@ -67,7 +67,7 @@ class MainWindow(QMainWindow):
 
         # Renderer and router
         self.renderer = ScreenRenderer(self)
-        self.router = TransactionRouter(self.renderer)
+        self.router = TransactionRouter(self.renderer, require_logon=require_logon)
         self.router.set_navigate_callback(self._on_navigate)
 
         # Connect command field and toolbar navigation buttons
@@ -79,6 +79,9 @@ class MainWindow(QMainWindow):
         if cmd:
             self.router.handle_command(cmd)
             self.command_field.clear()
+        elif self.renderer.session:
+            # Enter with an empty command field goes to the screen, as in SAP GUI
+            self.renderer.session.send_vkey(0)
 
     def _on_navigate(self, session, tcode):
         self.setWindowTitle(f"GUI Sandbox — {tcode}")
@@ -86,7 +89,7 @@ class MainWindow(QMainWindow):
             self.com_bridge.update_session(session)
 
     def load_initial_screen(self):
-        """Load the home screen after the window is shown."""
+        """Load the first screen (logon or home) after the window is shown."""
         self.router.go_home()
 
     def _create_main_toolbar(self):
@@ -223,8 +226,12 @@ if __name__ == "__main__":
     app.setStyle("Fusion")
     app.setStyleSheet(sap_global_stylesheet())
 
+    # --no-logon skips the logon screen and opens Easy Access directly
+    require_logon = "--no-logon" not in sys.argv[1:]
+
     # Load initial session for COM bridge
-    session = load_screen(Path(__file__).resolve().parent / "screens" / "01_SESSION_MANAGER.json")
+    first_screen = LOGON_SCREEN if require_logon else "01_SESSION_MANAGER.json"
+    session = load_screen(Path(__file__).resolve().parent / "screens" / first_screen)
     com_bridge = ComBridge(session)
     try:
         com_bridge.start()
@@ -235,7 +242,7 @@ if __name__ == "__main__":
 
     atexit.register(lambda: com_bridge.stop() if com_bridge else None)
 
-    main_win = MainWindow(com_bridge=com_bridge)
+    main_win = MainWindow(com_bridge=com_bridge, require_logon=require_logon)
     main_win.show()
     main_win.load_initial_screen()
 

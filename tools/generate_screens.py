@@ -115,11 +115,12 @@ def label(field, text, row, parent=usr_id):
     return node(parent(f"lbl{field}"), "GuiLabel", field, text=text, **box(LABEL_X, 20 + row * ROW_H, 200, 24))
 
 
-def field(field_name, row, *, kind="ctxt", text="", width=240, left=FIELD_X, changeable=True, parent=usr_id):
-    ctype = {"ctxt": "GuiCTextField", "txt": "GuiTextField"}[kind]
+def field(field_name, row, *, kind="ctxt", text="", width=240, left=FIELD_X, changeable=True, max_len=40,
+          parent=usr_id):
+    ctype = {"ctxt": "GuiCTextField", "txt": "GuiTextField", "pwd": "GuiPasswordField"}[kind]
     props = {"text": text} if text else {}
     return node(
-        parent(f"{kind}{field_name}"), ctype, field_name, changeable=changeable, max_len=40,
+        parent(f"{kind}{field_name}"), ctype, field_name, changeable=changeable, max_len=max_len,
         **props, **box(left, 20 + row * ROW_H, width, 24),
     )
 
@@ -321,6 +322,20 @@ def mm03_screen():
                    [(5, "Select Views   (F5)")], labelled("RMMG1-MATNR", "Material", 1, text="SBX-1000"))]
 
 
+def logon_screen():
+    """Logon screen, shown before Easy Access. Field IDs match the standard SAP GUI logon screen."""
+    menu = {"Logon": ["New Password", "Exit"]}
+    usr = labelled("RSYST-MANDT", "Client", 1, kind="txt", text=CLIENT, width=60, max_len=3)
+    # SAP user names are at most 12 characters; widen so the sample user fits
+    usr += labelled("RSYST-BNAME", "User", 2, kind="txt", width=180, max_len=max(12, len(USER)))
+    usr += labelled("RSYST-BCODE", "Password", 3, kind="pwd", width=180, max_len=40)
+    usr += labelled("RSYST-LANGU", "Logon Language", 5, kind="txt", text="EN", width=40, max_len=2)
+    usr.append(node(usr_id("boxINFO"), "GuiBox", "INFO", text="Information", **box(560, 20, 420, 160)))
+    usr.append(node(usr_id("lblINFO_TEXT"), "GuiLabel", "INFO_TEXT",
+                    text="Welcome to GUI Sandbox. All data is fictional.", **box(576, 56, 390, 24)))
+    return [screen("00_LOGON.json", "S000", "ZSBX_LOGON", 20, "Logon", menu, [], usr)]
+
+
 def home_screen():
     image = node(usr_id("IMAGE_CONTAINER"), "GuiContainerShell", "IMAGE_CONTAINER",
                  children=[node(usr_id("IMAGE_CONTAINER/shellcont"), "GuiContainerShell", "shellcont")],
@@ -332,7 +347,7 @@ def home_screen():
 
 def all_screens():
     return dict(
-        home_screen() + se16_screens() + se16n_screens() + se38_screens()
+        logon_screen() + home_screen() + se16_screens() + se16n_screens() + se38_screens()
         + sm37_screen() + su01_screen() + va03_screens() + mm03_screen()
     )
 

@@ -38,6 +38,7 @@ class SessionInfo:
         self.system_name:   str = "SIM"
         self.client:        str = "000"
         self.user:          str = "DEVELOPER"
+        self.language:      str = "EN"
         self.transaction:   str = "SESSION_MANAGER"
         self.program:       str = ""
         self.screen_number: int = 100

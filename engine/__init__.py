@@ -31,6 +31,7 @@ from .control import (
 )
 from .session import Session, Window, SessionInfo, VKEY_LABELS
 from .loader import load_screen, build_tree
+from .navigation import Navigator
 
 __all__ = [
     # Base
@@ -46,6 +47,8 @@ __all__ = [
     "TableCell", "TableRow", "TableControl", "GridView",
     # Session
     "Session", "Window", "SessionInfo", "VKEY_LABELS",
+    # Navigation
+    "Navigator",
     # Loader
     "load_screen", "build_tree",
 ]

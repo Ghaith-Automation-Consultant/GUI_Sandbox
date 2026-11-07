@@ -30,6 +30,8 @@ from engine.control import (
     Control, TableControl, GridView, StatusBar,
 )
 from engine.session import Session, Window
+from engine.navigation import Navigator
+
 from .recorder import ActionRecorder
 
 
@@ -403,6 +405,10 @@ class SessionProxy:
     ) -> None:
         self._session  = session
         self._recorder = recorder if recorder is not None else ActionRecorder()
+        Navigator.for_session(session).subscribe(self._follow)
+
+    def _follow(self, session: Session, _tcode: str) -> None:
+        self._session = session
 
     # ── SAP COM-style API ─────────────────────────────────────────────────────
 

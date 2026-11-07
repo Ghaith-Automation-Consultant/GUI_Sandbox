@@ -40,6 +40,10 @@ def main():
     print(f"  User: {info.User}")
     print(f"  Screen: {info.ScreenNumber}")
 
+    print("\nTesting StartTransaction...")
+    session.StartTransaction("SE16")
+    print(f"  Transaction: {session.Info.Transaction}")
+
     print("\nTesting findById...")
     field = session.findById("wnd[0]/usr/ctxtDATABROWSE-TABLENAME")
     print(f"  Field ID: {field.Id}")

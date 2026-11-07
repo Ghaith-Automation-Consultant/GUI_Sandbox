@@ -33,6 +33,7 @@ import pythoncom
 import win32com.server.util
 import win32event
 
+from engine.navigation import Navigator
 from engine.session import Session
 from .com_server import ComSapGui, SessionHolder
 
@@ -114,6 +115,7 @@ class ComBridge:
 
     def __init__(self, session: Session) -> None:
         self._holder = SessionHolder(session)
+        Navigator.for_session(session).subscribe(lambda new, _tcode: self.update_session(new))
         self._stop_handle = win32event.CreateEvent(None, True, False, None)
         self._ready_event = threading.Event()
         self._thread: Optional[threading.Thread] = None

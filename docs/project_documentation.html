@@ -608,7 +608,7 @@ server = start_server(load_screen("screens/02_SE16_initial.json"), port=7654)
 
 # === Client side (any language) ===
 from bridge import RemoteSession
-session = RemoteSession("http://localhost:7654")
+session = RemoteSession("http://127.0.0.1:7654")
 session.findById("wnd[0]/usr/ctxtDATABROWSE-TABLENAME").Text = "SFLIGHT"</code></pre>
   <div class="table-wrap">
     <table>
@@ -834,8 +834,8 @@ from engine import load_screen
 
 server = start_server(load_screen("screens/02_SE16_initial.json"), port=7654)
 # Then from any HTTP client:
-# POST http://localhost:7654/findById  {"path": "wnd[0]/usr/ctxtDATABROWSE-TABLENAME"}
-# POST http://localhost:7654/action    {"path": "...", "action": "setText", "value": "SFLIGHT"}</code></pre>
+# POST http://127.0.0.1:7654/findById  {"path": "wnd[0]/usr/ctxtDATABROWSE-TABLENAME"}
+# POST http://127.0.0.1:7654/action    {"path": "...", "action": "setText", "value": "SFLIGHT"}</code></pre>
 
   <h3>Use in-process (same Python script)</h3>
   <pre><code>from bridge import SandboxSession

@@ -5,12 +5,12 @@
 ### Build and test SAP GUI automation without an SAP system.
 
 A local Windows app that simulates the SAP GUI Scripting object model.<br>
-Connect with `GetObject("SAPGUI")`, explore real-looking screens, and develop your scripts on your own PC.
+Connect with `GetObject("SAPGUI")`, drive real-looking screens from your script, and develop on your own PC.
 
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-2a78d6)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-2a78d6)](#quick-start)
 [![Platform: Windows](https://img.shields.io/badge/platform-Windows-2a78d6)](#quick-start)
-[![Tests: 204 passing](https://img.shields.io/badge/tests-204%20passing-1baf7a)](#by-the-numbers)
+[![Tests: 227 passing](https://img.shields.io/badge/tests-227%20passing-1baf7a)](#by-the-numbers)
 
 <img src="docs/assets/film/gui-sandbox-demo.gif" alt="Animated demo: opening a table in GUI Sandbox, then a Python script reading values from its results grid" width="820">
 
@@ -38,6 +38,7 @@ GUI Sandbox is for development, training, and testing. It simulates the scriptin
 ## What you get
 
 - 🔌 **Three ways to connect:** COM through `GetObject("SAPGUI")`, a local HTTP JSON API, or in-process Python.
+- 🧭 **Scripts that navigate:** `StartTransaction`, the command field, and virtual keys move through each flow, and the window follows along.
 - 🧩 **A familiar object model:** `findById`, `Children`, `Info`, `sendVKey`, and 30 control types with the `Gui*` type names scripts expect.
 - 🖥️ **A real desktop UI:** menus, toolbars, tabs, grids, and tables, all rendered from the same control tree your script reads.
 - 📼 **An action recorder:** timestamped logs of `findById`, `setText`, `press`, and `sendVKey` for checking what a script did.
@@ -106,7 +107,7 @@ Close SAP Logon first, because both register under the same `SAPGUI` name. When 
 
 ### Connect over COM
 
-Type `SE16` in the app's command field and press Enter, then run this from another terminal:
+With the app running, run this from another terminal and watch the window follow your script:
 
 ```python
 import win32com.client
@@ -114,11 +115,14 @@ import win32com.client
 sap = win32com.client.GetObject("SAPGUI")
 session = sap.GetScriptingEngine.Children(0).Children(0)
 
-print(session.Info.Transaction)  # SE16
+session.StartTransaction("SE16")
+session.findById("wnd[0]/usr/ctxtDATABROWSE-TABLENAME").Text = "SFLIGHT"
+session.findById("wnd[0]").sendVKey(7)  # Table Contents
+session.findById("wnd[0]").sendVKey(8)  # Execute
 
-field = session.findById("wnd[0]/usr/ctxtDATABROWSE-TABLENAME")
-field.Text = "SFLIGHT"
-print(field.Text)  # SFLIGHT
+grid = session.findById("wnd[0]/usr/cntlGRID1/shellcont/shell")
+print(grid.RowCount)                   # 8
+print(grid.GetCellValue(0, "CARRID"))  # SX
 ```
 
 <details>
@@ -178,7 +182,7 @@ All screens use fictional data. To add your own, extend [`tools/generate_screens
     <td align="center"><h3>3</h3>scripting bridges</td>
     <td align="center"><h3>30</h3>control types</td>
     <td align="center"><h3>14</h3>sample screens</td>
-    <td align="center"><h3>204</h3>automated tests</td>
+    <td align="center"><h3>227</h3>automated tests</td>
   </tr>
 </table>
 
@@ -195,15 +199,16 @@ All screens use fictional data. To add your own, extend [`tools/generate_screens
 
 - [x] Qt interface with navigation between all included transactions
 - [x] COM, HTTP, and in-process bridges reading and writing the active session
+- [x] Script-driven navigation through `StartTransaction`, the command field, and virtual keys
 - [x] Action recording
 - [x] Generated sample screens with automated guards against live-system data
 
 **Coming next**
 
-- [ ] Transaction navigation started by scripts: `StartTransaction` and the command field don't load a new screen yet, so open transactions in the UI for now
 - [ ] Keyboard focus engine
 - [ ] Modal popups (`wnd[1]`, `wnd[2]`)
 - [ ] Functional status bar messages
+- [ ] Screens that react to what you enter: flows are fixed today, so SE16 always opens the sample `SFLIGHT` table
 
 ## Documentation
 

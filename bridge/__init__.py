@@ -47,7 +47,7 @@ RemoteSession connects to it with the exact same API as SandboxSession.
     # === Client process (automation script) ===
     from bridge import RemoteSession
 
-    session = RemoteSession("http://localhost:7654")
+    session = RemoteSession("http://127.0.0.1:7654")
     assert session.ping()
     session.findById("wnd[0]/usr/ctxtDATABROWSE-TABLENAME").Text = "SFLIGHT"
     session.findById("wnd[0]").sendVKey(0)

@@ -144,6 +144,8 @@ class ScreenRenderer:
         for child_widget in workspace.findChildren(QWidget):
             if child_widget.parent() == workspace:
                 child_widget.deleteLater()
+        self._usr_scroll = None
+        self._usr_widget = None
 
         usr = wnd.user_area
         if not usr:

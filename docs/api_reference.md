@@ -57,7 +57,7 @@ GetObject("SAPGUI")          →  ComSapGui
 | Member              | Kind   | Returns        | Description                          |
 |---------------------|--------|----------------|--------------------------------------|
 | `findById(path)`    | Method | ComControl     | Locate a control by SAP ID path      |
-| `StartTransaction(tcode)` | Method | —       | Switch to a transaction              |
+| `StartTransaction(tcode)` | Method | —       | Load a transaction's first screen; an unknown code sets a status bar error |
 | `sendVKey(key)`     | Method | —              | Send a virtual key to `wnd[0]`       |
 | `Info`              | Prop   | ComSessionInfo | Session metadata                     |
 | `ActiveWindow`      | Prop   | ComControl     | The active `wnd[0]` control          |
@@ -322,7 +322,7 @@ Scripting type identifiers:
 
 ## 8. HTTP API Endpoints
 
-The HTTP bridge runs on `http://localhost:7654` by default (configurable via
+The HTTP bridge runs on `http://127.0.0.1:7654` by default (configurable via
 the `port` argument to `start_server()`).
 
 ### Read endpoints
@@ -360,20 +360,20 @@ the `port` argument to `start_server()`).
 
 ```bash
 # Read session info
-curl http://localhost:7654/info
+curl http://127.0.0.1:7654/info
 
 # Find a control
-curl -X POST http://localhost:7654/findById \
+curl -X POST http://127.0.0.1:7654/findById \
   -H "Content-Type: application/json" \
   -d '{"path": "wnd[0]/usr/ctxtDATABROWSE-TABLENAME"}'
 
 # Set a field value
-curl -X POST http://localhost:7654/action \
+curl -X POST http://127.0.0.1:7654/action \
   -H "Content-Type: application/json" \
   -d '{"path": "wnd[0]/usr/ctxtDATABROWSE-TABLENAME", "action": "setText", "value": "SFLIGHT"}'
 
 # Press Enter
-curl -X POST http://localhost:7654/action \
+curl -X POST http://127.0.0.1:7654/action \
   -H "Content-Type: application/json" \
   -d '{"path": "wnd[0]", "action": "sendVKey", "key": 0}'
 ```
@@ -458,7 +458,7 @@ session.recorder.save("session_log.json")
 ```python
 from bridge import RemoteSession
 
-session = RemoteSession("http://localhost:7654")
+session = RemoteSession("http://127.0.0.1:7654")
 assert session.ping()
 
 session.findById("wnd[0]/usr/ctxtDATABROWSE-TABLENAME").Text = "SFLIGHT"

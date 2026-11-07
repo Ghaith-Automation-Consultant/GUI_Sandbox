@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 258" width="760" height="258" role="img" aria-label="Python code by project area. Scripting bridge: 2,099, Qt interface: 1,659, Tools: 1,519, Tests: 1,369, Control engine: 1,189.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 258" width="760" height="258" role="img" aria-label="Python code by project area. Scripting bridge: 2,117, Tests: 1,603, Qt interface: 1,600, Tools: 1,519, Control engine: 1,464.">
 <style>
   .surface { fill: #fcfcfb; stroke: rgba(11,11,11,0.10); }
   .bar { fill: #2a78d6; }
@@ -19,21 +19,21 @@
 
 <rect class="surface" x="0.5" y="0.5" width="759" height="257" rx="8"/>
 <text class="title" x="20" y="31">Python code by project area</text>
-<text class="note" x="20" y="52">Lines including comments and blanks. 7,835 in total.</text>
+<text class="note" x="20" y="52">Lines including comments and blanks. 8,303 in total.</text>
 <line class="base" x1="190" x2="190" y1="68" y2="232"/>
 <text class="label" x="178" y="86" text-anchor="end">Scripting bridge</text>
-<path class="bar" d="M190,74 H666.0 a4,4 0 0 1 4,4 V84 a4,4 0 0 1 -4,4 H190 Z"><title>Scripting bridge: 2,099</title></path>
-<text class="value" x="678.0" y="86">2,099</text>
-<text class="label" x="178" y="120" text-anchor="end">Qt interface</text>
-<path class="bar" d="M190,108 H565.3806574559314 a4,4 0 0 1 4,4 V118 a4,4 0 0 1 -4,4 H190 Z"><title>Qt interface: 1,659</title></path>
-<text class="value" x="577.3806574559314" y="120">1,659</text>
-<text class="label" x="178" y="154" text-anchor="end">Tools</text>
-<path class="bar" d="M190,142 H533.3654121010004 a4,4 0 0 1 4,4 V152 a4,4 0 0 1 -4,4 H190 Z"><title>Tools: 1,519</title></path>
-<text class="value" x="545.3654121010004" y="154">1,519</text>
-<text class="label" x="178" y="188" text-anchor="end">Tests</text>
-<path class="bar" d="M190,176 H499.06336350643164 a4,4 0 0 1 4,4 V186 a4,4 0 0 1 -4,4 H190 Z"><title>Tests: 1,369</title></path>
-<text class="value" x="511.06336350643164" y="188">1,369</text>
+<path class="bar" d="M190,74 H666.0 a4,4 0 0 1 4,4 V84 a4,4 0 0 1 -4,4 H190 Z"><title>Scripting bridge: 2,117</title></path>
+<text class="value" x="678.0" y="86">2,117</text>
+<text class="label" x="178" y="120" text-anchor="end">Tests</text>
+<path class="bar" d="M190,108 H549.4577231931979 a4,4 0 0 1 4,4 V118 a4,4 0 0 1 -4,4 H190 Z"><title>Tests: 1,603</title></path>
+<text class="value" x="561.4577231931979" y="120">1,603</text>
+<text class="label" x="178" y="154" text-anchor="end">Qt interface</text>
+<path class="bar" d="M190,142 H548.777515351913 a4,4 0 0 1 4,4 V152 a4,4 0 0 1 -4,4 H190 Z"><title>Qt interface: 1,600</title></path>
+<text class="value" x="560.777515351913" y="154">1,600</text>
+<text class="label" x="178" y="188" text-anchor="end">Tools</text>
+<path class="bar" d="M190,176 H530.4119036372225 a4,4 0 0 1 4,4 V186 a4,4 0 0 1 -4,4 H190 Z"><title>Tools: 1,519</title></path>
+<text class="value" x="542.4119036372225" y="188">1,519</text>
 <text class="label" x="178" y="222" text-anchor="end">Control engine</text>
-<path class="bar" d="M190,210 H457.90090519294904 a4,4 0 0 1 4,4 V220 a4,4 0 0 1 -4,4 H190 Z"><title>Control engine: 1,189</title></path>
-<text class="value" x="469.90090519294904" y="222">1,189</text>
+<path class="bar" d="M190,210 H517.9414265470004 a4,4 0 0 1 4,4 V220 a4,4 0 0 1 -4,4 H190 Z"><title>Control engine: 1,464</title></path>
+<text class="value" x="529.9414265470004" y="222">1,464</text>
 </svg>

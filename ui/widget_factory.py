@@ -23,6 +23,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtGui import QStandardItemModel, QStandardItem, QFont
 
+from . import gui_thread
 from engine.control import (
     Control, Container,
     TextField, ComboTextField, PasswordField, Label, Button,
@@ -43,6 +44,18 @@ def _set_common(widget: QWidget, ctrl: Control) -> None:
     widget.setEnabled(ctrl.enabled)
     widget.setVisible(ctrl.visible)
     widget.setProperty("sap_control", ctrl)
+
+
+def _set_text_on_gui_thread(field: QLineEdit, text: str) -> None:
+    """Show an engine value change, which a script may make from another thread."""
+    def apply() -> None:
+        try:
+            if field.text() != text:
+                field.setText(text)
+        except RuntimeError:
+            pass  # The screen was replaced before this change arrived.
+
+    gui_thread.invoker().post(apply)
 
 
 def _position(widget: QWidget, ctrl: Control, parent: QWidget) -> None:
@@ -98,8 +111,7 @@ def build_textfield(ctrl: TextField, parent: QWidget) -> QLineEdit:
     w.textChanged.connect(on_text_changed)
 
     def on_engine_change(c, new_val):
-        if w.text() != new_val:
-            w.setText(new_val)
+        _set_text_on_gui_thread(w, new_val)
 
     ctrl.on("change", on_engine_change)
     return w
@@ -157,8 +169,7 @@ def build_combo_textfield(ctrl: ComboTextField, parent: QWidget) -> QWidget:
     field.textChanged.connect(on_text_changed)
 
     def on_engine_change(c, new_val):
-        if field.text() != new_val:
-            field.setText(new_val)
+        _set_text_on_gui_thread(field, new_val)
 
     ctrl.on("change", on_engine_change)
     return container

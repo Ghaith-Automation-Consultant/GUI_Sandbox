@@ -25,6 +25,7 @@ Set session = con.Children.Item(0)
 WScript.Echo "  Transaction: " & session.Info.Transaction
 WScript.Echo "  User: " & session.Info.User
 
+session.StartTransaction "SE16"
 session.findById("wnd[0]/usr/ctxtDATABROWSE-TABLENAME").Text = "SFLIGHT"
 WScript.Echo "  Set field to SFLIGHT"
 

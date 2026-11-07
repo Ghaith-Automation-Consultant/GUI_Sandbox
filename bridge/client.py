@@ -11,7 +11,7 @@ with only a one-line import change.
 Usage::
 
     from bridge import RemoteSession
-    session = RemoteSession("http://localhost:7654")
+    session = RemoteSession("http://127.0.0.1:7654")
 
     # Identical to real SAP COM usage
     session.findById("wnd[0]/usr/ctxtDATABROWSE-TABLENAME").Text = "SFLIGHT"
@@ -275,12 +275,12 @@ class RemoteSession:
     Usage::
 
         from bridge import RemoteSession
-        session = RemoteSession("http://localhost:7654")
+        session = RemoteSession("http://127.0.0.1:7654")
         session.findById("wnd[0]/usr/ctxtDATABROWSE-TABLENAME").Text = "SFLIGHT"
         session.findById("wnd[0]").sendVKey(0)
     """
 
-    def __init__(self, url: str = "http://localhost:7654", timeout: float = 10.0) -> None:
+    def __init__(self, url: str = "http://127.0.0.1:7654", timeout: float = 10.0) -> None:
         self.url     = url.rstrip("/")
         self.timeout = timeout
 

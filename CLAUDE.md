@@ -23,10 +23,10 @@ python -m pytest tests/test_engine.py -q
 The project implements a three-layer architecture that mirrors SAP GUI's internal model. Layer B is the source of truth — Layer A renders it, Layer C exposes it to scripts.
 
 ### Layer A — Visual Shell (`main.py`, `ui/`)
-The Qt/PySide6 front-end. `MainWindow` builds the classic-style window chrome. `TransactionRouter` handles screen navigation. `ScreenRenderer` maps engine controls to Qt widgets via `WidgetFactory`. `app.setStyle("Fusion")` is required. Toolbars are re-parented into a `QVBoxLayout` to force correct stacking order.
+The Qt/PySide6 front-end. `MainWindow` builds the classic-style window chrome. `TransactionRouter` renders the `Navigator`'s sessions. Scripts can arrive on other threads, so navigation and widget updates go through `ui/gui_thread.py`. `ScreenRenderer` maps engine controls to Qt widgets via `WidgetFactory`. `app.setStyle("Fusion")` is required. Toolbars are re-parented into a `QVBoxLayout` to force correct stacking order.
 
 ### Layer B — Control Tree Engine (`engine/`)
-30+ control classes in `engine/control.py` (base `Control` with subclasses: `Container`, `TextField`, `ComboTextField`, `Button`, `GridView`, `TableControl`, `Tree`, etc.). `Session` in `engine/session.py` provides `findById()` with O(1) registry lookup. `engine/loader.py` reconstructs a `Session` from captured screen JSON files in `screens/`. `engine/transactions/` has hand-authored screens (`SE16InitialScreen`, `SessionManagerScreen`, etc.).
+30+ control classes in `engine/control.py` (base `Control` with subclasses: `Container`, `TextField`, `ComboTextField`, `Button`, `GridView`, `TableControl`, `Tree`, etc.). `Session` in `engine/session.py` provides `findById()` with O(1) registry lookup. `engine/loader.py` reconstructs a `Session` from captured screen JSON files in `screens/`. `engine/navigation.py` holds `Navigator`, which owns the transaction flows: it loads screens and wires buttons, virtual keys, and the command field, so every bridge and the UI share one behaviour. Listeners are told about each new session. `engine/transactions/` has hand-authored screens (`SE16InitialScreen`, `SessionManagerScreen`, etc.).
 
 ### Layer C — Scripting Bridge (`bridge/`)
 Three mechanisms, all operating on the same engine Session:
@@ -50,6 +50,7 @@ Three mechanisms, all operating on the same engine Session:
 - `tests/test_engine.py` — Control tree, Session, findById, load_screen, transactions
 - `tests/test_ui.py` — Qt widget rendering, ScreenRenderer, TransactionRouter
 - `tests/test_e2e.py` — Full stack: load screen → render → interact → verify
+- `tests/test_navigation.py` — Script-driven navigation through the engine, bridges, and live window
 - `tests/test_com_bridge.py` — Manual COM smoke test; run as a script while `main.py` is running
 - `tests/test_screens_sanitized.py` — Rejects screen files holding live-system identifiers
 - `tests/conftest.py` — Shared fixtures: `qapp` (session-scoped QApplication), `main_window`

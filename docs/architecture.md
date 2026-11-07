@@ -346,7 +346,7 @@ server = start_server(load_screen("screens/02_SE16_initial.json"), port=7654)
 ```python
 from bridge import RemoteSession
 
-session = RemoteSession("http://localhost:7654")
+session = RemoteSession("http://127.0.0.1:7654")
 session.findById("wnd[0]/usr/ctxtDATABROWSE-TABLENAME").Text = "SFLIGHT"
 ```
 

@@ -221,6 +221,7 @@ def load_screen(path: str | Path) -> Session:
     data = json.loads(Path(path).read_text(encoding="utf-8"))
     session = Session()
     _populate_session(session, data)
+    session.source = Path(path).name
     return session
 
 

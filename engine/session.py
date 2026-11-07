@@ -8,7 +8,7 @@ findById() is the primary API consumed by Layer C / automation scripts.
 """
 from __future__ import annotations
 
-from typing import Optional
+from typing import Any, Optional
 
 from .control import Control, Container, CommandField, StatusBar
 
@@ -90,6 +90,8 @@ class Session(Container):
         super().__init__(control_id, **kwargs)
         self.info = SessionInfo()
         self._registry: dict[str, Control] = {}
+        self.source: str = ""            # screen file this session was loaded from
+        self.navigator: Any = None       # engine.navigation.Navigator, when attached
 
     # ── window management ─────────────────────────────────────────────────────
 
@@ -148,6 +150,10 @@ class Session(Container):
     # ── transaction navigation ────────────────────────────────────────────────
 
     def start_transaction(self, tcode: str) -> None:
+        """Open a transaction through the navigator, or just record it without one."""
+        if self.navigator is not None:
+            self.navigator.start_transaction(tcode)
+            return
         self.info.transaction = tcode
         self.trigger("transaction_change", self, tcode)
 

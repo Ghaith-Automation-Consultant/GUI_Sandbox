@@ -46,6 +46,7 @@ import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any
 
+from engine.navigation import Navigator
 from engine.control import Control, TableControl, GridView, StatusBar
 from engine.session import Session, Window
 from engine.loader import load_screen as _load_screen
@@ -298,7 +299,7 @@ class _Handler(BaseHTTPRequestHandler):
 
         srv: SandboxServer = self.server  # type: ignore[assignment]
         with srv.lock:
-            srv.session = new_session
+            srv.follow(new_session)
             srv.recorder.log("loadScreen", value=file_path)
 
         self._ok({"loaded": file_path, "info": _session_info_dict(new_session)})
@@ -319,7 +320,7 @@ class SandboxServer(ThreadingHTTPServer):
     def __init__(
         self,
         session: Session,
-        host: str = "localhost",
+        host: str = "127.0.0.1",
         port: int = 7654,
         recorder: ActionRecorder | None = None,
     ) -> None:
@@ -328,11 +329,20 @@ class SandboxServer(ThreadingHTTPServer):
         self.lock     = threading.RLock()
         self._host    = host
         self._port    = port
+        self.follow(session)
         super().__init__((host, port), _Handler)
+
+    def follow(self, session: Session) -> None:
+        """Serve this session, and whichever session it navigates to next."""
+        self.session = session
+        Navigator.for_session(session).subscribe(self._on_navigate)
+
+    def _on_navigate(self, session: Session, _tcode: str) -> None:
+        self.session = session
 
     @property
     def url(self) -> str:
-        return f"http://{self._host}:{self._port}"
+        return f"http://{self.server_address[0]}:{self.server_port}"
 
     def __repr__(self) -> str:
         tcode = self.session.info.transaction
@@ -341,7 +351,7 @@ class SandboxServer(ThreadingHTTPServer):
 
 def start_server(
     session: Session,
-    host: str = "localhost",
+    host: str = "127.0.0.1",
     port: int = 7654,
     recorder: ActionRecorder | None = None,
 ) -> SandboxServer:

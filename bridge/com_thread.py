@@ -19,7 +19,7 @@ Usage::
     from bridge.com_thread import ComBridge
 
     session = load_screen("screens/02_SE16_initial.json")
-    bridge = ComBridge(session)
+    bridge = ComBridge(session)   # or ComBridge(opener=...) to start with no connection
     bridge.start()     # registers in ROT
     # ... Qt app runs ...
     bridge.stop()      # revokes from ROT, joins thread
@@ -27,7 +27,7 @@ Usage::
 from __future__ import annotations
 
 import threading
-from typing import Optional
+from typing import Any, Callable, Optional
 
 import pythoncom
 import win32com.server.util
@@ -113,9 +113,19 @@ class ComBridge:
     Call update_session() to swap the session exposed to COM clients.
     """
 
-    def __init__(self, session: Session) -> None:
-        self._holder = SessionHolder(session)
-        Navigator.for_session(session).subscribe(lambda new, _tcode: self.update_session(new))
+    def __init__(
+        self,
+        session: Optional[Session] = None,
+        opener: Optional[Callable[[str], Any]] = None,
+    ) -> None:
+        """Expose ``session`` over COM, or no connection when it is None.
+
+        ``opener(description)`` opens an environment for OpenConnection and
+        returns it, or None when the description is unknown.
+        """
+        self._holder = SessionHolder(session, opener)
+        if session is not None:
+            Navigator.for_session(session).subscribe(lambda new, _tcode: self.update_session(new))
         self._stop_handle = win32event.CreateEvent(None, True, False, None)
         self._ready_event = threading.Event()
         self._thread: Optional[threading.Thread] = None
@@ -142,9 +152,13 @@ class ComBridge:
         if self._errors:
             raise RuntimeError(f"COM bridge failed to start: {self._errors[0]}")
 
-    def update_session(self, session: Session) -> None:
-        """Swap the session exposed to COM clients (thread-safe)."""
+    def update_session(self, session: Optional[Session], environment: Any = None) -> None:
+        """Swap the session exposed to COM clients (thread-safe).
+
+        None closes the connection. ``environment`` names the connection.
+        """
         self._holder.session = session
+        self._holder.environment = environment if session is not None else None
 
     def stop(self) -> None:
         """Stop the COM server thread and revoke from the ROT."""

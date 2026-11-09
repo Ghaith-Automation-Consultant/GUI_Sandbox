@@ -10,7 +10,7 @@ Connect with `GetObject("SAPGUI")`, drive real-looking screens from your script,
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-2a78d6)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-2a78d6)](#quick-start)
 [![Platform: Windows](https://img.shields.io/badge/platform-Windows-2a78d6)](#quick-start)
-[![Tests: 262 passing](https://img.shields.io/badge/tests-262%20passing-1baf7a)](#by-the-numbers)
+[![Tests: 282 passing](https://img.shields.io/badge/tests-282%20passing-1baf7a)](#by-the-numbers)
 
 <img src="docs/assets/film/gui-sandbox-demo.gif" alt="Animated demo: opening a table in GUI Sandbox, then a Python script reading values from its results grid" width="820">
 
@@ -105,17 +105,25 @@ python main.py
 
 Close SAP Logon first, because both register under the same `SAPGUI` name. When you see `COM bridge started` in the terminal, the sandbox is ready.
 
-The app opens on a logon screen. Log on with client `000`, user `USER_STANDARD` and password `sandbox`. These test credentials are defined in [`engine/logon.py`](engine/logon.py); never put credentials for a real system there. To skip the logon screen, run `python main.py --no-logon`. Type `/nend` in the command field to log off.
+The app opens on an **SAP Logon** window listing the environments in [`environments.json`](environments.json). Double-click one to open it:
+
+| Environment | Opens on |
+|---|---|
+| `WL - With logon` | The logon screen. Log on with client `000`, user `USER_STANDARD` and password `sandbox`. |
+| `NL - No logon` | Easy Access, already logged on. |
+
+The test credentials are defined in [`engine/logon.py`](engine/logon.py); never put credentials for a real system there. Closing the session window returns to SAP Logon. To skip SAP Logon, run `python main.py --env WL` or `python main.py --env NL`. Type `/nend` in the command field to log off.
 
 ### Connect over COM
 
-With the app running, run this from another terminal and watch the window follow your script. It logs on with the same field IDs as the SAP GUI logon screen, then opens a table:
+With the app running, run this from another terminal and watch the window follow your script. As with SAP Logon, it opens a connection by its description, logs on with the same field IDs as the SAP GUI logon screen, then opens a table:
 
 ```python
 import win32com.client
 
-sap = win32com.client.GetObject("SAPGUI")
-session = sap.GetScriptingEngine.Children(0).Children(0)
+application = win32com.client.GetObject("SAPGUI").GetScriptingEngine
+connection = application.OpenConnection("WL - With logon", True)
+session = connection.Children(0)
 
 session.findById("wnd[0]/usr/txtRSYST-MANDT").Text = "000"
 session.findById("wnd[0]/usr/txtRSYST-BNAME").Text = "USER_STANDARD"
@@ -192,7 +200,7 @@ All screens use fictional data. To add your own, extend [`tools/generate_screens
     <td align="center"><h3>3</h3>scripting bridges</td>
     <td align="center"><h3>30</h3>control types</td>
     <td align="center"><h3>15</h3>sample screens</td>
-    <td align="center"><h3>262</h3>automated tests</td>
+    <td align="center"><h3>282</h3>automated tests</td>
   </tr>
 </table>
 

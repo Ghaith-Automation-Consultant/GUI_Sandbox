@@ -25,6 +25,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Callable, Optional
 
+from .environments import Environment
 from .loader import load_screen
 from .logon import check_logon
 from .session import Session
@@ -123,6 +124,7 @@ class Navigator:
         self.require_logon = require_logon
         self._logon: dict[str, str] = {}
         self._logged_on = not require_logon
+        self._environment: Optional[Environment] = None
         if session is not None:
             tcode, step = _locate(session)
             self._adopt(session, tcode, step)
@@ -150,13 +152,35 @@ class Navigator:
     def logged_on(self) -> bool:
         return self._logged_on
 
-    def subscribe(self, listener: Callable[[Session, str], None]) -> None:
-        """Call listener(session, tcode) whenever a new screen becomes active."""
+    @property
+    def environment(self) -> Optional[Environment]:
+        """The environment opened with connect(), if any."""
+        return self._environment
+
+    def subscribe(self, listener: Callable[[Optional[Session], str], None]) -> None:
+        """Call listener(session, tcode) whenever a new screen becomes active.
+
+        After disconnect() the listener is called once with (None, "").
+        """
         self._listeners.append(listener)
 
     def subscribe_messages(self, listener: Callable[[str], None]) -> None:
         """Call listener(text) whenever navigation reports a problem."""
         self._message_listeners.append(listener)
+
+    # ── connection ────────────────────────────────────────────────────────────
+
+    def connect(self, environment: Environment) -> Optional[Session]:
+        """Open an environment, replacing any open one, and show its first screen.
+
+        An environment with logon starts on the logon screen; one without
+        starts on Easy Access.
+        """
+        return self._dispatch(lambda: self._connect(environment))
+
+    def disconnect(self) -> None:
+        """Close the open environment. Listeners are told with (None, "")."""
+        self._dispatch(self._disconnect)
 
     # ── navigation ────────────────────────────────────────────────────────────
 
@@ -197,6 +221,25 @@ class Navigator:
         return self.start_transaction(command)
 
     # ── implementation (runs on the dispatcher's thread) ──────────────────────
+
+    def _connect(self, environment: Environment) -> Optional[Session]:
+        self._reset()
+        self._environment = environment
+        self.require_logon = environment.logon
+        self._logged_on = not environment.logon
+        return self._home()
+
+    def _disconnect(self) -> None:
+        self._reset()
+        self._environment = None
+        for listener in self._listeners:
+            listener(None, "")
+
+    def _reset(self) -> None:
+        self._session = None
+        self._tcode = ""
+        self._step = 0
+        self._logon = {}
 
     def _start(self, tcode: str) -> Optional[Session]:
         tcode = tcode.upper().strip()
@@ -289,6 +332,10 @@ class Navigator:
         return load_screen(path)
 
     def _activate(self, session: Session, tcode: str, step: int) -> Session:
+        if self._environment is not None:
+            session.info.system_name = self._environment.system
+            if not self._logon:
+                session.info.client = self._environment.client
         self._adopt(session, tcode, step)
         for listener in self._listeners:
             listener(session, tcode)

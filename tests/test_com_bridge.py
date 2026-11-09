@@ -25,6 +25,10 @@ def main():
     app = sap.GetScriptingEngine
     print(f"  App Type: {app.Type}")
 
+    if app.Children.Count == 0:
+        print("\nNo connection open; opening one from the SAP Logon list...")
+        app.OpenConnection("WL - With logon", True)
+
     conn = app.Children.Item(0)
     print(f"  Connection: {conn.Description}")
     print(f"  Connection Type: {conn.Type}")

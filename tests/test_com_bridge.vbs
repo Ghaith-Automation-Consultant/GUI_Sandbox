@@ -18,6 +18,11 @@ WScript.Echo "  Root ID: " & SapGuiAuto.Id
 Set app = SapGuiAuto.GetScriptingEngine
 WScript.Echo "  App Type: " & app.Type
 
+If app.Children.Count = 0 Then
+    app.OpenConnection "WL - With logon", True
+    WScript.Echo "  Opened WL - With logon"
+End If
+
 Set con = app.Children.Item(0)
 WScript.Echo "  Connection: " & con.Description
 

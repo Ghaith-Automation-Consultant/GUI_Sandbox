@@ -84,13 +84,22 @@ class TransactionRouter:
         """Forget the logged-on user and return to the logon screen."""
         return self.navigator.log_off()
 
+    def connect(self, environment) -> Session | None:
+        """Open an environment from the SAP Logon pad and show its first screen."""
+        return self.navigator.connect(environment)
+
+    def disconnect(self) -> None:
+        """Close the open environment."""
+        self.navigator.disconnect()
+
     def handle_command(self, command: str) -> Session | None:
         """Parse a command field entry and navigate."""
         return self.navigator.handle_command(command)
 
-    def _render(self, session: Session, tcode: str) -> None:
+    def _render(self, session: Session | None, tcode: str) -> None:
         self.renderer.clear()
-        self.renderer.render(session)
+        if session is not None:
+            self.renderer.render(session)
         if self._on_navigate:
             self._on_navigate(session, tcode)
 

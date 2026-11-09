@@ -9,7 +9,8 @@ in the Running Object Table (ROT).  External scripts access the sandbox via::
     import win32com.client
     sap = win32com.client.GetObject("SAPGUI")
     app = sap.GetScriptingEngine
-    session = app.Children(0).Children(0)
+    connection = app.OpenConnection("WL - With logon", True)  # unless one is open
+    session = connection.Children(0)
     session.findById("wnd[0]/usr/ctxtFOO").Text = "SFLIGHT"
     session.findById("wnd[0]").sendVKey(0)
 
@@ -24,9 +25,11 @@ The hierarchy mirrors the real SAP GUI Scripting Engine:
 from __future__ import annotations
 
 import threading
-from typing import Any, Optional
+from typing import Any, Callable, Optional
 
 import win32com.server.util
+import winerror
+from win32com.server.exception import COMException
 
 from engine.control import (
     Control, TableControl, GridView, StatusBar,
@@ -77,19 +80,30 @@ _SAP_TYPE_NUMBERS: dict[str, int] = {
 
 
 class SessionHolder:
-    """Thread-safe wrapper for the active Session reference."""
+    """Thread-safe wrapper for the active Session reference.
 
-    def __init__(self, session: Session) -> None:
+    ``session`` is None while no connection is open, as when SAP Logon is
+    running with no system opened. ``opener(description)`` opens an
+    environment for OpenConnection and returns it, or None if it is unknown.
+    """
+
+    def __init__(
+        self,
+        session: Optional[Session] = None,
+        opener: Optional[Callable[[str], Any]] = None,
+    ) -> None:
         self._session = session
         self._lock = threading.Lock()
+        self.opener = opener
+        self.environment: Any = None
 
     @property
-    def session(self) -> Session:
+    def session(self) -> Optional[Session]:
         with self._lock:
             return self._session
 
     @session.setter
-    def session(self, value: Session) -> None:
+    def session(self, value: Optional[Session]) -> None:
         with self._lock:
             self._session = value
 
@@ -503,7 +517,10 @@ class ComConnection:
 
     @property
     def Description(self) -> str:
-        return f"SIM {self._holder.session.info.system_name}"
+        if self._holder.environment is not None:
+            return self._holder.environment.description
+        session = self._holder.session
+        return f"SIM {session.info.system_name}" if session else ""
 
     @property
     def DisabledByServer(self) -> bool:
@@ -519,7 +536,7 @@ class ComConnection:
 class ComApplication:
     """Top-level application object."""
 
-    _public_methods_: list[str] = []
+    _public_methods_ = ["OpenConnection"]
     _public_attrs_ = [
         "Connections", "Children", "Id", "Type",
         "HistoryEnabled", "MajorVersion", "MinorVersion",
@@ -567,7 +584,22 @@ class ComApplication:
         return 0
 
     def Connections(self, index: Any = None) -> Any:
-        return _collection([_wrap(ComConnection(self._holder))], index)
+        items = [_wrap(ComConnection(self._holder))] if self._holder.session is not None else []
+        return _collection(items, index)
+
+    def OpenConnection(self, description: str, sync: bool = True, raise_: bool = True) -> Any:
+        """Open an environment from the SAP Logon list, as SAP GUI's OpenConnection does.
+
+        The one open connection is replaced. Returns the new connection once its
+        first screen is shown.
+        """
+        opener = self._holder.opener
+        if opener is None:
+            raise COMException(desc="Opening connections is not available", scode=winerror.E_NOTIMPL)
+        if opener(str(description)) is None:
+            raise COMException(desc=f"Connection entry not found: {description}",
+                               scode=winerror.E_INVALIDARG)
+        return _wrap(ComConnection(self._holder))
 
     def Children(self, index: Any = None) -> Any:
         return self.Connections(index)

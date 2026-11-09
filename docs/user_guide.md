@@ -66,7 +66,7 @@ run_sandbox.bat
 
 Au démarrage, l'application :
 
-1. Affiche l'écran de connexion (`screens/00_LOGON.json`, transaction `S000`). Connectez-vous avec le mandant `000`, l'utilisateur `USER_STANDARD` et le mot de passe `sandbox` (définis dans `engine/logon.py`), puis appuyez sur Entrée. `python main.py --no-logon` ouvre directement l'écran Easy Access, et `/nend` dans la zone de commande vous déconnecte.
+1. Affiche la fenêtre SAP Logon, qui liste les environnements de `environments.json`. Double-cliquez sur l'un d'eux : `WL - With logon` ouvre l'écran de connexion (`screens/00_LOGON.json`, transaction `S000`), où vous vous connectez avec le mandant `000`, l'utilisateur `USER_STANDARD` et le mot de passe `sandbox` (définis dans `engine/logon.py`) ; `NL - No logon` ouvre directement l'écran Easy Access. Fermer la fenêtre de session ramène à SAP Logon. `python main.py --env WL` ou `--env NL` ouvre l'environnement sans passer par SAP Logon, et `/nend` dans la zone de commande vous déconnecte. Un script ouvre un environnement avec `application.OpenConnection("WL - With logon", True)`.
 2. Affiche la fenêtre SAP GUI avec menus, barres d'outils, arbre de navigation et zone de contenu.
 3. Enregistre le pont COM dans la Running Object Table (ROT) Windows — le message `COM bridge started` apparaît dans le terminal.
 4. Les scripts externes peuvent alors se connecter via `GetObject("SAPGUI")`.

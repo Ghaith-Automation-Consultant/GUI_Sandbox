@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 import sys
 import atexit
-from pathlib import Path
+import argparse
 
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QVBoxLayout, QWidget, QLineEdit, QLabel,
@@ -11,10 +11,12 @@ from PySide6.QtWidgets import (
 from PySide6.QtGui import QFont
 from PySide6.QtCore import Qt, QSize
 
-from engine import load_screen
 from bridge import ComBridge
+from engine.environments import find_environment, load_environments
+from ui import gui_thread
+from ui.logon_pad import LogonPad
 from ui.screen_renderer import ScreenRenderer
-from ui.transaction_router import TransactionRouter, LOGON_SCREEN
+from ui.transaction_router import TransactionRouter
 from ui.styles import SAP, sap_global_stylesheet
 
 
@@ -22,6 +24,7 @@ class MainWindow(QMainWindow):
     def __init__(self, com_bridge=None, require_logon=False):
         super().__init__()
         self.com_bridge = com_bridge
+        self.logon_pad = None  # set when the app starts on the SAP Logon pad
 
         self.setWindowTitle("GUI Sandbox")
         self.setGeometry(100, 100, 1200, 800)
@@ -84,13 +87,33 @@ class MainWindow(QMainWindow):
             self.renderer.session.send_vkey(0)
 
     def _on_navigate(self, session, tcode):
-        self.setWindowTitle(f"GUI Sandbox — {tcode}")
+        self.setWindowTitle(f"GUI Sandbox — {tcode}" if session else "GUI Sandbox")
         if self.com_bridge:
-            self.com_bridge.update_session(session)
+            self.com_bridge.update_session(session, self.router.navigator.environment)
 
     def load_initial_screen(self):
         """Load the first screen (logon or home) after the window is shown."""
         self.router.go_home()
+
+    def open_environment(self, environment):
+        """Open an environment from the SAP Logon pad, replacing any open one."""
+        self.router.connect(environment)
+        self.show()
+        self.raise_()
+        self.activateWindow()
+        return environment
+
+    def closeEvent(self, event):
+        # With the SAP Logon pad open, closing the window closes the connection
+        # and returns to the pad, as in SAP GUI.
+        if self.logon_pad is not None and self.logon_pad.isVisible():
+            event.ignore()
+            self.hide()
+            self.router.disconnect()
+            self.logon_pad.raise_()
+            self.logon_pad.activateWindow()
+            return
+        super().closeEvent(event)
 
     def _create_main_toolbar(self):
         toolbar = QToolBar("Main Toolbar")
@@ -226,15 +249,32 @@ if __name__ == "__main__":
     app.setStyle("Fusion")
     app.setStyleSheet(sap_global_stylesheet())
 
-    # --no-logon skips the logon screen and opens Easy Access directly
-    require_logon = "--no-logon" not in sys.argv[1:]
+    parser = argparse.ArgumentParser(description="GUI Sandbox: an SAP GUI scripting simulator")
+    parser.add_argument("--env", metavar="ID",
+                        help="open this environment directly (for example WL or NL) instead of the SAP Logon pad")
+    parser.add_argument("--no-logon", action="store_true", help="same as --env NL")
+    args, _qt_args = parser.parse_known_args()
 
-    # Load initial session for COM bridge
-    first_screen = LOGON_SCREEN if require_logon else "01_SESSION_MANAGER.json"
-    session = load_screen(Path(__file__).resolve().parent / "screens" / first_screen)
-    com_bridge = ComBridge(session)
+    environments = load_environments()
+    env_name = "NL" if args.no_logon else args.env
+    start_env = find_environment(environments, env_name) if env_name else None
+    if env_name and start_env is None:
+        known = ", ".join(env.id for env in environments)
+        parser.error(f"unknown environment {env_name!r}; choose one of {known}")
+
+    main_win = MainWindow()
+
+    def open_connection(description):
+        """OpenConnection from a script: open the entry on the GUI thread and wait."""
+        env = find_environment(environments, description)
+        if env is None:
+            return None
+        return gui_thread.invoker().call(lambda: main_win.open_environment(env))
+
+    com_bridge = ComBridge(opener=open_connection)
     try:
         com_bridge.start()
+        main_win.com_bridge = com_bridge
         print("COM bridge started — GetObject(\"SAPGUI\") is available")
     except Exception as exc:
         print(f"COM bridge failed to start: {exc}")
@@ -242,8 +282,10 @@ if __name__ == "__main__":
 
     atexit.register(lambda: com_bridge.stop() if com_bridge else None)
 
-    main_win = MainWindow(com_bridge=com_bridge, require_logon=require_logon)
-    main_win.show()
-    main_win.load_initial_screen()
+    if start_env:
+        main_win.open_environment(start_env)
+    else:
+        main_win.logon_pad = LogonPad(environments, on_open=main_win.open_environment)
+        main_win.logon_pad.show()
 
     sys.exit(app.exec())

@@ -1,0 +1,16 @@
+[
+  {
+    "id": "WL",
+    "description": "WL - With logon",
+    "system": "SBX",
+    "client": "000",
+    "logon": true
+  },
+  {
+    "id": "NL",
+    "description": "NL - No logon",
+    "system": "SBX",
+    "client": "000",
+    "logon": false
+  }
+]

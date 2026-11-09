@@ -125,6 +125,19 @@ class ComCollection:
         return self._items[int(index)]
 
 
+def _collection(items: list, index: Any = None) -> Any:
+    """Return a wrapped collection, or one item of it when an index is given.
+
+    Collection getters such as ``Children`` are plain methods, not properties:
+    pywin32 drops the arguments of a property get, so VBScript's
+    ``obj.Children(0)`` would return the whole collection instead of item 0.
+    A method receives the index in both the property-get and the call form.
+    """
+    if index is None:
+        return _wrap(ComCollection(items))
+    return items[int(index)]
+
+
 # ──────────────────────────────────────────────────────────────────────────────
 #  ComSessionInfo
 # ──────────────────────────────────────────────────────────────────────────────
@@ -385,10 +398,9 @@ class ComControl:
 
     # ── children ─────────────────────────────────────────────────────────────
 
-    @property
-    def Children(self) -> Any:
+    def Children(self, index: Any = None) -> Any:
         items = [_wrap(ComControl(c, self._session)) for c in self._ctrl.children]
-        return _wrap(ComCollection(items))
+        return _collection(items, index)
 
     # ── findById ─────────────────────────────────────────────────────────────
 
@@ -461,11 +473,10 @@ class ComSession:
             return _wrap(ComControl(wnd, session))
         return None
 
-    @property
-    def Children(self) -> Any:
+    def Children(self, index: Any = None) -> Any:
         session = self._session
         items = [_wrap(ComControl(c, session)) for c in session.children]
-        return _wrap(ComCollection(items))
+        return _collection(items, index)
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -498,13 +509,11 @@ class ComConnection:
     def DisabledByServer(self) -> bool:
         return False
 
-    @property
-    def Children(self) -> Any:
-        return _wrap(ComCollection([_wrap(ComSession(self._holder))]))
+    def Children(self, index: Any = None) -> Any:
+        return _collection([_wrap(ComSession(self._holder))], index)
 
-    @property
-    def Sessions(self) -> Any:
-        return self.Children
+    def Sessions(self, index: Any = None) -> Any:
+        return self.Children(index)
 
 
 class ComApplication:
@@ -557,13 +566,11 @@ class ComApplication:
     def Revision(self) -> int:
         return 0
 
-    @property
-    def Connections(self) -> Any:
-        return _wrap(ComCollection([_wrap(ComConnection(self._holder))]))
+    def Connections(self, index: Any = None) -> Any:
+        return _collection([_wrap(ComConnection(self._holder))], index)
 
-    @property
-    def Children(self) -> Any:
-        return self.Connections
+    def Children(self, index: Any = None) -> Any:
+        return self.Connections(index)
 
 
 # ──────────────────────────────────────────────────────────────────────────────

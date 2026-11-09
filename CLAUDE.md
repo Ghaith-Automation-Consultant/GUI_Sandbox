@@ -56,6 +56,7 @@ Three mechanisms, all operating on the same engine Session:
 - `tests/test_e2e.py` — Full stack: load screen → render → interact → verify
 - `tests/test_navigation.py` — Script-driven navigation through the engine, bridges, and live window
 - `tests/test_logon.py` — Logon screen (S000): rules in `engine/logon.py`, UI flow, logon from a script thread
+- `tests/test_com_collections.py` — COM collections indexed the way VBScript does it (`obj.Children(0)` in one call)
 - `tests/test_com_bridge.py` — Manual COM smoke test; run as a script while `main.py` is running
 - `tests/test_screens_sanitized.py` — Rejects screen files holding live-system identifiers
 - `tests/conftest.py` — Shared fixtures: `qapp` (session-scoped QApplication), `main_window`

@@ -10,7 +10,7 @@ Connect with `GetObject("SAPGUI")`, drive real-looking screens from your script,
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-2a78d6)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-2a78d6)](#quick-start)
 [![Platform: Windows](https://img.shields.io/badge/platform-Windows-2a78d6)](#quick-start)
-[![Tests: 257 passing](https://img.shields.io/badge/tests-257%20passing-1baf7a)](#by-the-numbers)
+[![Tests: 258 passing](https://img.shields.io/badge/tests-258%20passing-1baf7a)](#by-the-numbers)
 
 <img src="docs/assets/film/gui-sandbox-demo.gif" alt="Animated demo: opening a table in GUI Sandbox, then a Python script reading values from its results grid" width="820">
 
@@ -192,7 +192,7 @@ All screens use fictional data. To add your own, extend [`tools/generate_screens
     <td align="center"><h3>3</h3>scripting bridges</td>
     <td align="center"><h3>30</h3>control types</td>
     <td align="center"><h3>15</h3>sample screens</td>
-    <td align="center"><h3>257</h3>automated tests</td>
+    <td align="center"><h3>258</h3>automated tests</td>
   </tr>
 </table>
 

@@ -187,9 +187,16 @@ All properties exposed by `ComControl`:
 
 ### Status Bar
 
-| Property    | Type | Access | Description                               |
-|-------------|------|--------|-------------------------------------------|
-| `MessageId` | str  | R      | Message type (`"S"` success, `"E"` error, etc.). Empty string for non-statusbar controls. |
+| Property      | Type | Access | Description                               |
+|---------------|------|--------|-------------------------------------------|
+| `MessageType` | str  | R      | Message type: `"S"` success, `"W"` warning, `"E"` error, `"A"` abort, `"I"` information. Empty when there is no message, and for other controls. |
+| `MessageId`   | str  | R      | Message class, such as `"00"` on a real system. Always empty in the sandbox for now. |
+
+```python
+sbar = session.findById("wnd[0]/sbar")
+if sbar.MessageType == "E":
+    print("Error:", sbar.Text)
+```
 
 ---
 

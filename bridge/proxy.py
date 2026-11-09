@@ -316,9 +316,17 @@ class ControlProxy:
     # ── status bar ───────────────────────────────────────────────────────────
 
     @property
-    def MessageId(self) -> str:
+    def MessageType(self) -> str:
+        """S success, W warning, E error, A abort, I information."""
         if isinstance(self._ctrl, StatusBar):
             return self._ctrl.message_type
+        return ""
+
+    @property
+    def MessageId(self) -> str:
+        """Message class, such as "00"."""
+        if isinstance(self._ctrl, StatusBar):
+            return self._ctrl.message_id
         return ""
 
     # ── actions ──────────────────────────────────────────────────────────────

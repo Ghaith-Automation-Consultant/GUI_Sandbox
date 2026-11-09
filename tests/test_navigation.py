@@ -119,6 +119,14 @@ class TestInProcessBridge:
         assert session.findById(GRID).GetCellValue(0, "CARRID") == "SX"
         assert session.Info.Transaction == "SE16"
 
+    def test_status_bar_message_type(self):
+        session = SandboxSession(home())
+        session.StartTransaction("ZZ_FAKE")
+        sbar = session.findById("wnd[0]/sbar")
+        assert sbar.MessageType == "E"
+        assert sbar.MessageId == ""
+        assert session.findById(OKCD).MessageType == ""
+
 
 class TestHttpBridge:
     @pytest.fixture
@@ -145,7 +153,10 @@ class TestHttpBridge:
     def test_unknown_transaction_sets_status(self, remote):
         remote.StartTransaction("ZZ_FAKE")
         assert remote.Info.Transaction == "SESSION_MANAGER"
-        assert "ZZ_FAKE" in remote.findById("wnd[0]/sbar").Text
+        sbar = remote.findById("wnd[0]/sbar")
+        assert "ZZ_FAKE" in sbar.Text
+        assert sbar.MessageType == "E"
+        assert sbar.MessageId == ""
 
     def test_load_screen_keeps_navigation_working(self, remote):
         remote.load_screen(str(SCREEN_DIR / "02_SE16_initial.json"))

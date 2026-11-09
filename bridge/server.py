@@ -80,6 +80,7 @@ def _ctrl_dict(ctrl: Control, *, include_children: bool = False) -> dict[str, An
         d["row_count"] = ctrl.row_count
     if isinstance(ctrl, StatusBar):
         d["message_type"] = ctrl.message_type
+        d["message_id"]   = ctrl.message_id
     if include_children:
         d["children"] = [_ctrl_dict(c, include_children=True) for c in ctrl.children]
     return d

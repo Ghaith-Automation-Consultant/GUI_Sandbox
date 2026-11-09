@@ -166,7 +166,7 @@ Control (base)  sap_type="GuiControl"
 │   ├── CheckBox           "GuiCheckBox"        + selected
 │   ├── ComboBox           "GuiComboBox"        + options
 │   ├── CommandField       "GuiOkCodeField"     (transaction field)
-│   ├── StatusBar          "GuiStatusbar"       + message_type, show()
+│   ├── StatusBar          "GuiStatusbar"       + message_type, message_id, show()
 │   ├── Titlebar           "GuiTitlebar"
 │   ├── MenuItem           "GuiMenuItem"
 │   ├── Tree               "GuiTree"

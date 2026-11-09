@@ -197,10 +197,12 @@ class StatusBar(Control):
     def __init__(self, control_id: str, **kwargs: Any) -> None:
         super().__init__(control_id, **kwargs)
         self.message_type: str = ""   # S=success W=warning E=error A=abort I=info
+        self.message_id: str = ""     # Message class, such as "00"; empty for sandbox messages
 
-    def show(self, message: str, message_type: str = "S") -> None:
+    def show(self, message: str, message_type: str = "S", message_id: str = "") -> None:
         self.text = message
         self.message_type = message_type
+        self.message_id = message_id
 
 
 class Titlebar(Control):

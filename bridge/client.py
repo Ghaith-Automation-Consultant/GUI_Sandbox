@@ -140,8 +140,14 @@ class RemoteControlProxy:
         return len(self._data.get("columns", []))
 
     @property
-    def MessageId(self) -> str:
+    def MessageType(self) -> str:
+        """S success, W warning, E error, A abort, I information."""
         return self._data.get("message_type", "")
+
+    @property
+    def MessageId(self) -> str:
+        """Message class, such as "00"."""
+        return self._data.get("message_id", "")
 
     # ── actions ──────────────────────────────────────────────────────────────
 

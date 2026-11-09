@@ -6,14 +6,14 @@ import pytest
 from PySide6.QtWidgets import QPushButton, QTreeWidget
 
 from engine.environments import find_environment, load_environments
-from engine.logon import SANDBOX_CLIENT, SANDBOX_USERS
+from engine.logon import SANDBOX_CLIENT
 from engine.navigation import HOME_TCODE, LOGON_TCODE, Navigator
 from ui.logon_pad import LogonPad
 
 ENVS = load_environments()
 WL = find_environment(ENVS, "WL")
 NL = find_environment(ENVS, "NL")
-USER, PASSWORD = next(iter(SANDBOX_USERS.items()))
+USER, PASSWORD = "USER_STANDARD", "sandbox"  # from users.json
 
 
 def log_on(session):

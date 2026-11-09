@@ -149,6 +149,11 @@ class RemoteControlProxy:
         """Message class, such as "00"."""
         return self._data.get("message_id", "")
 
+    @property
+    def MessageNumber(self) -> str:
+        """Message number, such as "343"."""
+        return self._data.get("message_number", "")
+
     # ── actions ──────────────────────────────────────────────────────────────
 
     def Press(self) -> None:

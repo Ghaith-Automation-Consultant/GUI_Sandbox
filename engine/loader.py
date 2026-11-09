@@ -29,7 +29,7 @@ from .control import (
     Box, Titlebar, Tree, Chart,
     TableControl, GridView,
 )
-from .session import Session, Window
+from .session import ModalWindow, Session, Window
 
 
 # SAP COM type string → Python class
@@ -158,7 +158,8 @@ def _attach_window(session: Session, wnd_node: dict[str, Any]) -> Window:
     wnd_id = wnd_node.get("id", "")
     index  = _extract_window_index(wnd_id)
 
-    wnd = Window(
+    cls = ModalWindow if wnd_node.get("type") == "GuiModalWindow" else Window
+    wnd = cls(
         wnd_id,
         index=index,
         name=wnd_node.get("name", f"wnd[{index}]"),
@@ -192,7 +193,7 @@ def _populate_session(session: Session, data: dict[str, Any]) -> None:
     if sap_type == "GuiSession":
         # Top level is a session node; its children are windows
         for wnd_node in tree.get("children", []):
-            if wnd_node.get("type") in ("GuiMainWindow", "GuiFrameWindow"):
+            if wnd_node.get("type") in ("GuiMainWindow", "GuiFrameWindow", "GuiModalWindow"):
                 _attach_window(session, wnd_node)
     elif sap_type in ("GuiMainWindow", "GuiFrameWindow"):
         _attach_window(session, tree)

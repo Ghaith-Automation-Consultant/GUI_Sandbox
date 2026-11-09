@@ -139,6 +139,19 @@ class ComCollection:
         return self._items[int(index)]
 
 
+def _not_found(path: str) -> COMException:
+    # SAP GUI raises a COM error for an unknown ID; scripts test for elements this way.
+    return COMException(desc=f"The control could not be found by id: {path}",
+                        scode=winerror.DISP_E_EXCEPTION)
+
+
+def _find(session: Session, path: str) -> Control:
+    try:
+        return session.findById(path)
+    except RuntimeError:
+        raise _not_found(path) from None
+
+
 def _collection(items: list, index: Any = None) -> Any:
     """Return a wrapped collection, or one item of it when an index is given.
 
@@ -228,7 +241,7 @@ class ComControl:
         "ScreenLeft", "ScreenTop",
         "RowCount", "VisibleRowCount", "ColumnCount",
         "Children", "ColumnOrder",
-        "MessageType", "MessageId", "Selected",
+        "MessageType", "MessageId", "MessageNumber", "Selected",
     ]
     _readonly_attrs_ = [
         "Id", "Type", "TypeAsNumber", "Name",
@@ -238,7 +251,7 @@ class ComControl:
         "ScreenLeft", "ScreenTop",
         "RowCount", "VisibleRowCount", "ColumnCount",
         "Children", "ColumnOrder",
-        "MessageType", "MessageId", "Selected",
+        "MessageType", "MessageId", "MessageNumber", "Selected",
     ]
 
     def __init__(self, ctrl: Control, session: Optional[Session] = None) -> None:
@@ -391,6 +404,13 @@ class ComControl:
             return self._ctrl.message_id
         return ""
 
+    @property
+    def MessageNumber(self) -> str:
+        """Message number, such as "343"."""
+        if isinstance(self._ctrl, StatusBar):
+            return self._ctrl.message_number
+        return ""
+
     # ── actions ──────────────────────────────────────────────────────────────
 
     def Press(self) -> None:
@@ -420,13 +440,13 @@ class ComControl:
 
     def findById(self, path: str) -> Any:
         if self._session is not None:
-            ctrl = self._session.findById(path)
+            ctrl = _find(self._session, path)
         else:
             ctrl = self._ctrl.find_control(path)
             if ctrl is None:
                 ctrl = self._ctrl.find_control(f"{self._ctrl.id}/{path}")
             if ctrl is None:
-                raise RuntimeError(f"Control not found: {path!r}")
+                raise _not_found(path)
         return _wrap(ComControl(ctrl, self._session))
 
 
@@ -466,8 +486,7 @@ class ComSession:
 
     def findById(self, path: str) -> Any:
         session = self._session
-        ctrl = session.findById(path)
-        return _wrap(ComControl(ctrl, session))
+        return _wrap(ComControl(_find(session, path), session))
 
     def StartTransaction(self, tcode: str) -> None:
         self._session.start_transaction(tcode)

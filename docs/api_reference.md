@@ -191,6 +191,7 @@ All properties exposed by `ComControl`:
 |---------------|------|--------|-------------------------------------------|
 | `MessageType` | str  | R      | Message type: `"S"` success, `"W"` warning, `"E"` error, `"A"` abort, `"I"` information. Empty when there is no message, and for other controls. |
 | `MessageId`   | str  | R      | Message class, such as `"00"` on a real system. Always empty in the sandbox for now. |
+| `MessageNumber` | str | R     | Message number. The sandbox sets `"343"` (transaction does not exist) and `"190"` (password can't be changed); other messages leave it empty. |
 
 ```python
 sbar = session.findById("wnd[0]/sbar")

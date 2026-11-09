@@ -8,10 +8,10 @@ from PySide6.QtWidgets import QLineEdit, QTreeWidget
 
 from engine.control import PasswordField, TextField
 from engine.loader import load_screen
-from engine.logon import SANDBOX_CLIENT, SANDBOX_USERS, check_logon
+from engine.logon import SANDBOX_CLIENT, check_logon
 from ui.transaction_router import LOGON_SCREEN, LOGON_TCODE, SCREEN_DIR
 
-USER, PASSWORD = next(iter(SANDBOX_USERS.items()))
+USER, PASSWORD = "USER_STANDARD", "sandbox"  # from users.json
 
 CLIENT_ID = "wnd[0]/usr/txtRSYST-MANDT"
 USER_ID = "wnd[0]/usr/txtRSYST-BNAME"

@@ -21,9 +21,10 @@ from __future__ import annotations
 from engine.navigation import (
     HOME_TCODE, LOGON_SCREEN, LOGON_TCODE, SCREEN_DIR, TRANSACTIONS, Navigator,
 )
-from engine.session import Session
+from engine.session import ModalWindow, Session
 
 from . import gui_thread
+from .popup_dialog import PopupDialog
 
 __all__ = [
     "HOME_TCODE", "LOGON_SCREEN", "LOGON_TCODE", "SCREEN_DIR", "TRANSACTIONS", "TransactionRouter",
@@ -39,6 +40,8 @@ class TransactionRouter:
         self.navigator = Navigator(dispatcher=gui_thread.invoker().call, require_logon=require_logon)
         self.navigator.subscribe(self._render)
         self.navigator.subscribe_messages(self._show_message)
+        self.navigator.subscribe_popups(self._sync_popups)
+        self.dialogs: dict[int, PopupDialog] = {}
 
     @property
     def current_tcode(self) -> str:
@@ -96,7 +99,24 @@ class TransactionRouter:
         """Parse a command field entry and navigate."""
         return self.navigator.handle_command(command)
 
+    def _sync_popups(self, session: Session | None, _top=None) -> None:
+        """Show a dialog for each open popup window, and close the rest."""
+        windows = {} if session is None else {
+            w.index: w for w in session.children if isinstance(w, ModalWindow)
+        }
+        for index, dialog in list(self.dialogs.items()):
+            if windows.get(index) is not dialog.window:
+                dialog.close_from_engine()
+                del self.dialogs[index]
+        for index in sorted(windows):
+            if index not in self.dialogs:
+                parent = self.dialogs.get(index - 1) or self.renderer.main_window
+                dialog = PopupDialog(windows[index], parent)
+                self.dialogs[index] = dialog
+                dialog.open()
+
     def _render(self, session: Session | None, tcode: str) -> None:
+        self._sync_popups(session)
         self.renderer.clear()
         if session is not None:
             self.renderer.render(session)

@@ -329,6 +329,13 @@ class ControlProxy:
             return self._ctrl.message_id
         return ""
 
+    @property
+    def MessageNumber(self) -> str:
+        """Message number, such as "343"."""
+        if isinstance(self._ctrl, StatusBar):
+            return self._ctrl.message_number
+        return ""
+
     # ── actions ──────────────────────────────────────────────────────────────
 
     def Press(self) -> None:

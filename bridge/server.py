@@ -81,6 +81,7 @@ def _ctrl_dict(ctrl: Control, *, include_children: bool = False) -> dict[str, An
     if isinstance(ctrl, StatusBar):
         d["message_type"] = ctrl.message_type
         d["message_id"]   = ctrl.message_id
+        d["message_number"] = ctrl.message_number
     if include_children:
         d["children"] = [_ctrl_dict(c, include_children=True) for c in ctrl.children]
     return d

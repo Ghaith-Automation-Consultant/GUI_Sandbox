@@ -73,6 +73,12 @@ class Window(Container):
         return self.find_control(f"{self.id}/usr")
 
 
+class ModalWindow(Window):
+    """A modal popup window (wnd[1], wnd[2], ...) that blocks the windows below it."""
+
+    sap_type = "GuiModalWindow"
+
+
 class Session(Container):
     """
     Top-level simulation object — mirrors GuiSession.
@@ -168,12 +174,15 @@ class Session(Container):
 
     # ── status bar shorthand ─────────────────────────────────────────────────
 
-    def set_status(self, message: str, message_type: str = "S") -> None:
-        wnd = self.get_window(0)
-        if wnd:
-            sbar = wnd.status_bar
+    def set_status(self, message: str, message_type: str = "S", message_number: str = "") -> None:
+        """Show a message in the main window's status bar, and in an open popup's."""
+        targets = [self.get_window(0)]
+        if self.active_window is not targets[0]:
+            targets.append(self.active_window)
+        for wnd in targets:
+            sbar = wnd.status_bar if wnd else None
             if isinstance(sbar, StatusBar):
-                sbar.show(message, message_type)
+                sbar.show(message, message_type, message_number=message_number)
 
     # ── convenience ──────────────────────────────────────────────────────────
 

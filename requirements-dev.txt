@@ -1,3 +1,6 @@
 -r requirements.txt
 pytest
 pillow
+# Test-only: tests/test_pysapgui.py runs this library's password helpers against
+# the sandbox. GPL-2.0; the app never imports it and none of its code is bundled.
+PySapGUI==1.0.7

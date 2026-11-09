@@ -173,7 +173,16 @@
             "id": "/app/con[0]/ses[0]/wnd[0]/tbar[1]",
             "type": "GuiToolbar",
             "name": "tbar[1]",
-            "changeable": true
+            "changeable": true,
+            "children": [
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[1]/btn[5]",
+                "type": "GuiButton",
+                "name": "btn[5]",
+                "tooltip": "New Password   (F5)",
+                "changeable": true
+              }
+            ]
           },
           {
             "id": "/app/con[0]/ses[0]/wnd[0]/usr",

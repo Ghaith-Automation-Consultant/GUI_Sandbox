@@ -10,7 +10,7 @@ Connect with `GetObject("SAPGUI")`, drive real-looking screens from your script,
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-2a78d6)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-2a78d6)](#quick-start)
 [![Platform: Windows](https://img.shields.io/badge/platform-Windows-2a78d6)](#quick-start)
-[![Tests: 282 passing](https://img.shields.io/badge/tests-282%20passing-1baf7a)](#by-the-numbers)
+[![Tests: 325 passing](https://img.shields.io/badge/tests-325%20passing-1baf7a)](#by-the-numbers)
 
 <img src="docs/assets/film/gui-sandbox-demo.gif" alt="Animated demo: opening a table in GUI Sandbox, then a Python script reading values from its results grid" width="820">
 
@@ -112,7 +112,20 @@ The app opens on an **SAP Logon** window listing the environments in [`environme
 | `WL - With logon` | The logon screen. Log on with client `000`, user `USER_STANDARD` and password `sandbox`. |
 | `NL - No logon` | Easy Access, already logged on. |
 
-The test credentials are defined in [`engine/logon.py`](engine/logon.py); never put credentials for a real system there. Closing the session window returns to SAP Logon. To skip SAP Logon, run `python main.py --env WL` or `python main.py --env NL`. Type `/nend` in the command field to log off.
+Each environment has its own test users in [`users.json`](users.json); never put credentials for a real system there. Closing the session window returns to SAP Logon. To skip SAP Logon, run `python main.py --env WL` or `python main.py --env NL`. Type `/nend` in the command field to log off.
+
+### Passwords and popups
+
+Password changes open SAP-style popups (`wnd[1]`), and a rejected password opens a second one (`wnd[2]`):
+
+| Workflow | How | Popup fields |
+|---|---|---|
+| Set | Logon screen, **New Password** (`tbar[1]/btn[5]`, F5) | `wnd[1]/usr/pwdRSYST-NCODE`, `pwdRSYST-NCOD2` |
+| Forced | Log on as a user with an initial password, such as `USER_NEW` / `welcome1` | Same as Set |
+| Change own | `SU3`, **Change Password** (`tbar[1]/btn[6]`) | `wnd[1]/usr/subSUBSCREEN:SAPMSYST:0043/pwdRSYST-BCODE`, `NCODE`, `NCOD2` |
+| Reset | `SU01`, enter a user, **Change Password** (`tbar[1]/btn[20]`, Shift+F8) | `wnd[1]/usr/pwdRSYST-NCODE`, `pwdRSYST-NCOD2` |
+
+A reset sets an initial password, so that user must choose a new one at the next logon. New passwords must be 8 to 40 characters, match, and differ from the old one. Changes last until the app restarts; `users.json` is never written. These IDs are the ones [PySapGUI](https://github.com/gutskodv/PySapGUI)'s password helpers use, and `tests/test_pysapgui.py` runs that library against the sandbox.
 
 ### Connect over COM
 
@@ -187,7 +200,8 @@ for entry in session.recorder.entries():
 | `SE16N` | General table display with a selection table | 2 |
 | `SE38` | ABAP Editor: start screen, source, attributes | 3 |
 | `SM37` | Job selection | 1 |
-| `SU01` | User maintenance | 1 |
+| `SU01` | User maintenance, with password reset | 1 |
+| `SU3` | Your own user profile, with password change | 1 |
 | `VA03` | Sales order with tabs and an item table | 2 |
 | `MM03` | Material display | 1 |
 
@@ -199,8 +213,8 @@ All screens use fictional data. To add your own, extend [`tools/generate_screens
   <tr>
     <td align="center"><h3>3</h3>scripting bridges</td>
     <td align="center"><h3>30</h3>control types</td>
-    <td align="center"><h3>15</h3>sample screens</td>
-    <td align="center"><h3>282</h3>automated tests</td>
+    <td align="center"><h3>16</h3>sample screens</td>
+    <td align="center"><h3>325</h3>automated tests</td>
   </tr>
 </table>
 

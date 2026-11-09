@@ -255,6 +255,13 @@
                 "name": "btn[29]",
                 "tooltip": "Lock/Unlock   (Ctrl+F5)",
                 "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[1]/btn[20]",
+                "type": "GuiButton",
+                "name": "btn[20]",
+                "tooltip": "Change Password   (Shift+F8)",
+                "changeable": true
               }
             ]
           },

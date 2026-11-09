@@ -198,11 +198,14 @@ class StatusBar(Control):
         super().__init__(control_id, **kwargs)
         self.message_type: str = ""   # S=success W=warning E=error A=abort I=info
         self.message_id: str = ""     # Message class, such as "00"; empty for sandbox messages
+        self.message_number: str = "" # Message number, such as "343" (transaction does not exist)
 
-    def show(self, message: str, message_type: str = "S", message_id: str = "") -> None:
+    def show(self, message: str, message_type: str = "S", message_id: str = "",
+             message_number: str = "") -> None:
         self.text = message
         self.message_type = message_type
         self.message_id = message_id
+        self.message_number = message_number
 
 
 class Titlebar(Control):

@@ -118,5 +118,13 @@
     "screen": 60,
     "status": "",
     "file": "14_MM03_initial.json"
+  },
+  {
+    "label": "15_SU3_initial",
+    "transaction": "SU3",
+    "program": "ZSBX_SU3",
+    "screen": 100,
+    "status": "",
+    "file": "15_SU3_initial.json"
   }
 ]

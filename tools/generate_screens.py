@@ -278,8 +278,21 @@ def su01_screen():
     menu = {"Users": ["Create", "Change", "Display", "Exit"], "Edit": ["Lock/Unlock"], "Goto": ["Back"]}
     return [screen("11_SU01_initial.json", "SU01", "ZSBX_SU01", 1050, "User Maintenance: Initial Screen", menu,
                    [(8, "Create   (F8)"), (18, "Change   (Shift+F6)"), (7, "Display   (F7)"),
-                    (14, "Delete   (Shift+F2)"), (29, "Lock/Unlock   (Ctrl+F5)")],
+                    (14, "Delete   (Shift+F2)"), (29, "Lock/Unlock   (Ctrl+F5)"),
+                    (20, "Change Password   (Shift+F8)")],
                    labelled("SUID_ST_BNAME-BNAME", "User", 1))]
+
+
+def su3_screen():
+    """Maintain User Profile (SU3). The Change Password button is tbar[1]/btn[6], as in SAP GUI."""
+    menu = {"User Profile": ["Change Password", "Exit"], "Goto": ["Back"]}
+    usr = labelled("SUID_ST_BNAME-BNAME", "User", 1, kind="txt", text=USER, changeable=False)
+    usr += labelled("SUID_ST_NODE_PERSON_NAME-NAME_LAST", "Last Name", 3, kind="txt", text="Standard",
+                    changeable=False)
+    usr += labelled("SUID_ST_NODE_WORKPLACE-DEPARTMENT", "Department", 4, kind="txt", text="Sandbox Testing",
+                    changeable=False)
+    return [screen("15_SU3_initial.json", "SU3", "ZSBX_SU3", 100, "Maintain User Profile", menu,
+                   [(6, "Change Password")], usr)]
 
 
 def va03_screens():
@@ -333,7 +346,7 @@ def logon_screen():
     usr.append(node(usr_id("boxINFO"), "GuiBox", "INFO", text="Information", **box(560, 20, 420, 160)))
     usr.append(node(usr_id("lblINFO_TEXT"), "GuiLabel", "INFO_TEXT",
                     text="Welcome to GUI Sandbox. All data is fictional.", **box(576, 56, 390, 24)))
-    return [screen("00_LOGON.json", "S000", "ZSBX_LOGON", 20, "Logon", menu, [], usr)]
+    return [screen("00_LOGON.json", "S000", "ZSBX_LOGON", 20, "Logon", menu, [(5, "New Password   (F5)")], usr)]
 
 
 def home_screen():
@@ -348,7 +361,7 @@ def home_screen():
 def all_screens():
     return dict(
         logon_screen() + home_screen() + se16_screens() + se16n_screens() + se38_screens()
-        + sm37_screen() + su01_screen() + va03_screens() + mm03_screen()
+        + sm37_screen() + su01_screen() + va03_screens() + mm03_screen() + su3_screen()
     )
 
 

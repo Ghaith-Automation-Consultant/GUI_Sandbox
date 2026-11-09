@@ -1,0 +1,6 @@
+{
+  "WL": [
+    {"user": "USER_STANDARD", "password": "sandbox",  "initial": false},
+    {"user": "USER_NEW",      "password": "welcome1", "initial": true}
+  ]
+}

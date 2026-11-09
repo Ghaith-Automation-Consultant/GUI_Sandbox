@@ -153,7 +153,15 @@ Navigation dans les tables. Trois étapes : saisie du nom de table, écran de s�
 
 ### SU01 — Gestion des utilisateurs
 
-- `11_SU01_initial.json` — écran initial
+- `11_SU01_initial.json` — écran initial. Saisissez un utilisateur puis **Change Password** (`tbar[1]/btn[20]`, Maj+F8) pour lui attribuer un mot de passe initial : il devra le changer à sa prochaine connexion.
+
+### SU3 — Profil utilisateur
+
+- `15_SU3_initial.json` — votre propre profil. **Change Password** (`tbar[1]/btn[6]`) ouvre une fenêtre (`wnd[1]`) avec l'ancien mot de passe et le nouveau, deux fois.
+
+### Mots de passe
+
+Les utilisateurs de test de chaque environnement sont dans `users.json` (`USER_STANDARD` / `sandbox`, et `USER_NEW` / `welcome1`, dont le mot de passe initial doit être changé à la connexion). Le bouton **New Password** de l'écran de connexion (F5) permet de changer son mot de passe avant de se connecter. Un nouveau mot de passe doit faire 8 à 40 caractères, être saisi deux fois à l'identique et différer de l'ancien ; sinon une seconde fenêtre (`wnd[2]`) affiche l'erreur. Les changements restent en mémoire jusqu'au redémarrage.
 
 ### VA03 — Affichage de commande client
 

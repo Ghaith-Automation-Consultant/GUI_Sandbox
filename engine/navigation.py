@@ -504,6 +504,14 @@ class Navigator:
             session.info.user = self._logon["user"]
             session.info.client = self._logon["client"]
             session.info.language = self._logon["language"]
+            if tcode == HOME_TCODE:  # Easy Access names the logged-on user
+                wnd = session.get_window(0)
+                title = f"Easy Access - Menu for {self._logon['user']}"
+                if wnd is not None:
+                    wnd.text = title
+                    titl = wnd.find_control(f"{wnd.id}/titl")
+                    if titl is not None:
+                        titl.text = title
             if tcode == "SU3":  # SU3 shows the logged-on user's own profile
                 try:
                     session.findById("wnd[0]/usr/txtSUID_ST_BNAME-BNAME").text = self._logon["user"]

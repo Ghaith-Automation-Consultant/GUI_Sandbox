@@ -151,6 +151,7 @@ class TestForcedChange:
         enter_new(nav.session, "welcome22")
         assert nav.tcode == HOME_TCODE
         assert nav.session.info.user == "USER_NEW"
+        assert nav.session.findById("wnd[0]/titl").text == "Easy Access - Menu for USER_NEW"
         assert not nav.users.is_initial("WL", "USER_NEW")
 
     def test_cancel_stays_logged_off(self, nav):

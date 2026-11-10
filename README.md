@@ -26,7 +26,7 @@ SAP GUI automation is hard to develop when every experiment needs a live system,
 
 | | Live SAP system | GUI Sandbox |
 |---|---|---|
-| **Access** | Account and authorisations required | Runs locally, no login |
+| **Access** | Account and authorisations required | Runs locally, with test users or no logon at all |
 | **SAP software** | SAP GUI installation required | None required |
 | **Data** | Real business data at risk | Fictional sample data only |
 | **Mistakes** | Can change real records | Nothing to break, restart to reset |
@@ -38,16 +38,22 @@ GUI Sandbox is for development, training, and testing. It simulates the scriptin
 ## What you get
 
 - 🔌 **Three ways to connect:** COM through `GetObject("SAPGUI")`, a local HTTP JSON API, or in-process Python.
+- 🖧 **An SAP Logon window:** pick an environment, or open one from a script with `OpenConnection("WL - With logon", True)`, as on a real landscape.
+- 🔑 **Logon and password popups:** per-environment test users, forced password changes, SU3 and SU01 resets in `wnd[1]`/`wnd[2]` popups, checked against the open-source [PySapGUI](https://github.com/gutskodv/PySapGUI) library.
 - 🧭 **Scripts that navigate:** `StartTransaction`, the command field, and virtual keys move through each flow, and the window follows along.
 - 🧩 **A familiar object model:** `findById`, `Children`, `Info`, `sendVKey`, and 30 control types with the `Gui*` type names scripts expect.
 - 🖥️ **A real desktop UI:** menus, toolbars, tabs, grids, and tables, all rendered from the same control tree your script reads.
 - 📼 **An action recorder:** timestamped logs of `findById`, `setText`, `press`, and `sendVKey` for checking what a script did.
-- 🧪 **15 ready-made screens:** a logon screen, Data Browser, ABAP Editor, job overview, users, sales orders, and materials.
+- 🧪 **16 ready-made screens:** a logon screen, Data Browser, ABAP Editor, job overview, users, user profile, sales orders, and materials.
 - ✏️ **Easy to extend:** screens are plain JSON, generated from one readable Python script.
 
 ## Take a look
 
 <table>
+  <tr>
+    <td width="50%"><img src="docs/assets/gallery/sap-logon.png" alt="SAP Logon window listing two sandbox environments"><br><b>SAP Logon</b>: choose an environment, or open it with <code>OpenConnection</code></td>
+    <td width="50%"><img src="docs/assets/gallery/password-popup.png" alt="Logon screen with a Change Password popup asking for a new password twice"><br><b>Password popup</b>: a forced change at logon, in <code>wnd[1]</code></td>
+  </tr>
   <tr>
     <td width="50%"><img src="docs/assets/gallery/home.png" alt="Home screen with a transaction menu tree"><br><b>Home</b>: open any transaction from the menu or command field</td>
     <td width="50%"><img src="docs/assets/gallery/se16-selection.png" alt="Selection screen with filter fields for a sample flight table"><br><b>SE16 selection</b>: range filters on a sample table</td>

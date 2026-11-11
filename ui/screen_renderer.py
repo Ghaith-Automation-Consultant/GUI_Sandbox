@@ -252,6 +252,7 @@ class ScreenRenderer:
             "SM37  - Job Overview": ("SM37", cat_basis),
             "VA03  - Display Sales Order": ("VA03", cat_logistics),
             "MM03  - Display Material": ("MM03", cat_logistics),
+            "XD03  - Display Customer": ("XD03", cat_logistics),
         }
 
         for label, (tcode, parent_item) in transactions.items():

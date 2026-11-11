@@ -1,0 +1,7 @@
+[
+  {"customer": "1000", "name": "Sample Customer Inc.", "street": "1 Sample Street",   "postal_code": "10001", "city": "New York",  "country": "US", "language": "EN", "company_codes": ["1000"]},
+  {"customer": "1001", "name": "Example Trading Ltd.", "street": "22 Example Road",   "postal_code": "EC1A 1AA", "city": "London", "country": "GB", "language": "EN", "company_codes": ["1000", "2000"]},
+  {"customer": "1002", "name": "Demo Retail GmbH",     "street": "Demostrasse 3",     "postal_code": "10115", "city": "Berlin",    "country": "DE", "language": "DE", "company_codes": ["2000"]},
+  {"customer": "1003", "name": "Test Logistics SA",    "street": "4 Rue de l'Essai",  "postal_code": "75001", "city": "Paris",     "country": "FR", "language": "FR", "company_codes": ["2000"]},
+  {"customer": "1004", "name": "Fictional Foods BV",   "street": "Voorbeeldlaan 5",   "postal_code": "1011 AB", "city": "Amsterdam", "country": "NL", "language": "EN", "company_codes": ["1000", "2000"]}
+]

@@ -1,0 +1,420 @@
+{
+  "_label": "17_XD03_general_data",
+  "system": "SBX",
+  "client": "000",
+  "user": "USER_STANDARD",
+  "transaction": "XD03",
+  "program": "ZSBX_XD03",
+  "screen": 110,
+  "status": "",
+  "tree": {
+    "id": "/app/con[0]/ses[0]",
+    "type": "GuiSession",
+    "name": "ses[0]",
+    "children": [
+      {
+        "id": "/app/con[0]/ses[0]/wnd[0]",
+        "type": "GuiMainWindow",
+        "name": "wnd[0]",
+        "text": "Display Customer: General Data",
+        "changeable": true,
+        "left": 0,
+        "top": 0,
+        "width": 1280,
+        "height": 800,
+        "children": [
+          {
+            "id": "/app/con[0]/ses[0]/wnd[0]/mbar",
+            "type": "GuiMenubar",
+            "name": "mbar",
+            "children": [
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[0]",
+                "type": "GuiMenu",
+                "name": "Customer",
+                "text": "Customer",
+                "changeable": true,
+                "children": [
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[0]/menu[0]",
+                    "type": "GuiMenu",
+                    "name": "Display",
+                    "text": "Display",
+                    "changeable": true
+                  },
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[0]/menu[1]",
+                    "type": "GuiMenu",
+                    "name": "Exit",
+                    "text": "Exit",
+                    "changeable": true
+                  }
+                ]
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[1]",
+                "type": "GuiMenu",
+                "name": "Edit",
+                "text": "Edit",
+                "changeable": true,
+                "children": [
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[1]/menu[0]",
+                    "type": "GuiMenu",
+                    "name": "Find",
+                    "text": "Find",
+                    "changeable": true
+                  }
+                ]
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[2]",
+                "type": "GuiMenu",
+                "name": "Goto",
+                "text": "Goto",
+                "changeable": true,
+                "children": [
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[2]/menu[0]",
+                    "type": "GuiMenu",
+                    "name": "Back",
+                    "text": "Back",
+                    "changeable": true
+                  }
+                ]
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[3]",
+                "type": "GuiMenu",
+                "name": "System",
+                "text": "System",
+                "changeable": true,
+                "children": [
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[3]/menu[0]",
+                    "type": "GuiMenu",
+                    "name": "User Profile",
+                    "text": "User Profile",
+                    "changeable": true
+                  },
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[3]/menu[1]",
+                    "type": "GuiMenu",
+                    "name": "Services",
+                    "text": "Services",
+                    "changeable": true
+                  },
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[3]/menu[2]",
+                    "type": "GuiMenu",
+                    "name": "Status...",
+                    "text": "Status...",
+                    "changeable": true
+                  }
+                ]
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[4]",
+                "type": "GuiMenu",
+                "name": "Help",
+                "text": "Help",
+                "changeable": true,
+                "children": [
+                  {
+                    "id": "/app/con[0]/ses[0]/wnd[0]/mbar/menu[4]/menu[0]",
+                    "type": "GuiMenu",
+                    "name": "Application Help",
+                    "text": "Application Help",
+                    "changeable": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]",
+            "type": "GuiToolbar",
+            "name": "tbar[0]",
+            "changeable": true,
+            "children": [
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/okcd",
+                "type": "GuiOkCodeField",
+                "name": "okcd",
+                "changeable": true,
+                "max_len": 132
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[0]",
+                "type": "GuiButton",
+                "name": "btn[0]",
+                "tooltip": "Enter   (Enter)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[11]",
+                "type": "GuiButton",
+                "name": "btn[11]",
+                "tooltip": "Save   (Ctrl+S)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[3]",
+                "type": "GuiButton",
+                "name": "btn[3]",
+                "tooltip": "Back   (F3)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[15]",
+                "type": "GuiButton",
+                "name": "btn[15]",
+                "tooltip": "Exit   (Shift+F3)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[12]",
+                "type": "GuiButton",
+                "name": "btn[12]",
+                "tooltip": "Cancel   (F12)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[86]",
+                "type": "GuiButton",
+                "name": "btn[86]",
+                "tooltip": "Print   (Ctrl+P)",
+                "changeable": true
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[71]",
+                "type": "GuiButton",
+                "name": "btn[71]",
+                "tooltip": "Find   (Ctrl+F)",
+                "changeable": true
+              }
+            ]
+          },
+          {
+            "id": "/app/con[0]/ses[0]/wnd[0]/titl",
+            "type": "GuiTitlebar",
+            "name": "titl",
+            "text": "Display Customer: General Data"
+          },
+          {
+            "id": "/app/con[0]/ses[0]/wnd[0]/tbar[1]",
+            "type": "GuiToolbar",
+            "name": "tbar[1]",
+            "changeable": true
+          },
+          {
+            "id": "/app/con[0]/ses[0]/wnd[0]/usr",
+            "type": "GuiUserArea",
+            "name": "usr",
+            "changeable": true,
+            "children": [
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/lblRF02D-KUNNR",
+                "type": "GuiLabel",
+                "name": "RF02D-KUNNR",
+                "text": "Customer",
+                "left": 16,
+                "top": 20,
+                "width": 200,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/txtRF02D-KUNNR",
+                "type": "GuiTextField",
+                "name": "RF02D-KUNNR",
+                "changeable": false,
+                "max_len": 40,
+                "left": 220,
+                "top": 20,
+                "width": 120,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/lblRF02D-BUKRS",
+                "type": "GuiLabel",
+                "name": "RF02D-BUKRS",
+                "text": "Company Code",
+                "left": 16,
+                "top": 50,
+                "width": 200,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/txtRF02D-BUKRS",
+                "type": "GuiTextField",
+                "name": "RF02D-BUKRS",
+                "changeable": false,
+                "max_len": 40,
+                "left": 220,
+                "top": 50,
+                "width": 60,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/lblKNA1-NAME1",
+                "type": "GuiLabel",
+                "name": "KNA1-NAME1",
+                "text": "Name",
+                "left": 16,
+                "top": 80,
+                "width": 200,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/txtKNA1-NAME1",
+                "type": "GuiTextField",
+                "name": "KNA1-NAME1",
+                "changeable": false,
+                "max_len": 40,
+                "left": 220,
+                "top": 80,
+                "width": 320,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/lblKNA1-STRAS",
+                "type": "GuiLabel",
+                "name": "KNA1-STRAS",
+                "text": "Street/House Number",
+                "left": 16,
+                "top": 110,
+                "width": 200,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/txtKNA1-STRAS",
+                "type": "GuiTextField",
+                "name": "KNA1-STRAS",
+                "changeable": false,
+                "max_len": 40,
+                "left": 220,
+                "top": 110,
+                "width": 320,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/lblKNA1-PSTLZ",
+                "type": "GuiLabel",
+                "name": "KNA1-PSTLZ",
+                "text": "Postal Code",
+                "left": 16,
+                "top": 140,
+                "width": 200,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/txtKNA1-PSTLZ",
+                "type": "GuiTextField",
+                "name": "KNA1-PSTLZ",
+                "changeable": false,
+                "max_len": 40,
+                "left": 220,
+                "top": 140,
+                "width": 100,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/lblKNA1-ORT01",
+                "type": "GuiLabel",
+                "name": "KNA1-ORT01",
+                "text": "City",
+                "left": 16,
+                "top": 170,
+                "width": 200,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/txtKNA1-ORT01",
+                "type": "GuiTextField",
+                "name": "KNA1-ORT01",
+                "changeable": false,
+                "max_len": 40,
+                "left": 220,
+                "top": 170,
+                "width": 240,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/lblKNA1-LAND1",
+                "type": "GuiLabel",
+                "name": "KNA1-LAND1",
+                "text": "Country",
+                "left": 16,
+                "top": 200,
+                "width": 200,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/txtKNA1-LAND1",
+                "type": "GuiTextField",
+                "name": "KNA1-LAND1",
+                "changeable": false,
+                "max_len": 40,
+                "left": 220,
+                "top": 200,
+                "width": 40,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/lblKNA1-SPRAS",
+                "type": "GuiLabel",
+                "name": "KNA1-SPRAS",
+                "text": "Language",
+                "left": 16,
+                "top": 230,
+                "width": 200,
+                "height": 24
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/usr/txtKNA1-SPRAS",
+                "type": "GuiTextField",
+                "name": "KNA1-SPRAS",
+                "changeable": false,
+                "max_len": 40,
+                "left": 220,
+                "top": 230,
+                "width": 40,
+                "height": 24
+              }
+            ]
+          },
+          {
+            "id": "/app/con[0]/ses[0]/wnd[0]/sbar",
+            "type": "GuiStatusbar",
+            "name": "sbar",
+            "children": [
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/sbar/pane[0]",
+                "type": "GuiStatusPane",
+                "name": "pane[0]"
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/sbar/pane[1]",
+                "type": "GuiStatusPane",
+                "name": "pane[1]",
+                "text": "SBX (1) 000"
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/sbar/pane[2]",
+                "type": "GuiStatusPane",
+                "name": "pane[2]",
+                "text": "sandbox"
+              },
+              {
+                "id": "/app/con[0]/ses[0]/wnd[0]/sbar/pane[3]",
+                "type": "GuiStatusPane",
+                "name": "pane[3]",
+                "text": "INS"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

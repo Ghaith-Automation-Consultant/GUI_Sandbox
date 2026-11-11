@@ -359,9 +359,14 @@ def home_screen():
 
 
 def all_screens():
+    try:  # XD03 and other reactive flows; works as a module and as a script
+        from tools.generate_reactive_screens import reactive_screens
+    except ModuleNotFoundError:
+        from generate_reactive_screens import reactive_screens
+
     return dict(
         logon_screen() + home_screen() + se16_screens() + se16n_screens() + se38_screens()
-        + sm37_screen() + su01_screen() + va03_screens() + mm03_screen() + su3_screen()
+        + sm37_screen() + su01_screen() + va03_screens() + mm03_screen() + su3_screen() + reactive_screens()
     )
 
 

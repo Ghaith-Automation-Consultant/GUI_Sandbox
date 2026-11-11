@@ -210,8 +210,34 @@ for entry in session.recorder.entries():
 | `SU3` | Your own user profile, with password change | 1 |
 | `VA03` | Sales order with tabs and an item table | 2 |
 | `MM03` | Material display | 1 |
+| `XD03` | Customer display that reacts to the customer number and company code you enter (data in [`customers.json`](customers.json)) | 2 |
 
 All screens use fictional data. To add your own, extend [`tools/generate_screens.py`](tools/generate_screens.py) and rerun it.
+
+### Customer lookup (XD03)
+
+`XD03` checks what you enter before moving on. Type a customer number (`wnd[0]/usr/ctxtRF02D-KUNNR`) and, optionally, a company code (`wnd[0]/usr/ctxtRF02D-BUKRS`), then press Enter. A valid entry opens **General Data** with that customer's details; anything else stays on the first screen with an error in the status bar.
+
+| Customer | Name | City, country | Company codes |
+|---|---|---|---|
+| `1000` | Sample Customer Inc. | New York, US | `1000` |
+| `1001` | Example Trading Ltd. | London, GB | `1000`, `2000` |
+| `1002` | Demo Retail GmbH | Berlin, DE | `2000` |
+| `1003` | Test Logistics SA | Paris, FR | `2000` |
+| `1004` | Fictional Foods BV | Amsterdam, NL | `1000`, `2000` |
+
+- Leading zeros and surrounding spaces are ignored: `1001` and `0000001001` are the same customer.
+- The company code is optional. When given, it must be one of the customer's company codes; case doesn't matter.
+- Back (F3) returns to the first screen with what you typed.
+
+| Input | Result (`sbar.Text`, `MessageType` = `E` for errors) |
+|---|---|
+| Known customer, no or matching company code | **General Data** screen; fields `txtRF02D-KUNNR`, `txtRF02D-BUKRS`, `txtKNA1-NAME1`, `txtKNA1-STRAS`, `txtKNA1-PSTLZ`, `txtKNA1-ORT01`, `txtKNA1-LAND1`, `txtKNA1-SPRAS` |
+| Blank customer | `Fill in all required entry fields` |
+| Unknown customer | `Customer 9999 has not been created` |
+| Customer not in that company code | `Customer 1002 has not been created for company code 1000` |
+
+The customers come from [`customers.json`](customers.json). Add entries with the same fields to accept more values (fictional data only), then restart the app.
 
 ## By the numbers
 
@@ -219,7 +245,7 @@ All screens use fictional data. To add your own, extend [`tools/generate_screens
   <tr>
     <td align="center"><h3>3</h3>scripting bridges</td>
     <td align="center"><h3>30</h3>control types</td>
-    <td align="center"><h3>16</h3>sample screens</td>
+    <td align="center"><h3>18</h3>sample screens</td>
     <td align="center"><h3>325</h3>automated tests</td>
   </tr>
 </table>
@@ -246,7 +272,7 @@ All screens use fictional data. To add your own, extend [`tools/generate_screens
 - [ ] Keyboard focus engine
 - [ ] Modal popups (`wnd[1]`, `wnd[2]`)
 - [ ] Functional status bar messages
-- [ ] Screens that react to what you enter: flows are fixed today, so SE16 always opens the sample `SFLIGHT` table
+- [ ] Screens that react to what you enter: `XD03` does (see [`engine/reactive.py`](engine/reactive.py)); the other flows are still fixed, so SE16 always opens the sample `SFLIGHT` table
 
 ## Documentation
 

@@ -112,7 +112,7 @@ En bas de la fenêtre, la barre de statut affiche les messages système (succès
 
 ## 6. Transactions disponibles
 
-Le sandbox inclut 15 écrans d'exemple générés par `tools/generate_screens.py`, avec des données fictives :
+Le sandbox inclut 18 écrans d'exemple générés par `tools/generate_screens.py`, avec des données fictives :
 
 ### S000 — Écran de connexion
 
@@ -171,6 +171,35 @@ Les utilisateurs de test de chaque environnement sont dans `users.json` (`USER_S
 ### MM03 — Affichage d'article
 
 - `14_MM03_initial.json` — écran initial
+
+### XD03 — Affichage de client
+
+Cet écran réagit à la saisie. Entrez un numéro de client (`wnd[0]/usr/ctxtRF02D-KUNNR`) et, si vous le souhaitez, une société (`wnd[0]/usr/ctxtRF02D-BUKRS`), puis appuyez sur Entrée. Une saisie valide ouvre l'écran **General Data** avec les données du client ; sinon l'écran initial reste affiché avec une erreur dans la barre de statut.
+
+| Client | Nom | Ville, pays | Sociétés |
+|---|---|---|---|
+| `1000` | Sample Customer Inc. | New York, US | `1000` |
+| `1001` | Example Trading Ltd. | London, GB | `1000`, `2000` |
+| `1002` | Demo Retail GmbH | Berlin, DE | `2000` |
+| `1003` | Test Logistics SA | Paris, FR | `2000` |
+| `1004` | Fictional Foods BV | Amsterdam, NL | `1000`, `2000` |
+
+- Les zéros de tête et les espaces sont ignorés : `1001` et `0000001001` désignent le même client.
+- La société est facultative. Si elle est saisie, elle doit faire partie des sociétés du client (majuscules ou minuscules indifférentes).
+- Retour (F3) revient à l'écran initial en conservant la saisie.
+
+Messages d'erreur (`MessageType` = `E`) :
+
+| Saisie | Message |
+|---|---|
+| Client vide | `Fill in all required entry fields` |
+| Client inconnu | `Customer 9999 has not been created` |
+| Client absent de la société | `Customer 1002 has not been created for company code 1000` |
+
+Les clients sont définis dans `customers.json`. Ajoutez des entrées avec les mêmes champs (données fictives uniquement), puis redémarrez l'application.
+
+- `16_XD03_initial.json` — écran initial
+- `17_XD03_general_data.json` — données générales du client
 
 ---
 
@@ -344,7 +373,7 @@ La suite de tests couvre le moteur de contrôles, l'interface graphique, les tes
 
 ## 10. Limitations connues
 
-- **Écrans statiques** — Le sandbox charge des captures JSON figées. Il ne simule pas la logique métier SAP (pas de navigation dynamique entre écrans basée sur les données saisies).
+- **Écrans statiques** — Le sandbox charge des écrans JSON fixes et ne simule pas la logique métier SAP. Seule la transaction `XD03` réagit aux données saisies ; les autres flux affichent toujours les mêmes écrans.
 - **Pas de BAPI/RFC** — Aucune communication avec un backend SAP. Les appels de fonctions distantes ne sont pas supportés.
 - **Pas de persistance** — Les modifications faites via les scripts (setText, etc.) sont en mémoire uniquement et perdues à la fermeture.
 - **Session unique** — Le sandbox expose une seule connexion avec une seule session (con[0]/ses[0]).

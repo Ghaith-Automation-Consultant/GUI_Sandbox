@@ -126,5 +126,21 @@
     "screen": 100,
     "status": "",
     "file": "15_SU3_initial.json"
+  },
+  {
+    "label": "16_XD03_initial",
+    "transaction": "XD03",
+    "program": "ZSBX_XD03",
+    "screen": 100,
+    "status": "",
+    "file": "16_XD03_initial.json"
+  },
+  {
+    "label": "17_XD03_general_data",
+    "transaction": "XD03",
+    "program": "ZSBX_XD03",
+    "screen": 110,
+    "status": "",
+    "file": "17_XD03_general_data.json"
   }
 ]

@@ -25,10 +25,12 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Callable, Optional
 
+from . import customers as _customers  # noqa: F401  (registers the XD03 reactive flow)
 from . import popups
 from .environments import Environment
 from .loader import load_screen
 from .logon import check_logon
+from .reactive import REACTIVE_FLOWS
 from .session import ModalWindow, Session
 from .users import DEFAULT_ENVIRONMENT, UserStore
 
@@ -85,6 +87,11 @@ _ADVANCE_KEYS: dict[tuple[str, int], set[int]] = {
     ("VA03", 0): {0, 8},
 }
 
+# Reactive flows (engine/reactive.py) bring their own screens and advance keys.
+for _flow in REACTIVE_FLOWS.values():
+    TRANSACTIONS.setdefault(_flow.tcode, _flow.screens)
+    _ADVANCE_KEYS.update({(_flow.tcode, step): keys for step, keys in _flow.advance_keys.items()})
+
 _VKEY_ENTER, _VKEY_BACK, _VKEY_CANCEL, _VKEY_EXIT = 0, 3, 12, 15
 _VKEY_NEW_PASSWORD = 5        # F5 on the logon screen
 _VKEY_CHANGE_PASSWORD = 20    # Shift+F8 in SU01
@@ -137,6 +144,7 @@ class Navigator:
         self._session: Optional[Session] = None
         self._tcode = ""
         self._step = 0
+        self._flow_context: Any = None  # what a reactive flow found for the current input
         self.require_logon = require_logon
         self._logon: dict[str, str] = {}
         self._logged_on = not require_logon
@@ -299,6 +307,7 @@ class Navigator:
         self._tcode = ""
         self._step = 0
         self._logon = {}
+        self._flow_context = None
 
     def _start(self, tcode: str) -> Optional[Session]:
         tcode = tcode.upper().strip()
@@ -309,6 +318,7 @@ class Navigator:
         if not screens:
             self._report(f"Transaction {tcode} does not exist", number="343")
             return None
+        self._flow_context = None
         return self._show(tcode, 0)
 
     def _next(self) -> Optional[Session]:
@@ -316,6 +326,13 @@ class Navigator:
         if self._step + 1 >= len(screens):
             self._report("End of transaction flow")
             return None
+        flow = REACTIVE_FLOWS.get(self._tcode)
+        if flow is not None and self._session is not None:
+            error, context = flow.check(self._session, self._step)
+            if error:
+                self._report(error)
+                return None
+            self._flow_context = context
         return self._show(self._tcode, self._step + 1)
 
     def _back(self) -> Optional[Session]:
@@ -517,6 +534,9 @@ class Navigator:
                     session.findById("wnd[0]/usr/txtSUID_ST_BNAME-BNAME").text = self._logon["user"]
                 except RuntimeError:
                     pass
+        flow = REACTIVE_FLOWS.get(tcode)
+        if flow is not None:
+            flow.fill(session, step, self._flow_context)
         return self._activate(session, tcode, step)
 
     def _load(self, name: str) -> Optional[Session]:
@@ -633,6 +653,8 @@ class Navigator:
             advances = "(f8)" in tooltip
         elif tcode == "SU01":
             advances = "(f7)" in tooltip or "display" in tooltip
+        elif tcode in REACTIVE_FLOWS:
+            advances = REACTIVE_FLOWS[tcode].advance_button(ctrl, step)
         return self.next_step if advances else None
 
     def _on_vkey(self, session: Session, key: int) -> None:

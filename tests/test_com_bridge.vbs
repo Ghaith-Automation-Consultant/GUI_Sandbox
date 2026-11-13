@@ -49,5 +49,50 @@ WScript.Echo "  Field text: " & fieldText
 session.findById("wnd[0]").sendVKey 0
 WScript.Echo "  sendVKey(0) — OK"
 
+' ALV grid: rows below the screen read empty until the grid scrolls to them
+session.findById("wnd[0]").sendVKey 8
+Set grid = session.findById("wnd[0]/usr/cntlGRID1/shellcont/shell")
+WScript.Echo "  Grid rows: " & grid.RowCount & ", visible: " & grid.VisibleRowCount
+If grid.GetCellValue(100, "CARRID") <> "" Then Fail "row 100 should not be loaded yet"
+grid.firstVisibleRow = 96
+If grid.GetCellValue(100, "CARRID") = "" Then Fail "row 100 should be loaded after scrolling"
+WScript.Echo "  Row 100 after scrolling: " & grid.GetCellValue(100, "CARRID") & " " & grid.GetCellValue(100, "CONNID")
+
+' Table control: page through, finding the table again after each scroll
+session.StartTransaction "VA03"
+session.findById("wnd[0]").sendVKey 0
+tbl = "wnd[0]/usr/tabsTAXI_TABSTRIP/tabpT02/tblITEMS"
+Set table = session.findById(tbl)
+total = table.RowCount
+page = table.VisibleRowCount
+items = 0
+For first = 0 To total - 1 Step page
+    table.VerticalScrollbar.Position = first
+    Set table = session.findById(tbl)
+    For r = 0 To page - 1
+        If first + r < total Then
+            lastItem = table.GetCell(r, 0).Text
+            items = items + 1
+        End If
+    Next
+Next
+WScript.Echo "  VA03 items read: " & items & " of " & total & ", last item " & lastItem
+If items <> total Or lastItem <> "250" Then Fail "table paging read the wrong rows"
+
+' A table reference taken before a scroll stops working, as in SAP GUI
+Set oldTable = session.findById(tbl)
+oldTable.VerticalScrollbar.Position = 0
+On Error Resume Next
+dummy = oldTable.RowCount
+staleError = Err.Number
+On Error GoTo 0
+If staleError = 0 Then Fail "a stale table reference should raise"
+WScript.Echo "  Stale table reference raised, as expected"
+
 WScript.Echo ""
 WScript.Echo "=== ALL TESTS PASSED ==="
+
+Sub Fail(message)
+    WScript.Echo "FAILED — " & message
+    WScript.Quit 1
+End Sub

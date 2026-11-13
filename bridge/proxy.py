@@ -21,13 +21,19 @@ COM patterns fully supported:
   table.GetCell(r, c).Text                          → cell read
   grid.ColumnTitles.ElementAt(i)                    → grid column title
   grid.GetCellValue(r, col_name)                    → grid cell read
+  table.VerticalScrollbar.Position = 10             → scroll a table control
+  grid.FirstVisibleRow = 40 / grid.SetCurrentCell(r, col)  → scroll an ALV grid
+
+Member names are case-insensitive, as in COM: ``table.verticalScrollbar.position``
+works too. After a table control scrolls, objects taken from it before the
+scroll raise RuntimeError, as SAP GUI does: find the table again.
 """
 from __future__ import annotations
 
 from typing import Any, Optional
 
 from engine.control import (
-    Control, TableControl, GridView, StatusBar,
+    Control, TableControl, GridView, StatusBar, is_stale, reference_token,
 )
 from engine.session import Session, Window
 from engine.navigation import Navigator
@@ -38,6 +44,57 @@ from .recorder import ActionRecorder
 # ──────────────────────────────────────────────────────────────────────────────
 #  Collection helpers
 # ──────────────────────────────────────────────────────────────────────────────
+
+class _ComStyle:
+    """COM-like member access: names ignore case, and stale objects refuse use.
+
+    Subclasses set ``_target`` (the engine object) and ``_token`` (its
+    ``reference_token`` when wrapped).
+    """
+
+    _target: Any = None
+    _token: Any = None
+
+    @classmethod
+    def _member(cls, name: str) -> Optional[str]:
+        if hasattr(cls, name):
+            return name
+        lower = name.lower()
+        for attr in dir(cls):
+            if not attr.startswith("_") and attr.lower() == lower:
+                return attr
+        return None
+
+    def _check(self) -> None:
+        target = object.__getattribute__(self, "_target")
+        if target is not None and is_stale(target, object.__getattribute__(self, "_token")):
+            raise RuntimeError(f"Control not found: {getattr(target, 'id', '')!r} "
+                               "(the table scrolled; find it again)")
+
+    def __getattribute__(self, name: str) -> Any:
+        if not name.startswith("_"):
+            object.__getattribute__(self, "_check")()
+        return object.__getattribute__(self, name)
+
+    def __getattr__(self, name: str) -> Any:
+        member = type(self)._member(name) if not name.startswith("_") else None
+        if member is None or member == name:
+            raise AttributeError(name)
+        return getattr(self, member)
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        if name.startswith("_"):
+            object.__setattr__(self, name, value)
+            return
+        self._check()
+        member = type(self)._member(name)
+        if member is None or not isinstance(getattr(type(self), member, None), property):
+            raise AttributeError(f"{type(self).__name__} has no settable property {name!r}")
+        try:
+            object.__setattr__(self, member, value)
+        except (ValueError, IndexError, KeyError) as exc:
+            raise RuntimeError(str(exc)) from None
+
 
 class ChildrenCollection:
     """Emulates GuiComponentCollection — exposes .Count and .Item(i)."""
@@ -164,7 +221,7 @@ class SessionInfoProxy:
 #  ControlProxy
 # ──────────────────────────────────────────────────────────────────────────────
 
-class ControlProxy:
+class ControlProxy(_ComStyle):
     """
     Duck-type proxy for engine.Control matching the SAP GUI Scripting COM API.
 
@@ -175,6 +232,8 @@ class ControlProxy:
     def __init__(self, ctrl: Control, recorder: Optional[ActionRecorder] = None) -> None:
         self._ctrl     = ctrl
         self._recorder = recorder
+        self._target   = ctrl
+        self._token    = reference_token(ctrl)
 
     def _log(self, action: str, value: Any = None, result: Any = None) -> None:
         if self._recorder:
@@ -271,7 +330,9 @@ class ControlProxy:
 
     @property
     def VisibleRowCount(self) -> int:
-        return self.RowCount
+        if isinstance(self._ctrl, (TableControl, GridView)):
+            return self._ctrl.visible_row_count
+        return 0
 
     @property
     def ColumnCount(self) -> int:
@@ -287,12 +348,38 @@ class ControlProxy:
             return ColumnsCollection(self._ctrl.columns)
         return ColumnsCollection([])
 
+    def _visible_cell(self, row: int, col: int) -> Control:
+        cell = self._ctrl.get_cell(int(row), int(col))
+        if cell is None:
+            raise RuntimeError(f"Row {row}, column {col} is not in the visible area "
+                               f"(rows 0..{self._ctrl.visible_row_count - 1}); scroll first")
+        return cell
+
     def GetCell(self, row: int, col: int) -> Optional["ControlProxy"]:
+        """The cell at a visible row: 0 is the top row on screen, as in SAP GUI."""
         if isinstance(self._ctrl, TableControl):
-            cell = self._ctrl.get_cell(row, col)
-            if cell:
-                return ControlProxy(cell, self._recorder)
+            return ControlProxy(self._visible_cell(row, col), self._recorder)
         return None
+
+    @property
+    def VerticalScrollbar(self) -> Optional["ScrollbarProxy"]:
+        if isinstance(self._ctrl, TableControl):
+            return ScrollbarProxy(self._ctrl.vertical_scrollbar, self._recorder)
+        return None
+
+    @property
+    def Rows(self) -> "RowsCollection":
+        """The visible rows, as SAP GUI's Rows collection."""
+        rows = self._ctrl.rows if isinstance(self._ctrl, TableControl) else []
+        return RowsCollection([TableRowProxy(r, self._recorder) for r in rows])
+
+    def GetAbsoluteRow(self, row: int) -> Optional["TableRowProxy"]:
+        if not isinstance(self._ctrl, TableControl):
+            return None
+        try:
+            return TableRowProxy(self._ctrl.get_absolute_row(int(row)), self._recorder)
+        except IndexError as exc:
+            raise RuntimeError(str(exc)) from None
 
     # ── grid — GuiGridView API ────────────────────────────────────────────────
 
@@ -308,10 +395,65 @@ class ControlProxy:
             return ColumnTitlesCollection(self._ctrl.columns)
         return ColumnTitlesCollection([])
 
-    def GetCellValue(self, row: int, col_name: str) -> str:
+    def GetCellValue(self, row: int, col: Any) -> str:
+        """GuiGridView: absolute row and column name. Table control: visible row, column index."""
         if isinstance(self._ctrl, GridView):
-            return self._ctrl.get_cell_value(row, col_name)
+            try:
+                self._ctrl.check_cell(int(row), str(col))
+            except (IndexError, KeyError) as exc:
+                raise RuntimeError(str(exc)) from None
+            return self._ctrl.get_cell_value(int(row), str(col))
+        if isinstance(self._ctrl, TableControl):
+            return self._visible_cell(row, col).text
         return ""
+
+    def _grid(self) -> GridView:
+        if not isinstance(self._ctrl, GridView):
+            raise RuntimeError(f"{self._ctrl.id} is not a GuiGridView")
+        return self._ctrl
+
+    @property
+    def FirstVisibleRow(self) -> int:
+        return self._ctrl.first_visible_row if isinstance(self._ctrl, GridView) else 0
+
+    @FirstVisibleRow.setter
+    def FirstVisibleRow(self, row: int) -> None:
+        self._log("setFirstVisibleRow", value=row)
+        self._grid().first_visible_row = int(row)
+
+    @property
+    def CurrentCellRow(self) -> int:
+        return self._ctrl.current_cell_row if isinstance(self._ctrl, GridView) else -1
+
+    @CurrentCellRow.setter
+    def CurrentCellRow(self, row: int) -> None:
+        grid = self._grid()
+        self.SetCurrentCell(int(row), grid.current_cell_column or grid.column_order[0])
+
+    @property
+    def CurrentCellColumn(self) -> str:
+        return self._ctrl.current_cell_column if isinstance(self._ctrl, GridView) else ""
+
+    @CurrentCellColumn.setter
+    def CurrentCellColumn(self, col: str) -> None:
+        grid = self._grid()
+        self.SetCurrentCell(max(grid.current_cell_row, 0), str(col))
+
+    def SetCurrentCell(self, row: int, col: str) -> None:
+        self._log("setCurrentCell", value=[row, col])
+        try:
+            self._grid().set_current_cell(int(row), str(col))
+        except (IndexError, KeyError) as exc:
+            raise RuntimeError(str(exc)) from None
+
+    @property
+    def SelectedRows(self) -> str:
+        return self._ctrl.selected_rows_text if isinstance(self._ctrl, GridView) else ""
+
+    @SelectedRows.setter
+    def SelectedRows(self, rows: str) -> None:
+        self._log("setSelectedRows", value=rows)
+        self._grid().selected_rows_text = str(rows)
 
     # ── status bar ───────────────────────────────────────────────────────────
 
@@ -384,6 +526,118 @@ class ControlProxy:
 
     def __repr__(self) -> str:
         return f"<ControlProxy {self._ctrl.id!r} [{type(self._ctrl).__name__}]>"
+
+
+class ScrollbarProxy(_ComStyle):
+    """A table control's vertical scrollbar (GuiScrollbar)."""
+
+    def __init__(self, bar: Any, recorder: Optional[ActionRecorder] = None) -> None:
+        self._bar = bar
+        self._recorder = recorder
+        self._target = bar
+        self._token = reference_token(bar)
+
+    @property
+    def Id(self) -> str:
+        return self._bar.id
+
+    @property
+    def Type(self) -> str:
+        return "GuiScrollbar"
+
+    @property
+    def Position(self) -> int:
+        return self._bar.position
+
+    @Position.setter
+    def Position(self, value: int) -> None:
+        if self._recorder:
+            self._recorder.log("setScrollPosition", path=self._bar.table.id, value=int(value))
+        self._bar.position = int(value)
+
+    @property
+    def Minimum(self) -> int:
+        return self._bar.minimum
+
+    @property
+    def Maximum(self) -> int:
+        return self._bar.maximum
+
+    @property
+    def PageSize(self) -> int:
+        return self._bar.page_size
+
+    @property
+    def Range(self) -> int:
+        return self._bar.range
+
+
+class TableRowProxy(_ComStyle):
+    """One table control row (GuiTableRow): its cells and its selection."""
+
+    def __init__(self, row: Any, recorder: Optional[ActionRecorder] = None) -> None:
+        self._row = row
+        self._recorder = recorder
+        self._target = row
+        self._token = reference_token(row)
+
+    @property
+    def Type(self) -> str:
+        return "GuiTableRow"
+
+    @property
+    def Count(self) -> int:
+        return len(self._row.cells)
+
+    def Item(self, index: int) -> ControlProxy:
+        cells = self._row.cells
+        if not 0 <= int(index) < len(cells):
+            raise RuntimeError(f"Cell {index} is not in this row, or the row is not on screen")
+        return ControlProxy(cells[int(index)], self._recorder)
+
+    def ElementAt(self, index: int) -> ControlProxy:
+        return self.Item(index)
+
+    def __call__(self, index: int) -> ControlProxy:
+        return self.Item(index)
+
+    @property
+    def Selected(self) -> bool:
+        return self._row.selected
+
+    @Selected.setter
+    def Selected(self, on: bool) -> None:
+        self._row.selected = bool(on)
+
+    @property
+    def Selectable(self) -> bool:
+        return self._row.selectable
+
+
+class RowsCollection:
+    """The visible rows of a table control."""
+
+    def __init__(self, rows: list[TableRowProxy]) -> None:
+        self._rows = rows
+
+    @property
+    def Count(self) -> int:
+        return len(self._rows)
+
+    def Item(self, index: int) -> TableRowProxy:
+        return self._rows[int(index)]
+
+    def ElementAt(self, index: int) -> TableRowProxy:
+        return self.Item(index)
+
+    def __call__(self, index: int) -> TableRowProxy:
+        return self.Item(index)
+
+    def __iter__(self):
+        return iter(self._rows)
+
+    def __len__(self) -> int:
+        return len(self._rows)
 
 
 # ──────────────────────────────────────────────────────────────────────────────

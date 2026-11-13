@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 428" width="760" height="428" role="img" aria-label="Automated tests by suite. Control engine: 65, End to end: 59, Sample data guards: 50, Qt widgets: 37, Password popups: 29, Logon screen: 27, Script navigation: 24, SAP Logon pad: 20, PySapGUI checks: 10, COM collections: 4.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 496" width="760" height="496" role="img" aria-label="Automated tests by suite. Control engine: 65, End to end: 60, Sample data guards: 56, Qt widgets: 37, Password popups: 29, Customer lookup: 28, Logon screen: 27, Table scrolling: 26, Script navigation: 24, SAP Logon pad: 20, PySapGUI checks: 10, COM collections: 4.">
 <style>
   .surface { fill: #fcfcfb; stroke: rgba(11,11,11,0.10); }
   .bar { fill: #2a78d6; }
@@ -17,38 +17,44 @@
   }
 </style>
 
-<rect class="surface" x="0.5" y="0.5" width="759" height="427" rx="8"/>
+<rect class="surface" x="0.5" y="0.5" width="759" height="495" rx="8"/>
 <text class="title" x="20" y="31">Automated tests by suite</text>
-<text class="note" x="20" y="52">Test cases collected by pytest. 325 in total.</text>
-<line class="base" x1="190" x2="190" y1="68" y2="402"/>
+<text class="note" x="20" y="52">Test cases collected by pytest. 386 in total.</text>
+<line class="base" x1="190" x2="190" y1="68" y2="470"/>
 <text class="label" x="178" y="86" text-anchor="end">Control engine</text>
 <path class="bar" d="M190,74 H666.0 a4,4 0 0 1 4,4 V84 a4,4 0 0 1 -4,4 H190 Z"><title>Control engine: 65</title></path>
 <text class="value" x="678.0" y="86">65</text>
 <text class="label" x="178" y="120" text-anchor="end">End to end</text>
-<path class="bar" d="M190,108 H621.6923076923076 a4,4 0 0 1 4,4 V118 a4,4 0 0 1 -4,4 H190 Z"><title>End to end: 59</title></path>
-<text class="value" x="633.6923076923076" y="120">59</text>
+<path class="bar" d="M190,108 H629.0769230769231 a4,4 0 0 1 4,4 V118 a4,4 0 0 1 -4,4 H190 Z"><title>End to end: 60</title></path>
+<text class="value" x="641.0769230769231" y="120">60</text>
 <text class="label" x="178" y="154" text-anchor="end">Sample data guards</text>
-<path class="bar" d="M190,142 H555.2307692307693 a4,4 0 0 1 4,4 V152 a4,4 0 0 1 -4,4 H190 Z"><title>Sample data guards: 50</title></path>
-<text class="value" x="567.2307692307693" y="154">50</text>
+<path class="bar" d="M190,142 H599.5384615384615 a4,4 0 0 1 4,4 V152 a4,4 0 0 1 -4,4 H190 Z"><title>Sample data guards: 56</title></path>
+<text class="value" x="611.5384615384615" y="154">56</text>
 <text class="label" x="178" y="188" text-anchor="end">Qt widgets</text>
 <path class="bar" d="M190,176 H459.2307692307692 a4,4 0 0 1 4,4 V186 a4,4 0 0 1 -4,4 H190 Z"><title>Qt widgets: 37</title></path>
 <text class="value" x="471.2307692307692" y="188">37</text>
 <text class="label" x="178" y="222" text-anchor="end">Password popups</text>
 <path class="bar" d="M190,210 H400.1538461538462 a4,4 0 0 1 4,4 V220 a4,4 0 0 1 -4,4 H190 Z"><title>Password popups: 29</title></path>
 <text class="value" x="412.1538461538462" y="222">29</text>
-<text class="label" x="178" y="256" text-anchor="end">Logon screen</text>
-<path class="bar" d="M190,244 H385.38461538461536 a4,4 0 0 1 4,4 V254 a4,4 0 0 1 -4,4 H190 Z"><title>Logon screen: 27</title></path>
-<text class="value" x="397.38461538461536" y="256">27</text>
-<text class="label" x="178" y="290" text-anchor="end">Script navigation</text>
-<path class="bar" d="M190,278 H363.2307692307692 a4,4 0 0 1 4,4 V288 a4,4 0 0 1 -4,4 H190 Z"><title>Script navigation: 24</title></path>
-<text class="value" x="375.2307692307692" y="290">24</text>
-<text class="label" x="178" y="324" text-anchor="end">SAP Logon pad</text>
-<path class="bar" d="M190,312 H333.6923076923077 a4,4 0 0 1 4,4 V322 a4,4 0 0 1 -4,4 H190 Z"><title>SAP Logon pad: 20</title></path>
-<text class="value" x="345.6923076923077" y="324">20</text>
-<text class="label" x="178" y="358" text-anchor="end">PySapGUI checks</text>
-<path class="bar" d="M190,346 H259.8461538461538 a4,4 0 0 1 4,4 V356 a4,4 0 0 1 -4,4 H190 Z"><title>PySapGUI checks: 10</title></path>
-<text class="value" x="271.8461538461538" y="358">10</text>
-<text class="label" x="178" y="392" text-anchor="end">COM collections</text>
-<path class="bar" d="M190,380 H215.53846153846155 a4,4 0 0 1 4,4 V390 a4,4 0 0 1 -4,4 H190 Z"><title>COM collections: 4</title></path>
-<text class="value" x="227.53846153846155" y="392">4</text>
+<text class="label" x="178" y="256" text-anchor="end">Customer lookup</text>
+<path class="bar" d="M190,244 H392.7692307692308 a4,4 0 0 1 4,4 V254 a4,4 0 0 1 -4,4 H190 Z"><title>Customer lookup: 28</title></path>
+<text class="value" x="404.7692307692308" y="256">28</text>
+<text class="label" x="178" y="290" text-anchor="end">Logon screen</text>
+<path class="bar" d="M190,278 H385.38461538461536 a4,4 0 0 1 4,4 V288 a4,4 0 0 1 -4,4 H190 Z"><title>Logon screen: 27</title></path>
+<text class="value" x="397.38461538461536" y="290">27</text>
+<text class="label" x="178" y="324" text-anchor="end">Table scrolling</text>
+<path class="bar" d="M190,312 H378.0 a4,4 0 0 1 4,4 V322 a4,4 0 0 1 -4,4 H190 Z"><title>Table scrolling: 26</title></path>
+<text class="value" x="390.0" y="324">26</text>
+<text class="label" x="178" y="358" text-anchor="end">Script navigation</text>
+<path class="bar" d="M190,346 H363.2307692307692 a4,4 0 0 1 4,4 V356 a4,4 0 0 1 -4,4 H190 Z"><title>Script navigation: 24</title></path>
+<text class="value" x="375.2307692307692" y="358">24</text>
+<text class="label" x="178" y="392" text-anchor="end">SAP Logon pad</text>
+<path class="bar" d="M190,380 H333.6923076923077 a4,4 0 0 1 4,4 V390 a4,4 0 0 1 -4,4 H190 Z"><title>SAP Logon pad: 20</title></path>
+<text class="value" x="345.6923076923077" y="392">20</text>
+<text class="label" x="178" y="426" text-anchor="end">PySapGUI checks</text>
+<path class="bar" d="M190,414 H259.8461538461538 a4,4 0 0 1 4,4 V424 a4,4 0 0 1 -4,4 H190 Z"><title>PySapGUI checks: 10</title></path>
+<text class="value" x="271.8461538461538" y="426">10</text>
+<text class="label" x="178" y="460" text-anchor="end">COM collections</text>
+<path class="bar" d="M190,448 H215.53846153846155 a4,4 0 0 1 4,4 V458 a4,4 0 0 1 -4,4 H190 Z"><title>COM collections: 4</title></path>
+<text class="value" x="227.53846153846155" y="460">4</text>
 </svg>

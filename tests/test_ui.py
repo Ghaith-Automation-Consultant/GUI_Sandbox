@@ -215,7 +215,9 @@ class TestBuildWidget:
         ctrl.add_row(["val3", "val4"])
         w = build_widget(ctrl, parent)
         assert isinstance(w, QTableView)
-        assert w.model().rowCount() == 2
+        assert w.model().rowCount() == ctrl.visible_row_count  # the visible area, as SAP GUI
+        assert w.model().item(1, 0).text() == "val3"
+        assert w.model().item(2, 0).text() == ""
         assert w.model().columnCount() == 2
 
     def test_gridview_widget(self, parent):

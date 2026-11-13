@@ -27,7 +27,7 @@ from .control import (
     UserArea, Menubar, Menu, MenuItem, Toolbar, TabStrip, Tab,
     Shell, Splitter, ScrollContainer, SimpleContainer, Box,
     Titlebar, Tree, Chart,
-    TableCell, TableRow, TableControl, GridView,
+    TableCell, TableCTextCell, TableRow, TableControl, GridView, Scrollbar,
 )
 from .session import Session, Window, SessionInfo, VKEY_LABELS
 from .loader import load_screen, build_tree
@@ -44,7 +44,7 @@ __all__ = [
     "TabStrip", "Tab", "Shell", "Splitter", "ScrollContainer",
     "SimpleContainer", "Box", "Titlebar", "Tree", "Chart",
     # Table controls
-    "TableCell", "TableRow", "TableControl", "GridView",
+    "TableCell", "TableCTextCell", "TableRow", "TableControl", "GridView", "Scrollbar",
     # Session
     "Session", "Window", "SessionInfo", "VKEY_LABELS",
     # Navigation

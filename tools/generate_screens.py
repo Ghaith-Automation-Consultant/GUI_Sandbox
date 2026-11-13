@@ -164,6 +164,25 @@ FLIGHT_ROWS = [
     ("SZ", "0550", "20260127", "212.50", "GBP", "A220", "130", "121"),
 ]
 
+
+def _more_flights(count):
+    """More fictional flights, so the SE16 grid has rows below the visible area."""
+    planes = [("A320", 180, "EUR"), ("B737", 160, "USD"), ("A220", 130, "GBP"), ("B787", 280, "USD")]
+    rows = []
+    for i in range(count):
+        carrier = ("SX", "SY", "SZ")[i % 3]
+        plane, seats, currency = planes[i % len(planes)]
+        day = 1 + (i * 3) % 28
+        month = 2 + (i // 28) % 3
+        rows.append((carrier, f"{600 + (i % 12) * 15:04d}", f"2026{month:02d}{day:02d}",
+                     f"{180 + (i * 37) % 520}.00", currency, plane, str(seats),
+                     str(seats - (i * 11) % (seats // 2))))
+    return rows
+
+
+# Enough rows to scroll: the grid shows 24 at a time and loads the rest as it scrolls.
+FLIGHT_ROWS = FLIGHT_ROWS + _more_flights(112)
+
 ABAP_SOURCE_NOTE = "SAPGUI.AbapEditor.1"
 
 
@@ -180,6 +199,7 @@ def se16_screens():
         usr_id("cntlGRID1/shellcont/shell"), "GuiGridView", "shell", changeable=True,
         columns=[{"name": n, "title": t} for n, t in FLIGHT_FIELDS],
         rows=[dict(zip((n for n, _ in FLIGHT_FIELDS), row)) for row in FLIGHT_ROWS],
+        lazy_load=True,
         **box(8, 8, 1200, 560),
     )
     return [
@@ -203,8 +223,10 @@ def se16n_screens():
     table = node(
         usr_id("tblSE16NSELFIELDS_TC"), "GuiTableControl", "SELFIELDS_TC", text="Selection Criteria",
         changeable=True,
-        columns=[{"name": "FIELDNAME", "title": "Field Name"}, {"name": "SCRTEXT", "title": "Description"},
-                 {"name": "LOW", "title": "From"}, {"name": "HIGH", "title": "To"}],
+        columns=[{"name": "FIELDNAME", "title": "Field Name", "field": "GS_SELFIELDS-FIELDNAME"},
+                 {"name": "SCRTEXT", "title": "Description", "field": "GS_SELFIELDS-SCRTEXT_M"},
+                 {"name": "LOW", "title": "From", "field": "GS_SELFIELDS-LOW", "prefix": "ctxt"},
+                 {"name": "HIGH", "title": "To", "field": "GS_SELFIELDS-HIGH", "prefix": "ctxt"}],
         rows=[[name, title, "", ""] for name, title in FLIGHT_FIELDS],
         **box(LABEL_X, 110, 800, 320),
     )
@@ -295,8 +317,20 @@ def su3_screen():
                    [(6, "Change Password")], usr)]
 
 
+# Order 1000000001 has more items than its table control shows, so scripts must scroll.
+ORDER_ITEMS = [
+    (f"{10 * (i + 1)}", f"SBX-{1000 + 100 * (i % 9)}", 1 + (i * 7) % 9, 25 + (i * 13) % 90)
+    for i in range(25)
+]
+
+
+def _amount(value):
+    return f"{value:,.2f}"
+
+
 def va03_screens():
     menu = {"Sales Document": ["Display", "Exit"], "Edit": ["Find"], "Goto": ["Header", "Item"]}
+    order_total = sum(qty * price for _pos, _mat, qty, price in ORDER_ITEMS)
 
     def tab_id(tab):
         return lambda cid: usr_id(f"tabsTAXI_TABSTRIP/tabp{tab}/{cid}")
@@ -305,15 +339,18 @@ def va03_screens():
         usr_id("tabsTAXI_TABSTRIP/tabpT01"), "GuiTab", "T01", text="Sales", selected=True,
         children=labelled("VBAK-AUDAT", "Order Date", 0, kind="txt", text="12.01.2026", changeable=False, parent=tab_id("T01"))
         + labelled("VBAK-WAERK", "Currency", 1, kind="txt", text="EUR", changeable=False, parent=tab_id("T01"))
-        + labelled("VBAK-NETWR", "Net Value", 2, kind="txt", text="1,250.00", changeable=False, parent=tab_id("T01")),
+        + labelled("VBAK-NETWR", "Net Value", 2, kind="txt", text=_amount(order_total), changeable=False,
+                     parent=tab_id("T01")),
     )
     items_tab = node(
         usr_id("tabsTAXI_TABSTRIP/tabpT02"), "GuiTab", "T02", text="Item Overview",
         children=[node(
             tab_id("T02")("tblITEMS"), "GuiTableControl", "ITEMS", changeable=True,
-            columns=[{"name": "POSNR", "title": "Item"}, {"name": "MATNR", "title": "Material"},
-                     {"name": "KWMENG", "title": "Quantity"}, {"name": "NETWR", "title": "Net Value"}],
-            rows=[["10", "SBX-1000", "5", "750.00"], ["20", "SBX-2000", "2", "500.00"]],
+            columns=[{"name": "POSNR", "title": "Item", "field": "VBAP-POSNR"},
+                     {"name": "MATNR", "title": "Material", "field": "VBAP-MATNR", "prefix": "ctxt"},
+                     {"name": "KWMENG", "title": "Quantity", "field": "RV45A-KWMENG"},
+                     {"name": "NETWR", "title": "Net Value", "field": "VBAP-NETWR"}],
+            rows=[[pos, mat, str(qty), _amount(qty * price)] for pos, mat, qty, price in ORDER_ITEMS],
             **box(8, 8, 800, 240),
         )],
     )

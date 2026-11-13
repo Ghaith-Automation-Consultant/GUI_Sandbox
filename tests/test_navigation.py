@@ -63,7 +63,7 @@ class TestNavigator:
         assert nav.step == 1
         nav.session.send_vkey(8)
         assert nav.step == 2
-        assert nav.session.findById(GRID).row_count == 8
+        assert nav.session.findById(GRID).row_count == 120
 
     def test_back_steps_then_goes_home(self):
         nav = Navigator()
@@ -142,7 +142,7 @@ class TestHttpBridge:
         remote.findById("wnd[0]").sendVKey(7)
         remote.findById("wnd[0]").sendVKey(8)
         grid = remote.findById(GRID)
-        assert grid.RowCount == 8
+        assert grid.RowCount == 120
         assert grid.GetCellValue(0, "CARRID") == "SX"
 
     def test_command_field(self, remote):

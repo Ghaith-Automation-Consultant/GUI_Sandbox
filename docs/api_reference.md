@@ -174,10 +174,38 @@ All properties exposed by `ComControl`:
 
 | Property          | Type | Access | Description                               |
 |-------------------|------|--------|-------------------------------------------|
-| `RowCount`        | int  | R      | Total number of rows                      |
-| `VisibleRowCount` | int  | R      | Same as `RowCount` in sandbox             |
+| `RowCount`        | int  | R      | Total number of rows, on screen or not    |
+| `VisibleRowCount` | int  | R      | Rows that fit on screen (from the control's height, or `visible_rows` in the screen JSON) |
 | `ColumnCount`     | int  | R      | Number of columns                         |
 | `ColumnOrder`     | list | R      | Column order list (GridView only)         |
+
+### Table control scrolling (GuiTableControl)
+
+SAP GUI only sends a table control the rows on screen, and the sandbox does the same:
+
+- **Cells exist for visible rows only.** Their IDs are `<prefix><field>[column,row]`, such as `txtVBAP-POSNR[0,3]` or `ctxtVBAP-MATNR[1,3]`, where `row` counts from the top of the screen. Rows past the end of the data have empty cells that can't be changed.
+- **Scrolling is a round trip.** After `VerticalScrollbar.Position` changes, the table, its cells, rows and scrollbar taken before the scroll raise "The control could not be found by id" (`RuntimeError` in-process). Call `findById` again.
+- **Edits are kept.** Text written to a cell stays in the table when it scrolls away and back.
+
+| Member                    | Type | Access | Description |
+|---------------------------|------|--------|-------------|
+| `VerticalScrollbar`       | GuiScrollbar | R | `Position` (R/W), `Minimum` (0), `Maximum` (`RowCount - 1`), `PageSize` (`VisibleRowCount`), `Range` |
+| `GetCell(row, col)`       | method | — | The cell at a visible row and a column index. Raises for a row outside the screen. |
+| `Rows` / `Rows(i)`        | collection | R | The visible rows (`GuiTableRow`): `Count`, `Item(i)` for a cell, `Selected` (R/W), `Selectable` |
+| `GetAbsoluteRow(n)`       | method | — | The `GuiTableRow` at an absolute index, to select rows that are off screen |
+
+### ALV grid scrolling (GuiGridView)
+
+The grid scrolls on the client, so a grid reference stays valid. A grid with `"lazy_load": true` in its screen JSON (the SE16 results) behaves like a large grid in SAP GUI, which loads rows in blocks as you scroll: `GetCellValue` on a row that has never been on screen returns `""`.
+
+| Member                    | Type | Access | Description |
+|---------------------------|------|--------|-------------|
+| `FirstVisibleRow`         | int  | R/W    | Top row on screen. Setting it scrolls and loads that page. |
+| `CurrentCellRow`          | int  | R/W    | Row of the current cell, `-1` if none |
+| `CurrentCellColumn`       | str  | R/W    | Column name of the current cell |
+| `SetCurrentCell(row, col)`| method | —    | Moves the current cell and scrolls it into view |
+| `SelectedRows`            | str  | R/W    | Selected rows, such as `"0,2-4"` |
+| `GetCellValue(row, col)`  | method | —    | Absolute row and column name. Raises for an unknown row or column. |
 
 ### Selection (CheckBox / RadioButton only)
 
@@ -208,8 +236,10 @@ if sbar.MessageType == "E":
 | `Press()`                 | Button               | Triggers the `press` event                 |
 | `Select()`                | Tab, RadioButton     | Triggers the `select` event                |
 | `sendVKey(key)`           | Window, any control  | Sends a virtual key. If called on a non-Window control, walks up the tree to find the parent Window. |
-| `GetCellValue(row, col)`  | GridView, TableControl | Returns cell text. For GridView, `col` is the column name (str). For TableControl, `col` is the column index (int). |
-| `GetCell(row, col)`       | TableControl         | Returns a ComControl wrapping the TableCell |
+| `GetCellValue(row, col)`  | GridView, TableControl | Returns cell text. GridView: absolute row and column name (str). TableControl: visible row and column index (int), a sandbox shortcut for `GetCell(row, col).Text`. |
+| `GetCell(row, col)`       | TableControl         | Returns the cell control at a visible row |
+| `GetAbsoluteRow(row)`     | TableControl         | Returns the row at an absolute index |
+| `SetCurrentCell(row, col)`| GridView             | Moves the current cell and scrolls to it |
 
 ### Virtual Key Codes
 
@@ -361,7 +391,11 @@ the `port` argument to `start_server()`).
 | `sendVKey`         | `key: <int>`          | Sends a virtual key                  |
 | `getInfo`          | —                     | Full control dict including children |
 | `getChildren`      | —                     | List of direct child control dicts   |
-| `getCellValue`     | `row: int, col: int\|str` | Cell value (table/grid)          |
+| `getCellValue`     | `row: int, col: int\|str` | Cell value (grid: absolute row; table control: visible row) |
+| `scroll`           | `value: <int>`        | Table control: `VerticalScrollbar.Position`; grid: `FirstVisibleRow` |
+| `setCurrentCell`   | `row: int, col: str`  | Grid current cell                    |
+| `setSelectedRows`  | `value: "0,2-4"`      | Grid selected rows                   |
+| `selectRow`        | `row: int, value: bool` | Selects an absolute table control row |
 | `startTransaction` | `value: "SE16"`       | Navigate to a transaction            |
 
 ### Example (curl)
@@ -441,6 +475,10 @@ print(ctrl.text)
 | `.Select()` / `.select()` | Trigger select event                       |
 | `.sendVKey(key)`   | Send virtual key                                   |
 | `.GetCellValue(row, col)` | Cell value (GridView/TableControl)          |
+| `.VerticalScrollbar.Position` | Scroll a table control; find the table again afterwards |
+| `.FirstVisibleRow` / `.SetCurrentCell(row, col)` / `.SelectedRows` | Scroll and select in an ALV grid |
+
+Member names also ignore case, as in COM: `table.verticalScrollbar.position = 9` works.
 
 ### ActionRecorder
 

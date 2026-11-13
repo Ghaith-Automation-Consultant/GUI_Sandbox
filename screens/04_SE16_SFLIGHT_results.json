@@ -6,7 +6,7 @@
   "transaction": "SE16",
   "program": "ZSBX_SE16",
   "screen": 500,
-  "status": "8 entries displayed",
+  "status": "120 entries displayed",
   "tree": {
     "id": "/app/con[0]/ses[0]",
     "type": "GuiSession",
@@ -16,7 +16,7 @@
         "id": "/app/con[0]/ses[0]/wnd[0]",
         "type": "GuiMainWindow",
         "name": "wnd[0]",
-        "text": "Data Browser: Table SFLIGHT Select Entries   8",
+        "text": "Data Browser: Table SFLIGHT Select Entries   120",
         "changeable": true,
         "left": 0,
         "top": 0,
@@ -213,7 +213,7 @@
             "id": "/app/con[0]/ses[0]/wnd[0]/titl",
             "type": "GuiTitlebar",
             "name": "titl",
-            "text": "Data Browser: Table SFLIGHT Select Entries   8"
+            "text": "Data Browser: Table SFLIGHT Select Entries   120"
           },
           {
             "id": "/app/con[0]/ses[0]/wnd[0]/tbar[1]",
@@ -369,8 +369,1129 @@
                     "PLANETYPE": "A220",
                     "SEATSMAX": "130",
                     "SEATSOCC": "121"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0600",
+                    "FLDATE": "20260201",
+                    "PRICE": "180.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "180"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0615",
+                    "FLDATE": "20260204",
+                    "PRICE": "217.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "149"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0630",
+                    "FLDATE": "20260207",
+                    "PRICE": "254.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "108"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0645",
+                    "FLDATE": "20260210",
+                    "PRICE": "291.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "247"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0660",
+                    "FLDATE": "20260213",
+                    "PRICE": "328.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "136"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0675",
+                    "FLDATE": "20260216",
+                    "PRICE": "365.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "105"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0690",
+                    "FLDATE": "20260219",
+                    "PRICE": "402.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "129"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0705",
+                    "FLDATE": "20260222",
+                    "PRICE": "439.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "203"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0720",
+                    "FLDATE": "20260225",
+                    "PRICE": "476.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "92"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0735",
+                    "FLDATE": "20260228",
+                    "PRICE": "513.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "141"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0750",
+                    "FLDATE": "20260203",
+                    "PRICE": "550.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "85"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0765",
+                    "FLDATE": "20260206",
+                    "PRICE": "587.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "159"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0600",
+                    "FLDATE": "20260209",
+                    "PRICE": "624.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "138"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0615",
+                    "FLDATE": "20260212",
+                    "PRICE": "661.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "97"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0630",
+                    "FLDATE": "20260215",
+                    "PRICE": "698.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "106"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0645",
+                    "FLDATE": "20260218",
+                    "PRICE": "215.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "255"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0660",
+                    "FLDATE": "20260221",
+                    "PRICE": "252.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "94"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0675",
+                    "FLDATE": "20260224",
+                    "PRICE": "289.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "133"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0690",
+                    "FLDATE": "20260227",
+                    "PRICE": "326.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "127"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0705",
+                    "FLDATE": "20260202",
+                    "PRICE": "363.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "211"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0720",
+                    "FLDATE": "20260205",
+                    "PRICE": "400.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "140"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0735",
+                    "FLDATE": "20260208",
+                    "PRICE": "437.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "89"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0750",
+                    "FLDATE": "20260211",
+                    "PRICE": "474.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "83"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0765",
+                    "FLDATE": "20260214",
+                    "PRICE": "511.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "167"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0600",
+                    "FLDATE": "20260217",
+                    "PRICE": "548.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "96"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0615",
+                    "FLDATE": "20260220",
+                    "PRICE": "585.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "125"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0630",
+                    "FLDATE": "20260223",
+                    "PRICE": "622.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "104"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0645",
+                    "FLDATE": "20260226",
+                    "PRICE": "659.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "263"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0660",
+                    "FLDATE": "20260301",
+                    "PRICE": "696.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "142"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0675",
+                    "FLDATE": "20260304",
+                    "PRICE": "213.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "81"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0690",
+                    "FLDATE": "20260307",
+                    "PRICE": "250.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "125"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0705",
+                    "FLDATE": "20260310",
+                    "PRICE": "287.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "219"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0720",
+                    "FLDATE": "20260313",
+                    "PRICE": "324.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "98"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0735",
+                    "FLDATE": "20260316",
+                    "PRICE": "361.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "117"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0750",
+                    "FLDATE": "20260319",
+                    "PRICE": "398.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "81"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0765",
+                    "FLDATE": "20260322",
+                    "PRICE": "435.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "175"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0600",
+                    "FLDATE": "20260325",
+                    "PRICE": "472.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "144"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0615",
+                    "FLDATE": "20260328",
+                    "PRICE": "509.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "153"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0630",
+                    "FLDATE": "20260303",
+                    "PRICE": "546.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "102"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0645",
+                    "FLDATE": "20260306",
+                    "PRICE": "583.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "271"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0660",
+                    "FLDATE": "20260309",
+                    "PRICE": "620.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "100"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0675",
+                    "FLDATE": "20260312",
+                    "PRICE": "657.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "109"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0690",
+                    "FLDATE": "20260315",
+                    "PRICE": "694.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "123"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0705",
+                    "FLDATE": "20260318",
+                    "PRICE": "211.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "227"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0720",
+                    "FLDATE": "20260321",
+                    "PRICE": "248.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "146"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0735",
+                    "FLDATE": "20260324",
+                    "PRICE": "285.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "145"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0750",
+                    "FLDATE": "20260327",
+                    "PRICE": "322.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "79"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0765",
+                    "FLDATE": "20260302",
+                    "PRICE": "359.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "183"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0600",
+                    "FLDATE": "20260305",
+                    "PRICE": "396.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "102"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0615",
+                    "FLDATE": "20260308",
+                    "PRICE": "433.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "101"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0630",
+                    "FLDATE": "20260311",
+                    "PRICE": "470.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "100"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0645",
+                    "FLDATE": "20260314",
+                    "PRICE": "507.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "279"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0660",
+                    "FLDATE": "20260317",
+                    "PRICE": "544.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "148"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0675",
+                    "FLDATE": "20260320",
+                    "PRICE": "581.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "137"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0690",
+                    "FLDATE": "20260323",
+                    "PRICE": "618.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "121"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0705",
+                    "FLDATE": "20260326",
+                    "PRICE": "655.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "235"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0720",
+                    "FLDATE": "20260401",
+                    "PRICE": "692.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "104"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0735",
+                    "FLDATE": "20260404",
+                    "PRICE": "209.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "93"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0750",
+                    "FLDATE": "20260407",
+                    "PRICE": "246.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "77"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0765",
+                    "FLDATE": "20260410",
+                    "PRICE": "283.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "191"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0600",
+                    "FLDATE": "20260413",
+                    "PRICE": "320.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "150"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0615",
+                    "FLDATE": "20260416",
+                    "PRICE": "357.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "129"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0630",
+                    "FLDATE": "20260419",
+                    "PRICE": "394.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "98"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0645",
+                    "FLDATE": "20260422",
+                    "PRICE": "431.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "147"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0660",
+                    "FLDATE": "20260425",
+                    "PRICE": "468.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "106"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0675",
+                    "FLDATE": "20260428",
+                    "PRICE": "505.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "85"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0690",
+                    "FLDATE": "20260403",
+                    "PRICE": "542.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "119"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0705",
+                    "FLDATE": "20260406",
+                    "PRICE": "579.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "243"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0720",
+                    "FLDATE": "20260409",
+                    "PRICE": "616.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "152"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0735",
+                    "FLDATE": "20260412",
+                    "PRICE": "653.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "121"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0750",
+                    "FLDATE": "20260415",
+                    "PRICE": "690.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "75"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0765",
+                    "FLDATE": "20260418",
+                    "PRICE": "207.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "199"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0600",
+                    "FLDATE": "20260421",
+                    "PRICE": "244.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "108"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0615",
+                    "FLDATE": "20260424",
+                    "PRICE": "281.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "157"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0630",
+                    "FLDATE": "20260427",
+                    "PRICE": "318.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "96"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0645",
+                    "FLDATE": "20260402",
+                    "PRICE": "355.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "155"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0660",
+                    "FLDATE": "20260405",
+                    "PRICE": "392.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "154"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0675",
+                    "FLDATE": "20260408",
+                    "PRICE": "429.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "113"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0690",
+                    "FLDATE": "20260411",
+                    "PRICE": "466.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "117"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0705",
+                    "FLDATE": "20260414",
+                    "PRICE": "503.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "251"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0720",
+                    "FLDATE": "20260417",
+                    "PRICE": "540.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "110"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0735",
+                    "FLDATE": "20260420",
+                    "PRICE": "577.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "149"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0750",
+                    "FLDATE": "20260423",
+                    "PRICE": "614.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "73"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0765",
+                    "FLDATE": "20260426",
+                    "PRICE": "651.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "207"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0600",
+                    "FLDATE": "20260201",
+                    "PRICE": "688.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "156"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0615",
+                    "FLDATE": "20260204",
+                    "PRICE": "205.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "105"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0630",
+                    "FLDATE": "20260207",
+                    "PRICE": "242.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "94"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0645",
+                    "FLDATE": "20260210",
+                    "PRICE": "279.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "163"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0660",
+                    "FLDATE": "20260213",
+                    "PRICE": "316.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "112"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0675",
+                    "FLDATE": "20260216",
+                    "PRICE": "353.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "141"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0690",
+                    "FLDATE": "20260219",
+                    "PRICE": "390.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "115"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0705",
+                    "FLDATE": "20260222",
+                    "PRICE": "427.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "259"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0720",
+                    "FLDATE": "20260225",
+                    "PRICE": "464.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "158"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0735",
+                    "FLDATE": "20260228",
+                    "PRICE": "501.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "97"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0750",
+                    "FLDATE": "20260203",
+                    "PRICE": "538.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "71"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0765",
+                    "FLDATE": "20260206",
+                    "PRICE": "575.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "215"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0600",
+                    "FLDATE": "20260209",
+                    "PRICE": "612.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "114"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0615",
+                    "FLDATE": "20260212",
+                    "PRICE": "649.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "133"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0630",
+                    "FLDATE": "20260215",
+                    "PRICE": "686.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "92"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0645",
+                    "FLDATE": "20260218",
+                    "PRICE": "203.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "171"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0660",
+                    "FLDATE": "20260221",
+                    "PRICE": "240.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "160"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0675",
+                    "FLDATE": "20260224",
+                    "PRICE": "277.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "89"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0690",
+                    "FLDATE": "20260227",
+                    "PRICE": "314.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "113"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0705",
+                    "FLDATE": "20260202",
+                    "PRICE": "351.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "267"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0720",
+                    "FLDATE": "20260205",
+                    "PRICE": "388.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "116"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0735",
+                    "FLDATE": "20260208",
+                    "PRICE": "425.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "125"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0750",
+                    "FLDATE": "20260211",
+                    "PRICE": "462.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "69"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0765",
+                    "FLDATE": "20260214",
+                    "PRICE": "499.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "223"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0600",
+                    "FLDATE": "20260217",
+                    "PRICE": "536.00",
+                    "CURRENCY": "EUR",
+                    "PLANETYPE": "A320",
+                    "SEATSMAX": "180",
+                    "SEATSOCC": "162"
+                  },
+                  {
+                    "CARRID": "SY",
+                    "CONNID": "0615",
+                    "FLDATE": "20260220",
+                    "PRICE": "573.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B737",
+                    "SEATSMAX": "160",
+                    "SEATSOCC": "81"
+                  },
+                  {
+                    "CARRID": "SZ",
+                    "CONNID": "0630",
+                    "FLDATE": "20260223",
+                    "PRICE": "610.00",
+                    "CURRENCY": "GBP",
+                    "PLANETYPE": "A220",
+                    "SEATSMAX": "130",
+                    "SEATSOCC": "90"
+                  },
+                  {
+                    "CARRID": "SX",
+                    "CONNID": "0645",
+                    "FLDATE": "20260226",
+                    "PRICE": "647.00",
+                    "CURRENCY": "USD",
+                    "PLANETYPE": "B787",
+                    "SEATSMAX": "280",
+                    "SEATSOCC": "179"
                   }
                 ],
+                "lazy_load": true,
                 "left": 8,
                 "top": 8,
                 "width": 1200,
@@ -382,7 +1503,7 @@
             "id": "/app/con[0]/ses[0]/wnd[0]/sbar",
             "type": "GuiStatusbar",
             "name": "sbar",
-            "text": "8 entries displayed",
+            "text": "120 entries displayed",
             "children": [
               {
                 "id": "/app/con[0]/ses[0]/wnd[0]/sbar/pane[0]",

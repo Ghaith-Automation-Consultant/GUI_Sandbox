@@ -19,8 +19,9 @@ from PySide6.QtWidgets import (
     QRadioButton as QtRadioButton, QComboBox as QtComboBox,
     QGroupBox, QTabWidget, QTreeWidget, QTreeWidgetItem,
     QTableView, QHeaderView, QScrollArea, QFrame, QToolButton,
-    QHBoxLayout, QPlainTextEdit,
+    QHBoxLayout, QPlainTextEdit, QScrollBar,
 )
+from PySide6.QtCore import QItemSelection, QItemSelectionModel, Qt
 from PySide6.QtGui import QStandardItemModel, QStandardItem, QFont
 
 from . import gui_thread
@@ -303,23 +304,86 @@ def _update_statusbar_style(icon: QLabel, msg: QLabel, msg_type: str) -> None:
     msg.setStyleSheet(f"color: {color}; background: transparent;")
 
 
+def _on_engine(ctrl: Control, events: tuple[str, ...], refresh) -> None:
+    """Run refresh on the GUI thread whenever the engine control fires one of events.
+
+    Scripts scroll from the COM or HTTP thread; the refresh reads the engine
+    state when it runs, and does nothing once the widget is gone.
+    """
+    def apply() -> None:
+        try:
+            refresh()
+        except RuntimeError:
+            pass  # The screen was replaced before this change arrived.
+
+    for event in events:
+        ctrl.on(event, lambda *_args: gui_thread.invoker().post(apply))
+
+
+class _PagedTableView(QTableView):
+    """A table control: only the visible rows, and a scrollbar that asks the engine to scroll.
+
+    SAP GUI sends a table control's visible rows only; scrolling is a round
+    trip that brings the next rows. The engine plays the server: the model
+    always holds ``visible_row_count`` rows starting at the scroll position.
+    """
+
+    def __init__(self, ctrl: TableControl, parent: QWidget) -> None:
+        super().__init__(parent)
+        self._ctrl = ctrl
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.pager = QScrollBar(Qt.Orientation.Vertical, self)
+        self.pager.setObjectName(f"{ctrl.id}/vsb")
+        self.pager.valueChanged.connect(self._scroll_engine)
+        self.setViewportMargins(0, 0, self.pager.sizeHint().width(), 0)
+
+    def refresh(self) -> None:
+        model = self.model()
+        for r, row in enumerate(self._ctrl.visible_cells):
+            for c, cell in enumerate(row):
+                item = model.item(r, c)
+                if item is None:
+                    item = QStandardItem()
+                    item.setEditable(False)
+                    model.setItem(r, c, item)
+                item.setText(cell.text)
+        bar = self._ctrl.vertical_scrollbar
+        self.pager.blockSignals(True)
+        self.pager.setRange(bar.minimum, bar.maximum)
+        self.pager.setPageStep(bar.page_size)
+        self.pager.setValue(bar.position)
+        self.pager.blockSignals(False)
+
+    def _scroll_engine(self, value: int) -> None:
+        if value != self._ctrl.position:
+            self._ctrl.scroll_to(value)
+
+    def resizeEvent(self, event) -> None:  # noqa: N802 (Qt override)
+        super().resizeEvent(event)
+        rect = self.contentsRect()
+        width = self.pager.sizeHint().width()
+        top = self.horizontalHeader().height()
+        self.pager.setGeometry(rect.right() - width + 1, rect.top() + top,
+                               width, max(0, rect.height() - top))
+
+    def wheelEvent(self, event) -> None:  # noqa: N802 (Qt override)
+        steps = -event.angleDelta().y() // 40
+        if steps:
+            self.pager.setValue(self.pager.value() + steps)
+        event.accept()
+
+
 def build_table(ctrl: TableControl, parent: QWidget) -> QTableView:
-    model = QStandardItemModel()
+    model = QStandardItemModel(ctrl.visible_row_count, len(ctrl.columns))
 
     col_names = [c.get("title", c.get("name", f"Col {i}")) for i, c in enumerate(ctrl.columns)]
     model.setHorizontalHeaderLabels(col_names)
 
-    for row in ctrl.rows:
-        items = []
-        for cell in row.cells:
-            item = QStandardItem(cell.text)
-            item.setEditable(False)
-            items.append(item)
-        model.appendRow(items)
-
-    view = QTableView(parent)
+    view = _PagedTableView(ctrl, parent)
     _set_common(view, ctrl)
     view.setModel(model)
+    view.refresh()
+    _on_engine(ctrl, ("scroll", "cell_change"), view.refresh)
     view.setFont(QFont(SAP.FONT_FAMILY, SAP.FONT_SIZE))
     view.setAlternatingRowColors(True)
     view.setSelectionBehavior(QTableView.SelectionBehavior.SelectRows)
@@ -349,6 +413,40 @@ def build_table(ctrl: TableControl, parent: QWidget) -> QTableView:
     return view
 
 
+def _link_grid(view: QTableView, grid: GridView) -> None:
+    """Keep an ALV grid's first visible row, current cell and selection in step with Qt."""
+    bar = view.verticalScrollBar()
+
+    def user_scrolled(value: int) -> None:
+        if grid.row_count and value != grid.first_visible_row:
+            grid.first_visible_row = min(value, grid.row_count - 1)
+
+    def show_first_row() -> None:
+        bar.blockSignals(True)
+        bar.setValue(grid.first_visible_row)
+        bar.blockSignals(False)
+
+    def show_current_cell() -> None:
+        if grid.current_cell_row >= 0 and grid.current_cell_column in grid.column_order:
+            col = grid.column_order.index(grid.current_cell_column)
+            view.setCurrentIndex(view.model().index(grid.current_cell_row, col))
+        show_first_row()
+
+    def show_selection() -> None:
+        model = view.model()
+        selection = QItemSelection()
+        last = model.columnCount() - 1
+        for row in sorted(grid.selected_rows):
+            selection.select(model.index(row, 0), model.index(row, last))
+        view.selectionModel().select(
+            selection, QItemSelectionModel.SelectionFlag.ClearAndSelect)
+
+    bar.valueChanged.connect(user_scrolled)
+    _on_engine(grid, ("scroll",), show_first_row)
+    _on_engine(grid, ("current_cell",), show_current_cell)
+    _on_engine(grid, ("selection",), show_selection)
+
+
 def build_gridview(ctrl: GridView, parent: QWidget) -> QTableView:
     model = QStandardItemModel()
 
@@ -368,10 +466,11 @@ def build_gridview(ctrl: GridView, parent: QWidget) -> QTableView:
     view = QTableView(parent)
     _set_common(view, ctrl)
     view.setModel(model)
+    _link_grid(view, ctrl)
     view.setFont(QFont(SAP.FONT_FAMILY, SAP.FONT_SIZE))
     view.setAlternatingRowColors(True)
     view.setSelectionBehavior(QTableView.SelectionBehavior.SelectRows)
-    view.setSelectionMode(QTableView.SelectionMode.SingleSelection)
+    view.setSelectionMode(QTableView.SelectionMode.ExtendedSelection)
     view.horizontalHeader().setStretchLastSection(True)
     view.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Interactive)
     view.horizontalHeader().setMinimumSectionSize(50)

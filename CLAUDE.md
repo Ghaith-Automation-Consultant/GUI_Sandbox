@@ -54,6 +54,10 @@ Modal popups are `ModalWindow` (`GuiModalWindow`) windows built at runtime by `e
 
 A reactive flow checks the input before moving on and fills the next screen with matching data, instead of always showing the same next screen. Base class and registry: `engine/reactive.py` (`ReactiveFlow`, `REACTIVE_FLOWS`). The Navigator calls `check()` in `_next` (an error stays on the screen with a status bar message) and `fill()` in `_show` (also on Back, so typed values come back). `XD03` (`engine/customers.py`) looks customers up in `customers.json` (fictional; leading zeros ignored, optional company code). Its screens come from `tools/generate_reactive_screens.py`, which `tools/generate_screens.py` includes. A new flow: subclass `ReactiveFlow`, call `register()`, import the module in `engine/navigation.py`, and add its screens to `reactive_screens()`.
 
+## Table and Grid Scrolling
+
+`TableControl` (`engine/control.py`) keeps every row in `data` but only has cell controls for the visible rows (`visible_row_count`, from the height or `visible_rows` in the JSON), with SAP IDs `<prefix><field>[col,row]` (column dicts take `field` and `prefix`). `scroll_to()` / `vertical_scrollbar.position` rebuilds the cells, reindexes the session registry and bumps `generation`; the bridges record `reference_token()` when they wrap an object and raise "could not be found" once `is_stale()` says it changed, so scripts must find the table again after a scroll, as in SAP GUI. `GridView` scrolls without a round trip (`first_visible_row`, `set_current_cell`, `selected_rows_text`); with `lazy_load` (the SE16 results grid) rows never on screen read as "". The Qt table (`_PagedTableView` in `ui/widget_factory.py`) shows only the visible rows and its own scrollbar drives the engine; engine `scroll` events refresh widgets through `gui_thread`.
+
 ## Key Conventions
 
 - **Widget objectNames = automation IDs.** Every Qt widget gets `setObjectName()` matching the SAP-like path.
@@ -72,6 +76,7 @@ A reactive flow checks the input before moving on and fills the next screen with
 - `tests/test_passwords.py` — `users.json`, password rules, the Set/Forced/SU3/Reset popups and their Qt dialog
 - `tests/test_pysapgui.py` — PySapGUI's password helpers run against the sandbox (skipped if PySapGUI isn't installed)
 - `tests/test_customers.py` — XD03 reactive flow: lookup rules, Navigator flow, live window, script thread
+- `tests/test_table_scrolling.py` — Table control paging, stale references, ALV lazy loading, on every bridge and the live window
 - `tests/test_com_collections.py` — COM collections indexed the way VBScript does it (`obj.Children(0)` in one call)
 - `tests/test_com_bridge.py` — Manual COM smoke test; run as a script while `main.py` is running
 - `tests/test_screens_sanitized.py` — Rejects screen files holding live-system identifiers

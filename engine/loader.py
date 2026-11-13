@@ -97,7 +97,8 @@ def _build_control(node: dict[str, Any]) -> Control:
 
     # ── TableControl: use pre-parsed columns / rows if present ───────────────
     if sap_type == "GuiTableControl":
-        ctrl = TableControl(ctrl_id, columns=node.get("columns", []), **common)
+        ctrl = TableControl(ctrl_id, columns=node.get("columns", []),
+                            visible_rows=int(node.get("visible_rows", 0)), **common)
         for row_vals in node.get("rows", []):
             # rows may be a list of dicts {0: val, 1: val} or {col: val}
             if isinstance(row_vals, dict):
@@ -111,7 +112,9 @@ def _build_control(node: dict[str, Any]) -> Control:
 
     # ── GridView: use pre-parsed columns / rows if present ───────────────────
     if sap_type == "GuiGridView":
-        ctrl = GridView(ctrl_id, columns=node.get("columns", []), **common)
+        ctrl = GridView(ctrl_id, columns=node.get("columns", []),
+                        visible_rows=int(node.get("visible_rows", 0)),
+                        lazy_load=bool(node.get("lazy_load", False)), **common)
         for row_dict in node.get("rows", []):
             if isinstance(row_dict, dict):
                 ctrl.add_row(row_dict)

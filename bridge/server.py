@@ -27,7 +27,13 @@ select        → trigger select (tab / radio button)
 sendVKey      → key: <int>   (0=Enter, 3=Back, 8=Execute, 11=Save, 12=Cancel)
 getInfo       → full control dict including children
 getChildren   → list of direct child control dicts
-getCellValue  → row: int, col: int|str  (TableControl: col index; GridView: col name)
+getCellValue  → row: int, col: int|str  (TableControl: visible row, col index;
+                                         GridView: absolute row, col name)
+scroll        → value: <int>  table control: VerticalScrollbar.Position;
+                              grid: FirstVisibleRow
+setCurrentCell   → row: int, col: str          (GridView)
+setSelectedRows  → value: "0,2-4"              (GridView)
+selectRow     → row: <absolute int>, value: bool  (TableControl)
 startTransaction  → value: "SE16"
 
 Usage::
@@ -78,6 +84,18 @@ def _ctrl_dict(ctrl: Control, *, include_children: bool = False) -> dict[str, An
     if isinstance(ctrl, (TableControl, GridView)):
         d["columns"]   = ctrl.columns
         d["row_count"] = ctrl.row_count
+        d["visible_row_count"] = ctrl.visible_row_count
+    if isinstance(ctrl, TableControl):
+        bar = ctrl.vertical_scrollbar
+        d["scrollbar"] = {"position": bar.position, "minimum": bar.minimum,
+                          "maximum": bar.maximum, "page_size": bar.page_size,
+                          "range": bar.range}
+        d["selected_rows"] = sorted(ctrl.selected_rows)
+    if isinstance(ctrl, GridView):
+        d["first_visible_row"] = ctrl.first_visible_row
+        d["current_cell_row"] = ctrl.current_cell_row
+        d["current_cell_column"] = ctrl.current_cell_column
+        d["selected_rows"] = ctrl.selected_rows_text
     if isinstance(ctrl, StatusBar):
         d["message_type"] = ctrl.message_type
         d["message_id"]   = ctrl.message_id
@@ -270,11 +288,40 @@ class _Handler(BaseHTTPRequestHandler):
                     row = int(body.get("row", 0))
                     col = body.get("col", 0)
                     if isinstance(ctrl, GridView):
+                        ctrl.check_cell(row, str(col))
                         result = ctrl.get_cell_value(row, str(col))
                     elif isinstance(ctrl, TableControl):
-                        result = ctrl.get_cell_value(row, int(col))
+                        cell = ctrl.get_cell(row, int(col))
+                        if cell is None:
+                            self._error(400, f"Row {row}, column {col} is not in the visible "
+                                             f"area (rows 0..{ctrl.visible_row_count - 1}); "
+                                             "scroll first")
+                            return
+                        result = cell.text
                     else:
                         result = ""
+
+                elif action == "scroll":
+                    if isinstance(ctrl, TableControl):
+                        ctrl.vertical_scrollbar.position = int(value)
+                    elif isinstance(ctrl, GridView):
+                        ctrl.first_visible_row = int(value)
+                    else:
+                        self._error(400, f"{path} does not scroll")
+                        return
+                    result = int(value)
+
+                elif action == "setCurrentCell" and isinstance(ctrl, GridView):
+                    ctrl.set_current_cell(int(body.get("row", 0)), str(body.get("col", "")))
+                    result = "ok"
+
+                elif action == "setSelectedRows" and isinstance(ctrl, GridView):
+                    ctrl.selected_rows_text = str(value or "")
+                    result = ctrl.selected_rows_text
+
+                elif action == "selectRow" and isinstance(ctrl, TableControl):
+                    ctrl.get_absolute_row(int(body.get("row", 0))).selected = bool(value)
+                    result = sorted(ctrl.selected_rows)
 
                 else:
                     self._error(400, f"Unknown action: {action!r}")
@@ -283,6 +330,8 @@ class _Handler(BaseHTTPRequestHandler):
                 srv.recorder.log(action, path=path, value=value, result=result)
                 self._ok({"result": result})
 
+            except (ValueError, IndexError, KeyError) as exc:
+                self._error(400, str(exc))
             except Exception as exc:
                 self._error(500, str(exc))
 

@@ -134,7 +134,7 @@ Navigation dans les tables. Trois étapes : saisie du nom de table, écran de s�
 |---------|-------------|
 | `02_SE16_initial.json` | Saisie du nom de table |
 | `03_SE16_SFLIGHT_selection_screen.json` | Filtres pour SFLIGHT |
-| `04_SE16_SFLIGHT_results.json` | Résultats SFLIGHT (GridView ALV) |
+| `04_SE16_SFLIGHT_results.json` | Résultats SFLIGHT (GridView ALV) : 120 vols, 24 à l'écran, lignes chargées au défilement |
 
 ### SE16N — General Table Display
 
@@ -166,7 +166,7 @@ Les utilisateurs de test de chaque environnement sont dans `users.json` (`USER_S
 ### VA03 — Affichage de commande client
 
 - `12_VA03_initial.json` — écran initial
-- `13_VA03_overview.json` — vue d'ensemble de la commande
+- `13_VA03_overview.json` — vue d'ensemble de la commande ; l'onglet *Item Overview* contient un table control de 25 postes, dont 9 à l'écran
 
 ### MM03 — Affichage d'article
 
@@ -304,6 +304,25 @@ session.findById("wnd[0]").sendVKey(0)
 | `/action` | POST | `{"path": "...", "action": "setText", "value": "X"}` — exécute une action |
 | `/loadScreen` | POST | `{"file": "screens/02_SE16_initial.json"}` — charge un écran |
 
+### 7.5 Faire défiler les tables et les grilles
+
+Comme dans SAP GUI, un **table control** (`GuiTableControl`) n'a de cellules que pour les lignes affichées. Leurs identifiants sont de la forme `txtVBAP-POSNR[0,3]` (`[colonne,ligne]`, la ligne comptée depuis le haut de l'écran). Lire une ligne hors de l'écran lève une erreur.
+
+Modifier `VerticalScrollbar.Position` est un aller-retour serveur : la table, ses cellules et sa barre de défilement obtenues avant ne fonctionnent plus. Il faut refaire `findById` après chaque défilement.
+
+```python
+table_id = "wnd[0]/usr/tabsTAXI_TABSTRIP/tabpT02/tblITEMS"
+table = session.findById(table_id)
+total, page = table.RowCount, table.VisibleRowCount
+for first in range(0, total, page):
+    table.VerticalScrollbar.Position = first
+    table = session.findById(table_id)   # retrouver la table après le défilement
+    for row in range(min(page, total - first)):
+        print(table.GetCell(row, 0).Text)
+```
+
+Une **grille ALV** (`GuiGridView`) défile sans aller-retour, et la référence reste valable. La grille des résultats SE16 charge ses lignes au défilement : `GetCellValue` renvoie une chaîne vide pour une ligne jamais affichée, jusqu'à ce que `FirstVisibleRow` ou `SetCurrentCell` l'amène à l'écran. `SelectedRows` lit et écrit la sélection (`"0,2-4"`).
+
 ---
 
 ## 8. Capture de nouveaux écrans
@@ -377,7 +396,7 @@ La suite de tests couvre le moteur de contrôles, l'interface graphique, les tes
 - **Pas de BAPI/RFC** — Aucune communication avec un backend SAP. Les appels de fonctions distantes ne sont pas supportés.
 - **Pas de persistance** — Les modifications faites via les scripts (setText, etc.) sont en mémoire uniquement et perdues à la fermeture.
 - **Session unique** — Le sandbox expose une seule connexion avec une seule session (con[0]/ses[0]).
-- **Pas de popups modales** — Les fenêtres `wnd[1]`, `wnd[2]` ne sont pas encore gérées.
+- **Popups limitées** — Les fenêtres `wnd[1]` et `wnd[2]` existent pour la connexion et les mots de passe ; l'aide à la saisie (F4) et les autres popups ne sont pas encore gérées.
 - **Pas de gestion du focus clavier** — La navigation par tabulation entre champs n'est pas implémentée.
 - **Données figées** — Les résultats de tables (SE16, SE16N) sont ceux capturés au moment de la capture, pas des données live.
 

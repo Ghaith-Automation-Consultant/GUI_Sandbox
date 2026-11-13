@@ -177,8 +177,10 @@ class TestTableControl:
         assert t.get_cell_value(0, 1) == "val2"
 
     def test_get_cell_out_of_range(self):
-        t = TableControl("tbl", columns=[{"name": "X"}])
-        assert t.get_cell(0, 0) is None
+        t = TableControl("tbl", columns=[{"name": "X"}], visible_rows=3)
+        assert t.get_cell(0, 0).text == ""          # empty rows still have cells, as in SAP
+        assert not t.get_cell(0, 0).changeable
+        assert t.get_cell(3, 0) is None              # below the visible area
         assert t.get_cell_value(5, 5) == ""
 
     def test_multiple_rows(self):

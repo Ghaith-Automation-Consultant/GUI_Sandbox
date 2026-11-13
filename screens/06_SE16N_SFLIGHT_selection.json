@@ -289,19 +289,25 @@
                 "columns": [
                   {
                     "name": "FIELDNAME",
-                    "title": "Field Name"
+                    "title": "Field Name",
+                    "field": "GS_SELFIELDS-FIELDNAME"
                   },
                   {
                     "name": "SCRTEXT",
-                    "title": "Description"
+                    "title": "Description",
+                    "field": "GS_SELFIELDS-SCRTEXT_M"
                   },
                   {
                     "name": "LOW",
-                    "title": "From"
+                    "title": "From",
+                    "field": "GS_SELFIELDS-LOW",
+                    "prefix": "ctxt"
                   },
                   {
                     "name": "HIGH",
-                    "title": "To"
+                    "title": "To",
+                    "field": "GS_SELFIELDS-HIGH",
+                    "prefix": "ctxt"
                   }
                 ],
                 "rows": [

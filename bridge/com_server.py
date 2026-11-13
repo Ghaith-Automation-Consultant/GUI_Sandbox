@@ -33,7 +33,7 @@ from win32com.server.exception import COMException
 
 from engine.control import (
     Control, TableControl, GridView, StatusBar,
-    CheckBox, RadioButton,
+    CheckBox, RadioButton, is_stale, reference_token,
 )
 from engine.session import Session, Window
 
@@ -145,6 +145,42 @@ def _not_found(path: str) -> COMException:
                         scode=winerror.DISP_E_EXCEPTION)
 
 
+def _error(message: str) -> COMException:
+    return COMException(desc=message, scode=winerror.DISP_E_EXCEPTION)
+
+
+class _Checked:
+    """Refuses every public member once the wrapped object went stale.
+
+    A table scroll is a round trip in SAP GUI: objects a script held from
+    before it stop working and the script finds the table again. The token
+    taken at wrap time tells whether the object is still the one on screen.
+    """
+
+    _target: Any = None
+    _token: Any = None
+
+    def _check(self) -> None:
+        target = object.__getattribute__(self, "_target")
+        if is_stale(target, object.__getattribute__(self, "_token")):
+            raise _not_found(getattr(target, "id", ""))
+
+    def __getattribute__(self, name: str) -> Any:
+        if not name.startswith("_"):
+            object.__getattribute__(self, "_check")()
+        return object.__getattribute__(self, name)
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        if not name.startswith("_"):
+            self._check()
+            try:
+                object.__setattr__(self, name, value)
+            except (ValueError, IndexError, KeyError) as exc:
+                raise _error(str(exc)) from None
+            return
+        object.__setattr__(self, name, value)
+
+
 def _find(session: Session, path: str) -> Control:
     try:
         return session.findById(path)
@@ -220,7 +256,7 @@ class ComSessionInfo:
 #  ComControl — universal control wrapper
 # ──────────────────────────────────────────────────────────────────────────────
 
-class ComControl:
+class ComControl(_Checked):
     """
     Wraps any engine.Control and exposes SAP COM-compatible properties.
 
@@ -231,7 +267,7 @@ class ComControl:
 
     _public_methods_ = [
         "findById", "Press", "Select", "sendVKey",
-        "GetCellValue", "GetCell",
+        "GetCellValue", "GetCell", "GetAbsoluteRow", "Rows", "SetCurrentCell",
     ]
     _public_attrs_ = [
         "Id", "Type", "TypeAsNumber", "Name", "Text",
@@ -242,6 +278,8 @@ class ComControl:
         "RowCount", "VisibleRowCount", "ColumnCount",
         "Children", "ColumnOrder",
         "MessageType", "MessageId", "MessageNumber", "Selected",
+        "VerticalScrollbar", "FirstVisibleRow", "CurrentCellRow",
+        "CurrentCellColumn", "SelectedRows",
     ]
     _readonly_attrs_ = [
         "Id", "Type", "TypeAsNumber", "Name",
@@ -252,11 +290,14 @@ class ComControl:
         "RowCount", "VisibleRowCount", "ColumnCount",
         "Children", "ColumnOrder",
         "MessageType", "MessageId", "MessageNumber", "Selected",
+        "VerticalScrollbar",
     ]
 
     def __init__(self, ctrl: Control, session: Optional[Session] = None) -> None:
         self._ctrl = ctrl
         self._session = session
+        self._target = ctrl
+        self._token = reference_token(ctrl)
 
     # ── identity ─────────────────────────────────────────────────────────────
 
@@ -360,7 +401,9 @@ class ComControl:
 
     @property
     def VisibleRowCount(self) -> int:
-        return self.RowCount
+        if isinstance(self._ctrl, (TableControl, GridView)):
+            return self._ctrl.visible_row_count
+        return 0
 
     @property
     def ColumnCount(self) -> int:
@@ -375,18 +418,99 @@ class ComControl:
         return []
 
     def GetCellValue(self, row: int, col: Any) -> str:
+        """GuiGridView: absolute row and column name. Table control: visible row, column index."""
         if isinstance(self._ctrl, GridView):
+            try:
+                self._ctrl.check_cell(int(row), str(col))
+            except (IndexError, KeyError) as exc:
+                raise _error(str(exc)) from None
             return self._ctrl.get_cell_value(int(row), str(col))
         if isinstance(self._ctrl, TableControl):
-            return self._ctrl.get_cell_value(int(row), int(col))
+            return self._visible_cell(row, col).text
         return ""
 
+    def _visible_cell(self, row: Any, col: Any) -> Control:
+        cell = self._ctrl.get_cell(int(row), int(col))
+        if cell is None:
+            raise _error(f"Row {row}, column {col} is not in the visible area "
+                         f"(rows 0..{self._ctrl.visible_row_count - 1}); scroll first")
+        return cell
+
     def GetCell(self, row: int, col: int) -> Any:
+        """The cell at a visible row: 0 is the top row on screen, as in SAP GUI."""
         if isinstance(self._ctrl, TableControl):
-            cell = self._ctrl.get_cell(int(row), int(col))
-            if cell:
-                return _wrap(ComControl(cell, self._session))
+            return _wrap(ComControl(self._visible_cell(row, col), self._session))
         return None
+
+    # ── table control: scrolling and rows ────────────────────────────────────
+
+    @property
+    def VerticalScrollbar(self) -> Any:
+        if isinstance(self._ctrl, TableControl):
+            return _wrap(ComScrollbar(self._ctrl.vertical_scrollbar))
+        return None
+
+    def Rows(self, index: Any = None) -> Any:
+        """The visible rows (GuiTableRow), as SAP GUI's Rows collection."""
+        if not isinstance(self._ctrl, TableControl):
+            return _collection([], index)
+        items = [_wrap(ComTableRow(r, self._session)) for r in self._ctrl.rows]
+        return _collection(items, index)
+
+    def GetAbsoluteRow(self, row: int) -> Any:
+        if not isinstance(self._ctrl, TableControl):
+            return None
+        try:
+            return _wrap(ComTableRow(self._ctrl.get_absolute_row(int(row)), self._session))
+        except IndexError as exc:
+            raise _error(str(exc)) from None
+
+    # ── grid: scrolling, current cell, selection ─────────────────────────────
+
+    def _grid(self) -> GridView:
+        if not isinstance(self._ctrl, GridView):
+            raise _error(f"{self._ctrl.id} is not a GuiGridView")
+        return self._ctrl
+
+    @property
+    def FirstVisibleRow(self) -> int:
+        return self._ctrl.first_visible_row if isinstance(self._ctrl, GridView) else 0
+
+    @FirstVisibleRow.setter
+    def FirstVisibleRow(self, row: int) -> None:
+        self._grid().first_visible_row = int(row)
+
+    @property
+    def CurrentCellRow(self) -> int:
+        return self._ctrl.current_cell_row if isinstance(self._ctrl, GridView) else -1
+
+    @CurrentCellRow.setter
+    def CurrentCellRow(self, row: int) -> None:
+        grid = self._grid()
+        grid.set_current_cell(int(row), grid.current_cell_column or grid.column_order[0])
+
+    @property
+    def CurrentCellColumn(self) -> str:
+        return self._ctrl.current_cell_column if isinstance(self._ctrl, GridView) else ""
+
+    @CurrentCellColumn.setter
+    def CurrentCellColumn(self, col: str) -> None:
+        grid = self._grid()
+        grid.set_current_cell(max(grid.current_cell_row, 0), str(col))
+
+    def SetCurrentCell(self, row: int, col: str) -> None:
+        try:
+            self._grid().set_current_cell(int(row), str(col))
+        except (IndexError, KeyError) as exc:
+            raise _error(str(exc)) from None
+
+    @property
+    def SelectedRows(self) -> str:
+        return self._ctrl.selected_rows_text if isinstance(self._ctrl, GridView) else ""
+
+    @SelectedRows.setter
+    def SelectedRows(self, rows: str) -> None:
+        self._grid().selected_rows_text = str(rows)
 
     # ── status bar ───────────────────────────────────────────────────────────
 
@@ -448,6 +572,97 @@ class ComControl:
             if ctrl is None:
                 raise _not_found(path)
         return _wrap(ComControl(ctrl, self._session))
+
+
+class ComScrollbar(_Checked):
+    """A table control's vertical scrollbar (GuiScrollbar)."""
+
+    _public_methods_: list[str] = []
+    _public_attrs_ = ["Position", "Minimum", "Maximum", "PageSize", "Range", "Id", "Type"]
+    _readonly_attrs_ = ["Minimum", "Maximum", "PageSize", "Range", "Id", "Type"]
+
+    def __init__(self, bar: Any) -> None:
+        self._bar = bar
+        self._target = bar
+        self._token = reference_token(bar)
+
+    @property
+    def Id(self) -> str:
+        return self._bar.id
+
+    @property
+    def Type(self) -> str:
+        return "GuiScrollbar"
+
+    @property
+    def Position(self) -> int:
+        return self._bar.position
+
+    @Position.setter
+    def Position(self, value: int) -> None:
+        self._bar.position = int(value)
+
+    @property
+    def Minimum(self) -> int:
+        return self._bar.minimum
+
+    @property
+    def Maximum(self) -> int:
+        return self._bar.maximum
+
+    @property
+    def PageSize(self) -> int:
+        return self._bar.page_size
+
+    @property
+    def Range(self) -> int:
+        return self._bar.range
+
+
+class ComTableRow(_Checked):
+    """One table control row (GuiTableRow): its cells and its selection."""
+
+    _public_methods_ = ["Item", "ElementAt"]
+    _public_attrs_ = ["Count", "Selected", "Selectable", "Type"]
+    _readonly_attrs_ = ["Count", "Selectable", "Type"]
+
+    def __init__(self, row: Any, session: Optional[Session]) -> None:
+        self._row = row
+        self._session = session
+        self._target = row
+        self._token = reference_token(row)
+
+    def _value_(self, index: int) -> Any:
+        return self.Item(index)
+
+    @property
+    def Type(self) -> str:
+        return "GuiTableRow"
+
+    @property
+    def Count(self) -> int:
+        return len(self._row.cells)
+
+    def Item(self, index: int) -> Any:
+        cells = self._row.cells
+        if not 0 <= int(index) < len(cells):
+            raise _error(f"Cell {index} is not in this row, or the row is not on screen")
+        return _wrap(ComControl(cells[int(index)], self._session))
+
+    def ElementAt(self, index: int) -> Any:
+        return self.Item(index)
+
+    @property
+    def Selected(self) -> bool:
+        return self._row.selected
+
+    @Selected.setter
+    def Selected(self, on: bool) -> None:
+        self._row.selected = bool(on)
+
+    @property
+    def Selectable(self) -> bool:
+        return self._row.selectable
 
 
 # ──────────────────────────────────────────────────────────────────────────────

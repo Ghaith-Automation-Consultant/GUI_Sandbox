@@ -10,7 +10,7 @@ Connect with `GetObject("SAPGUI")`, drive real-looking screens from your script,
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-2a78d6)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-2a78d6)](#quick-start)
 [![Platform: Windows](https://img.shields.io/badge/platform-Windows-2a78d6)](#quick-start)
-[![Tests: 325 passing](https://img.shields.io/badge/tests-325%20passing-1baf7a)](#by-the-numbers)
+[![Tests: 386 passing](https://img.shields.io/badge/tests-386%20passing-1baf7a)](#by-the-numbers)
 
 <img src="docs/assets/film/gui-sandbox-demo.gif" alt="Animated demo: opening a table in GUI Sandbox, then a Python script reading values from its results grid" width="820">
 
@@ -40,6 +40,7 @@ GUI Sandbox is for development, training, and testing. It simulates the scriptin
 - 🔌 **Three ways to connect:** COM through `GetObject("SAPGUI")`, a local HTTP JSON API, or in-process Python.
 - 🖧 **An SAP Logon window:** pick an environment, or open one from a script with `OpenConnection("WL - With logon", True)`, as on a real landscape.
 - 🔑 **Logon and password popups:** per-environment test users, forced password changes, SU3 and SU01 resets in `wnd[1]`/`wnd[2]` popups, checked against the open-source [PySapGUI](https://github.com/gutskodv/PySapGUI) library.
+- 📜 **Tables that scroll like the real ones:** a table control only has cells for the rows on screen, `VerticalScrollbar.Position` pages through it, and references go stale after each scroll. ALV grids load rows as they scroll, with `FirstVisibleRow`, `SetCurrentCell`, and `SelectedRows`.
 - 🧭 **Scripts that navigate:** `StartTransaction`, the command field, and virtual keys move through each flow, and the window follows along.
 - 🧩 **A familiar object model:** `findById`, `Children`, `Info`, `sendVKey`, and 30 control types with the `Gui*` type names scripts expect.
 - 🖥️ **A real desktop UI:** menus, toolbars, tabs, grids, and tables, all rendered from the same control tree your script reads.
@@ -133,6 +134,24 @@ Password changes open SAP-style popups (`wnd[1]`), and a rejected password opens
 
 A reset sets an initial password, so that user must choose a new one at the next logon. New passwords must be 8 to 40 characters, match, and differ from the old one. Changes last until the app restarts; `users.json` is never written. These IDs are the ones [PySapGUI](https://github.com/gutskodv/PySapGUI)'s password helpers use, and `tests/test_pysapgui.py` runs that library against the sandbox.
 
+### Scroll tables and grids
+
+A script that reads every row of a short table in development often fails on real data, where the rows don't fit on screen. The sandbox behaves like SAP GUI, so that failure shows up here first:
+
+- **Table controls** (`GuiTableControl`, such as the VA03 items: 25 rows, 9 on screen) only have cells for the visible rows, with IDs like `txtVBAP-POSNR[0,3]` (`[column,row]`, counted from the top of the screen). `GetCell` on a row below the screen raises an error. Setting `VerticalScrollbar.Position` is a round trip: the table, its cells and its scrollbar from before stop working, so find the table again after each scroll.
+- **ALV grids** (`GuiGridView`, such as the SE16 results: 120 flights, 24 on screen) load rows as they scroll. `GetCellValue` on a row that was never on screen returns an empty string, until `FirstVisibleRow` or `SetCurrentCell` brings it into view.
+
+```python
+table_id = "wnd[0]/usr/tabsTAXI_TABSTRIP/tabpT02/tblITEMS"
+table = session.findById(table_id)
+total, page = table.RowCount, table.VisibleRowCount
+for first in range(0, total, page):
+    table.VerticalScrollbar.Position = first
+    table = session.findById(table_id)        # find it again after the scroll
+    for row in range(min(page, total - first)):
+        print(table.GetCell(row, 0).Text)      # 10, 20, ... 250
+```
+
 ### Connect over COM
 
 With the app running, run this from another terminal and watch the window follow your script. As with SAP Logon, it opens a connection by its description, logs on with the same field IDs as the SAP GUI logon screen, then opens a table:
@@ -157,7 +176,7 @@ session.findById("wnd[0]").sendVKey(7)  # Table Contents
 session.findById("wnd[0]").sendVKey(8)  # Execute
 
 grid = session.findById("wnd[0]/usr/cntlGRID1/shellcont/shell")
-print(grid.RowCount)                   # 8
+print(grid.RowCount)                   # 120
 print(grid.GetCellValue(0, "CARRID"))  # SX
 ```
 
@@ -172,7 +191,7 @@ server = start_server(load_screen("screens/04_SE16_SFLIGHT_results.json"), port=
 session = RemoteSession(server.url)
 
 grid = session.findById("wnd[0]/usr/cntlGRID1/shellcont/shell")
-print(grid.RowCount)                  # 8
+print(grid.RowCount)                  # 120
 print(grid.GetCellValue(0, "CARRID"))  # SX
 
 server.shutdown()
@@ -246,7 +265,7 @@ The customers come from [`customers.json`](customers.json). Add entries with the
     <td align="center"><h3>3</h3>scripting bridges</td>
     <td align="center"><h3>30</h3>control types</td>
     <td align="center"><h3>18</h3>sample screens</td>
-    <td align="center"><h3>325</h3>automated tests</td>
+    <td align="center"><h3>386</h3>automated tests</td>
   </tr>
 </table>
 
@@ -266,11 +285,13 @@ The customers come from [`customers.json`](customers.json). Add entries with the
 - [x] Script-driven navigation through `StartTransaction`, the command field, and virtual keys
 - [x] Action recording
 - [x] Generated sample screens with automated guards against live-system data
+- [x] Modal popups (`wnd[1]`, `wnd[2]`) for logon and password flows
+- [x] Table control and ALV grid scrolling
 
 **Coming next**
 
 - [ ] Keyboard focus engine
-- [ ] Modal popups (`wnd[1]`, `wnd[2]`)
+- [ ] Value help (F4) and other popups
 - [ ] Functional status bar messages
 - [ ] Screens that react to what you enter: `XD03` does (see [`engine/reactive.py`](engine/reactive.py)); the other flows are still fixed, so SE16 always opens the sample `SFLIGHT` table
 

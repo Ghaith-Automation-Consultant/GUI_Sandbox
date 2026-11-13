@@ -140,6 +140,53 @@ class RemoteControlProxy:
         return len(self._data.get("columns", []))
 
     @property
+    def VisibleRowCount(self) -> int:
+        return int(self._data.get("visible_row_count", 0))
+
+    def _refresh(self) -> None:
+        self._data = self._session._post("/findById", {"path": self.Id})
+
+    @property
+    def VerticalScrollbar(self) -> "_RemoteScrollbar":
+        self._refresh()
+        return _RemoteScrollbar(self)
+
+    @property
+    def FirstVisibleRow(self) -> int:
+        self._refresh()
+        return int(self._data.get("first_visible_row", 0))
+
+    @FirstVisibleRow.setter
+    def FirstVisibleRow(self, row: int) -> None:
+        self._action("scroll", value=int(row))
+
+    @property
+    def CurrentCellRow(self) -> int:
+        self._refresh()
+        return int(self._data.get("current_cell_row", -1))
+
+    @property
+    def CurrentCellColumn(self) -> str:
+        self._refresh()
+        return self._data.get("current_cell_column", "")
+
+    def SetCurrentCell(self, row: int, col: str) -> None:
+        self._action("setCurrentCell", row=int(row), col=str(col))
+
+    @property
+    def SelectedRows(self) -> str:
+        self._refresh()
+        return str(self._data.get("selected_rows", ""))
+
+    @SelectedRows.setter
+    def SelectedRows(self, rows: str) -> None:
+        self._action("setSelectedRows", value=str(rows))
+
+    def SelectRow(self, row: int, selected: bool = True) -> None:
+        """Select an absolute table control row (GetAbsoluteRow(row).Selected)."""
+        self._action("selectRow", row=int(row), value=bool(selected))
+
+    @property
     def MessageType(self) -> str:
         """S success, W warning, E error, A abort, I information."""
         return self._data.get("message_type", "")
@@ -177,13 +224,15 @@ class RemoteControlProxy:
         return str(self._action("getCellValue", row=row, col=col) or "")
 
     def GetCell(self, row: int, col: int) -> Optional["RemoteControlProxy"]:
-        val = self._action("getCellValue", row=row, col=col)
-        if val is None:
-            return None
-        return RemoteControlProxy(
-            {"id": f"{self.Id}/cell[{row},{col}]", "text": str(val)},
-            self._session,
-        )
+        """The cell at a visible row, found by its SAP ID ([column,row])."""
+        self._action("getCellValue", row=row, col=col)  # raises if not on screen
+        children = self._session._post(
+            "/action", {"path": self.Id, "action": "getChildren"}).get("result", [])
+        suffix = f"[{int(col)},{int(row)}]"
+        for child in children:
+            if child.get("id", "").endswith(suffix):
+                return RemoteControlProxy(child, self._session)
+        return None
 
     # ── children ─────────────────────────────────────────────────────────────
 
@@ -199,6 +248,39 @@ class RemoteControlProxy:
 
     def __repr__(self) -> str:
         return f"<RemoteControlProxy {self._data.get('id', '?')!r}>"
+
+
+class _RemoteScrollbar:
+    """A remote table control's vertical scrollbar."""
+
+    def __init__(self, table: RemoteControlProxy) -> None:
+        self._table = table
+        self._bar = table._data.get("scrollbar", {})
+
+    @property
+    def Position(self) -> int:
+        return int(self._bar.get("position", 0))
+
+    @Position.setter
+    def Position(self, value: int) -> None:
+        self._table._action("scroll", value=int(value))
+        self._bar["position"] = int(value)
+
+    @property
+    def Minimum(self) -> int:
+        return int(self._bar.get("minimum", 0))
+
+    @property
+    def Maximum(self) -> int:
+        return int(self._bar.get("maximum", 0))
+
+    @property
+    def PageSize(self) -> int:
+        return int(self._bar.get("page_size", 0))
+
+    @property
+    def Range(self) -> int:
+        return int(self._bar.get("range", 0))
 
 
 class _RemoteChildren:
